@@ -4,11 +4,12 @@ include '../components/connect.php';
 
 session_start();
 
-$admin_id = $_SESSION['admin_id'];
+//$admin_id = $_SESSION['admin_id'];
+$user_id = $_SESSION['user_id'];
 
-if(!isset($admin_id)){
+/*if(!isset($admin_id)){
    header('location:admin_login.php');
-};
+};*/
 
 if(isset($_POST['add_product'])){
 
@@ -20,6 +21,7 @@ if(isset($_POST['add_product'])){
    $details = filter_var($details, FILTER_SANITIZE_STRING);
    $category = $_POST['category'];
    $brand = $_POST['brand'];
+   $store = $_POST['store'];
 
    $image_01 = $_FILES['image_01']['name'];
    $image_01 = filter_var($image_01, FILTER_SANITIZE_STRING);
@@ -46,8 +48,8 @@ if(isset($_POST['add_product'])){
       $message[] = 'product name already exist!';
    }else{
 
-      $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image_01, image_02, image_03, category, brand) VALUES(?,?,?,?,?,?,?,?)");
-      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03]);
+      $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image_01, image_02, image_03, category, brand, created_by) VALUES(?,?,?,?,?,?,?,?,?)");
+      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $category, $brand, $store]);
 
       if($insert_products){
          if($image_size_01 > 2000000 OR $image_size_02 > 2000000 OR $image_size_03 > 2000000){
@@ -60,6 +62,8 @@ if(isset($_POST['add_product'])){
          }
 
       }
+      
+      include 'Location: ../index.php';
 
    }  
 
@@ -171,7 +175,7 @@ if(isset($_GET['delete'])){
             <span>إسم السوق (مطلوب)</span>
             <select class="box" name="store" id="store">
                 <?php
-                    $select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$admin_id'");
+                    $select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$user_id'");
                     $select_products->execute();
                     $number_of_brand = $select_products->rowCount();
                     if($select_products->rowCount() > 0) {
@@ -202,7 +206,7 @@ if(isset($_GET['delete'])){
     </div>
 </section>-->
 
-<section class="show-products">
+<!--<section class="show-products">
 
    <h1 class="heading">products added</h1>
 
@@ -237,7 +241,7 @@ if(isset($_GET['delete'])){
    
    </div>
 
-</section>
+</section>-->
 
 
 

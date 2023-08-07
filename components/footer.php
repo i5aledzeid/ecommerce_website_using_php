@@ -1,5 +1,10 @@
 <footer class="footer">
 
+    <style>
+        img[src="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"] {
+            display: none;
+        }
+    </style>
    <section class="grid">
 
       <div class="box">
@@ -21,8 +26,8 @@
       <div class="box">
          <h3>contact us</h3>
          <a href="tel:1234567890"><i class="fas fa-phone"></i> +123 456 7899</a>
-         <a href="tel:11122233333"><i class="fas fa-phone"></i> +111 222 3333</a>
-         <a href="mailto:shaikh@gmail.com"><i class="fas fa-envelope"></i> shaikh@gmail.com</a>
+         <a href="tel:0582350407"><i class="fas fa-phone"></i> +966 058 2350 407</a>
+         <a href="mailto:i5aledzeid@gmail.com"><i class="fas fa-envelope"></i> i5aledzeid@gmail.com</a>
          <a href="https://www.google.com/myplace"><i class="fas fa-map-marker-alt"></i> mumbai, india - 400104 </a>
       </div>
 
@@ -36,8 +41,6 @@
 
    </section>
 
-   <div class="credit">&copy; copyright @
-      <?= date('Y'); ?> by <span>mr. web designer</span> | all rights reserved!
-   </div>
+   <div style="font-size: 12px;" class="credit">&copy; copyright @ 1996-<?= date('Y'); ?> by <span>i5aledzeid</span> | all rights reserved!</div>
 
 </footer>
