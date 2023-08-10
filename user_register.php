@@ -24,6 +24,13 @@ if(isset($_POST['submit'])){
    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
    $select_user->execute([$email,]);
    $row = $select_user->fetch(PDO::FETCH_ASSOC);
+   
+    /******************* CREATE NEW STORE *********************/
+    /*$subtitle = $name + " store.";
+    $image = "avatar_male_man_portrait_icon.png";
+    $background = "home-bg-1.png";
+    $status = 0;*/
+    /******************* CREATE NEW STORE *********************/
 
    if($select_user->rowCount() > 0){
       $message[] = 'email already exists!';
@@ -31,9 +38,14 @@ if(isset($_POST['submit'])){
       if($pass != $cpass){
          $message[] = 'confirm password not matched!';
       }else{
+        /*$insert_strore = $conn->prepare("INSERT INTO `store`(title, subtitle, status, image, background) VALUES(?,?,?,?,?,?)");
+        $insert_strore->execute([$name, $subtitle, $status, $image, $background]);*/
+         
          $insert_user = $conn->prepare("INSERT INTO `users`(name, email, password) VALUES(?,?,?)");
          $insert_user->execute([$name, $email, $cpass]);
          $message[] = 'registered successfully, login now please!';
+         header('Location: user_login.php');
+         //header('Location: splash.php');
       }
    }
 
@@ -60,17 +72,17 @@ if(isset($_POST['submit'])){
    
 <?php include 'components/user_header.php'; ?>
 
-<section class="form-container">
+<section class="form-container" style="direction: rtl; text-align: right;">
 
    <form action="" method="post">
-      <h3>register now</h3>
-      <input type="text" name="name" required placeholder="enter your username" maxlength="20"  class="box">
-      <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="cpass" required placeholder="confirm your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="submit" value="register now" class="btn" name="submit">
-      <p>already have an account?</p>
-      <a href="user_login.php" class="option-btn">login now</a>
+      <h3>أنشئ حساب جديد</h3>
+      <input type="text" name="name" required placeholder="أدخل إسم مستخدم" maxlength="20"  class="box">
+      <input type="email" name="email" required placeholder="أدخل بريد إلكتروني" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="pass" required placeholder="أدخل كلمة المرور" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="cpass" required placeholder="أعد إدخال كلمة المرور" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="submit" value="أنشئ حساب جديد الآن" class="btn" name="submit">
+      <p>تملك حساباً بالفعل؟</p>
+      <a href="user_login.php" class="option-btn">سجل دخول الآن</a>
    </form>
 
 </section>

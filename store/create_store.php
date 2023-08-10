@@ -19,6 +19,10 @@ if(isset($_POST['add_product'])){
    $price = filter_var($price, FILTER_SANITIZE_STRING);
    $details = $_POST['details'];
    $details = filter_var($details, FILTER_SANITIZE_STRING);
+   $image = $_POST['image'];
+   $image = filter_var($image, FILTER_SANITIZE_STRING);
+   $background = $_POST['background'];
+   $background = filter_var($background, FILTER_SANITIZE_STRING);
 
    $select_products = $conn->prepare("SELECT * FROM `store` WHERE id = ?");
    $select_products->execute([$user_id]);
@@ -27,9 +31,13 @@ if(isset($_POST['add_product'])){
       $message[] = 'product name already exist!';
    }else{
         $date = date('Y-m-d H:i:s');
-      $insert_products = $conn->prepare("INSERT INTO `store`(title,	subtitle, status, created_by, created_at) VALUES(?,?,?,?,?)");
-      $insert_products->execute([$name, $details, $price, $user_id, $date]);
+        //$insert_store = $conn->prepare("UPDATE `store` SET `title` = ?, `subtitle` = ? WHERE `store`.`id` = '$user_id'");
+        //$insert_store->execute([$name, $details]);
+      $insert_products = $conn->prepare("INSERT INTO `store`(id, title,	subtitle, status, image, background, created_by, created_at) VALUES(?,?,?,?,?,?,?,?)");
+      $insert_products->execute([$user_id, $name, $details, $price, $image, $background, $user_id, $date]);
    }  
+   //echo '<script>alert("تم إنشاء المتجر بنجاح!");</script>';
+   header('location: index.php?user_id='.$user_id.'');
 
 };
 
@@ -84,6 +92,7 @@ if(isset($_GET['delete'])){
 
    <h1 class="heading">
        إضافة سوق
+       <?php echo '['. $user_id. '] '; ?>
        <?php echo $date = date('Y-m-d H:i:s');?>
    </h1>
 
@@ -110,8 +119,16 @@ if(isset($_GET['delete'])){
             <textarea name="details" placeholder="enter store details" class="box" required maxlength="500" cols="30" rows="10"></textarea>
          </div>
          <div class="inputBox">
+            <span>صورة السوق (مطلوب)</span>
+            <input type="text" class="box" required placeholder="enter image store" name="image" value="avatar_male_man_portrait_icon.png" readonly>
+         </div>
+         <div class="inputBox">
             <span>حالة السوق (مطلوب)</span>
             <input type="number" min="0" class="box" required max="9" placeholder="enter product price" onkeypress="if(this.value.length == 10) return false;" name="price" value="0" readonly>
+         </div>
+         <div class="inputBox">
+            <span>غلاف السوق (مطلوب)</span>
+            <input type="text" class="box" required placeholder="enter background store" name="background" value="home-bg-1.png" readonly>
          </div>
          <!--<div class="inputBox">
             <span>العلامة التجارية للمنتج (مطلوب)</span>-->

@@ -36,9 +36,19 @@ include '../components/wishlist_cart.php';
 </head>
 <body>
    
-<?php include '../components/user_header.php'; ?>
+<?php //include '../components/user_header.php'; ?>
+<?php include '../components/stores_header.php'; ?>
 
-<div class="home-bg">
+<?php
+    $select_products = $conn->prepare("SELECT * FROM `store` WHERE created_by='$user_id'");
+    $select_products->execute();
+    if($select_products->rowCount() > 0){
+        while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
+?>
+
+<div class="home-bg" style="background: url(../images/<?= $fetch_products['background']; ?>) no-repeat;">
+    
+    <?php } } ?>
 
 <section class="home">
 
@@ -86,8 +96,8 @@ include '../components/wishlist_cart.php';
                             </script>
                         <?php } ?>
                 </span><br>
-                <h3 style="font-size: 16px;"><?= $fetch_products['subtitle']; ?></h3>
-                <h3 style="font-size: 16px;"><?= $fetch_products['created_at']; ?></h3>
+                <h3 style="font-size: 12px;"><?= $fetch_products['subtitle']; ?></h3>
+                <h3 style="font-size: 8px;"><?= $fetch_products['created_at']; ?></h3>
                 <a href="" class="btn">shop now</a>
                 <?php
                     if ($user_id == $id) { ?>
@@ -143,12 +153,21 @@ include '../components/wishlist_cart.php';
 
     <h1 class="heading">
     <?php
+        $select_stores = $conn->prepare("SELECT * FROM `products` WHERE sid='$user_id'"); 
+        $select_stores->execute();
+        if($select_stores->rowCount() > 0){
+            $number_of_store = $select_stores->rowCount();
+        }
+        else {
+            $number_of_store = 0;
+        }
+        
         $select_products = $conn->prepare("SELECT * FROM `store` WHERE created_by='$user_id'");
         $select_products->execute();
         if($select_products->rowCount() > 0){
             while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
                 $name = $fetch_products['title'];
-                echo '<a style="color: #FE4445;">' . $name . '</a>\'s store products';
+                echo '<a style="color: #FE4445;">' . $name . '</a>\'s store products [' . $number_of_store . ']';
             }
         }
    ?>
@@ -172,13 +191,53 @@ include '../components/wishlist_cart.php';
       <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
       <a href="../quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
       <img src="../uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
-      <div class="name"><?= $fetch_product['name']; ?></div>
+      <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
       <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
+      <div class="name" style="font-size: 16px; color: #198754;">
+            <i class="bi bi-shop"></i> <?= $fetch_product['created_by']; ?>
+            <?php
+            $by = $fetch_product['created_by'];
+            $select_stores = $conn->prepare("SELECT * FROM `store` WHERE `title`='$by'"); 
+            $select_stores->execute();
+            if($select_stores->rowCount() > 0){
+                while($fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php
+                        $status = $fetch_store['status'];
+                        if ($status == 0) {
+                            echo '<i class="fa fa-info-circle" style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="جديد" id="blah"></i>';
+                        } else if ($status == 1) {
+                            echo '<i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>';
+                        } else if ($status == 2) {
+                            echo '<i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>';
+                        } else if ($status == 3) {
+                            echo '<i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>';
+                        } else if ($status == 4) {
+                            echo '<i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>';
+                        } else if ($status == 5) {
+                            echo '<i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>';
+                        } else if ($status == 6) {
+                            echo '<i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>';
+                        }
+                    
+                }
+            }
+            ?>
+            <script>
+                $(document).ready(function() {
+                    $("[rel=tooltip]").tooltip({ placement: 'right'});
+                });
+            </script>
+      </div>
       <div class="flex">
          <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
          <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
       </div>
-      <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php
+            if ($user_id != $id) { ?>
+                <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php } else { ?>
+                <input type="button" value="" class="btn" name="" style="background: white;">
+        <?php } ?>
    </form>
    <?php
       }
@@ -328,6 +387,11 @@ var swiper = new Swiper(".home-slider", {
       1024: {
         slidesPerView: 5,
       },
+      // ADDED NEW 08-08-2023
+      1400: {
+         slidesPerView: 6,
+      },
+      // ADDED NEW 08-08-2023
    },
 });
 
@@ -348,6 +412,11 @@ var swiper = new Swiper(".products-slider", {
       1024: {
         slidesPerView: 3,
       },
+      // ADDED NEW 08-08-2023
+      1400: {
+        slidesPerView: 4,
+      },
+      // ADDED NEW 08-08-2023
    },
 });
 

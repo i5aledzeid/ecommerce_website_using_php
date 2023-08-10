@@ -3,7 +3,8 @@
 include '../components/connect.php';
 
 session_start();
-
+$user_id = $_GET['user_id'];
+$id = $_SESSION['user_id'];
 if(isset($_SESSION['user_id'])){
    $user_id = $_SESSION['user_id'];
 }else{
@@ -42,13 +43,45 @@ else {
    <link rel="stylesheet" href="../css/home-style.css">
    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <style>
+        @media (max-width:768px){
+            .btn.add-product {
+                /*background: red;
+                color: blue;*/
+            }
+        }
+        
+        @media (max-width:450px){
+            .btn.add-product {
+                padding: 8px;
+                margin: 8px;
+                position: absolute;
+                top: 32px;
+                color: white;
+                content: 'hhhh';
+            }
+            .btn.add-product:after {
+                content: 'إضافة منتج';
+            }
+        }
+    </style>
 
 </head>
 <body>
    
-<?php include '../components/user_header.php'; ?>
+<?php include '../components/store_header.php'; ?>
 
-<div class="home-bg">
+<?php
+    $select_products = $conn->prepare("SELECT * FROM `store` WHERE created_by='$user_id'");
+    $select_products->execute();
+    if($select_products->rowCount() > 0){
+        while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
+?>
+
+<div class="home-bg" style="background: url(../images/<?= $fetch_products['background']; ?>) no-repeat;">
+    
+    <?php } } ?>
 
 <section class="home">
 
@@ -96,15 +129,58 @@ else {
                             </script>
                         <?php } ?>
                 </span><br>
-                <h3 style="font-size: 16px;"><?= $fetch_products['subtitle']; ?></h3>
-                <h3 style="font-size: 16px;"><?= $fetch_products['created_at']; ?></h3>
+                <h3 style="font-size: 12px;"><?= $fetch_products['subtitle']; ?></h3>
+                <h3 style="font-size: 8px;"><?= $fetch_products['created_at']; ?></h3>
                 <a href="" class="btn">shop now</a>
-                <a href="products.php" class="btn">+</a>
+                <a href="products.php" class="btn add-product">+</a>
 
             </div>
       </div>
       
-      <?php } } ?>
+      <?php } } else { ?>
+      
+      <div class="swiper-slide slide" style="height: 200px;">
+            <div class="image">
+                <img src="../images/avatar_male_man_portrait_icon.png" alt="profile-logo" style="height: 100px; ">
+            </div>
+            <div class="content">
+                <span>
+                    Store Name
+                    <?php
+                        $status = $fetch_products['status'];
+                        if ($status == 0) { ?>
+                            <i class="fa bi-asterisk style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="حالة المتجر" id="blah"></i>
+                        <?php } else if ($status == 1) { ?>
+                            <i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>
+                        <?php } else if ($status == 2) { ?>
+                            <i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>
+                        <?php } else if ($status == 3) { ?>
+                            <i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>
+                        <?php } else if ($status == 4) { ?>
+                            <i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>
+                        <?php } else if ($status == 5) { ?>
+                            <i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>
+                        <?php } else if ($status == 6) { ?>
+                            <!--<svg style="color: #1D9BF0;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
+                                <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
+                            </svg>-->
+                            <i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>
+                            <script>
+                                $(document).ready(function() {
+                                    $("[rel=tooltip]").tooltip({ placement: 'right'});
+                                });
+                            </script>
+                        <?php } else { ?>
+                            <i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>
+                        <?php } ?>
+                </span><br>
+                <h3 style="font-size: 12px;"><?= $fetch_products['subtitle']; ?></h3>
+                <h3 style="font-size: 8px;"><?= $fetch_products['created_at']; ?></h3>
+                <a href="" class="btn">shop now</a>
+            </div>
+      </div>
+      
+      <?php } ?>
 
    </div>
 
@@ -149,12 +225,126 @@ else {
 
     <h1 class="heading">
     <?php
+        $select_stores = $conn->prepare("SELECT * FROM `store_orders` WHERE sid='$user_id'"); 
+        $select_stores->execute();
+        if($select_stores->rowCount() > 0){
+            $number_of_store = $select_stores->rowCount();
+        }
+        else {
+            $number_of_store = 0;
+        }
+
         $select_products = $conn->prepare("SELECT * FROM `store` WHERE created_by='$user_id'");
         $select_products->execute();
         if($select_products->rowCount() > 0){
             while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
                 $name = $fetch_products['title'];
-                echo '<a style="color: #FE4445;">' . $name . '</a>\'s store products';
+                echo '<a style="color: #FE4445;">' . $name . '</a>\'s store [<a style="color: #FE4445;">' . $number_of_store . '</a>] orders';
+            }
+        }
+   ?>
+   </h1>
+
+   <div class="swiper products-slider">
+
+   <div class="swiper-wrapper">
+
+   <?php
+     $select_products = $conn->prepare("SELECT * FROM `store_orders` WHERE store='$name' LIMIT 6"); 
+     $select_products->execute();
+     if($select_products->rowCount() > 0){
+      while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
+   ?>
+   <form action="" method="post" class="swiper-slide slide">
+      <input type="hidden" name="pid" value="<?= $fetch_product['id']; ?>">
+      <input type="hidden" name="name" value="<?= $fetch_product['name']; ?>">
+      <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
+      <input type="hidden" name="image" value="<?= $fetch_product['image']; ?>">
+      <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
+      <a href="../quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
+      <img src="../images/<?= $fetch_product['image']; ?>" alt="">
+      <div class="name" style="font-weight: bold;"><?= $fetch_product['total_products']; ?></div>
+      <div class="name"><?= '<i class="bi bi-bag-check-fill"></i> ' . $fetch_product['name']; ?> <a style="font-size: 12px;">(<?= $fetch_product['payment_status']; ?>)</a></div>
+      <div class="name" style="font-size: 16px; color: #198754;">
+            <i class="bi bi-shop"></i> <?= '[SID:' . $fetch_product['sid'] . '] ' . $fetch_product['store']; ?>
+            <?php
+            $by = $fetch_product['created_by'];
+            $select_stores = $conn->prepare("SELECT * FROM `store` WHERE `title`='$by'"); 
+            $select_stores->execute();
+            if($select_stores->rowCount() > 0){
+                while($fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php
+                        $status = $fetch_store['status'];
+                        if ($status == 0) {
+                            echo '<i class="fa fa-info-circle" style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="جديد" id="blah"></i>';
+                        } else if ($status == 1) {
+                            echo '<i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>';
+                        } else if ($status == 2) {
+                            echo '<i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>';
+                        } else if ($status == 3) {
+                            echo '<i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>';
+                        } else if ($status == 4) {
+                            echo '<i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>';
+                        } else if ($status == 5) {
+                            echo '<i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>';
+                        } else if ($status == 6) {
+                            echo '<i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>';
+                        }
+                    
+                }
+            }
+            ?>
+            <script>
+                $(document).ready(function() {
+                    $("[rel=tooltip]").tooltip({ placement: 'right'});
+                });
+            </script>
+      </div>
+      <div class="flex">
+         <div class="price"><span>$</span><?= $fetch_product['total_price']; ?><span>/-</span></div>
+         <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
+      </div>
+        <?php
+            if ($user_id != $id) { ?>
+                <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php } else { ?>
+                <input type="button" value="" class="btn" name="" style="background: white;">
+        <?php } ?>
+   </form>
+   <?php
+      }
+   }else{
+        echo '<p class="empty">no orders added yet!</p>&nbsp;';
+        if ($check_stores == 0) {
+            //echo '<p class="empty"><a href="create_store.php">!أنشئ متجر الآن</a></p>';
+        }
+   }
+   ?>
+
+   </div>
+
+   <div class="swiper-pagination"></div>
+
+   </div>
+
+</section>
+
+<section class="home-products">
+
+    <h1 class="heading">
+    <?php
+        $select_stores = $conn->prepare("SELECT * FROM `products` WHERE sid='$user_id'"); 
+        $select_stores->execute();
+        if($select_stores->rowCount() > 0){
+            $number_of_store = $select_stores->rowCount();
+        }
+
+        $select_products = $conn->prepare("SELECT * FROM `store` WHERE created_by='$user_id'");
+        $select_products->execute();
+        if($select_products->rowCount() > 0){
+            while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
+                $name = $fetch_products['title'];
+                echo '<a style="color: #FE4445;">' . $name . '</a>\'s store products [' . $number_of_store . ']';
             }
         }
    ?>
@@ -178,13 +368,53 @@ else {
       <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
       <a href="../quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
       <img src="../uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
-      <div class="name"><?= $fetch_product['name']; ?></div>
+      <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
       <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
+      <div class="name" style="font-size: 16px; color: #198754;">
+            <i class="bi bi-shop"></i> <?= $fetch_product['created_by']; ?>
+            <?php
+            $by = $fetch_product['created_by'];
+            $select_stores = $conn->prepare("SELECT * FROM `store` WHERE `title`='$by'"); 
+            $select_stores->execute();
+            if($select_stores->rowCount() > 0){
+                while($fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php
+                        $status = $fetch_store['status'];
+                        if ($status == 0) {
+                            echo '<i class="fa fa-info-circle" style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="جديد" id="blah"></i>';
+                        } else if ($status == 1) {
+                            echo '<i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>';
+                        } else if ($status == 2) {
+                            echo '<i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>';
+                        } else if ($status == 3) {
+                            echo '<i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>';
+                        } else if ($status == 4) {
+                            echo '<i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>';
+                        } else if ($status == 5) {
+                            echo '<i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>';
+                        } else if ($status == 6) {
+                            echo '<i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>';
+                        }
+                    
+                }
+            }
+            ?>
+            <script>
+                $(document).ready(function() {
+                    $("[rel=tooltip]").tooltip({ placement: 'right'});
+                });
+            </script>
+      </div>
       <div class="flex">
          <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
          <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
       </div>
-      <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php
+            if ($user_id != $id) { ?>
+                <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php } else { ?>
+                <input type="button" value="" class="btn" name="" style="background: white;">
+        <?php } ?>
    </form>
    <?php
       }
@@ -337,6 +567,11 @@ var swiper = new Swiper(".home-slider", {
       1024: {
         slidesPerView: 5,
       },
+      // ADDED NEW 08-08-2023
+      1400: {
+         slidesPerView: 6,
+      },
+      // ADDED NEW 08-08-2023
    },
 });
 
@@ -357,6 +592,11 @@ var swiper = new Swiper(".products-slider", {
       1024: {
         slidesPerView: 3,
       },
+      // ADDED NEW 08-08-2023
+      1400: {
+        slidesPerView: 4,
+      },
+      // ADDED NEW 08-08-2023
    },
 });
 

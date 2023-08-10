@@ -22,6 +22,10 @@ $select_store->execute([$user_id]);
 $fetch_store = $select_store->fetch(PDO::FETCH_ASSOC);
 $store = $fetch_store['title'];
 
+$check_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+$check_cart->execute([$user_id]);
+$cart_count = $check_cart->rowCount();
+
 if(isset($_POST['order'])){
 
    $name = $_POST['name'];
@@ -39,11 +43,34 @@ if(isset($_POST['order'])){
 
    $check_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
    $check_cart->execute([$user_id]);
+   
+    //////////////////////// TRICKS ////////////////////////
+    $c = $cart_count;
+    $xx = 0;
+    $sid_array = array();
+    for ($x = 0; $x < $c; $x++) {
+        $sid_array[$x] = $_POST['name_' . $xx++];
+    }
+    $image = "";
+    $store = "Khaled Zeid";
+    $sido = 1;
+    //////////////////////// TRICKS ////////////////////////
 
    if($check_cart->rowCount() > 0){
 
-      $insert_order = $conn->prepare("INSERT INTO `orders`(user_id, name, number, email, method, address, total_products, total_price) VALUES(?,?,?,?,?,?,?,?)");
+      $insert_order = $conn->prepare("INSERT INTO `orders`(user_id, name, number, email, method, address, total_products, total_price) 
+        VALUES(?,?,?,?,?,?,?,?)");
       $insert_order->execute([$user_id, $name, $number, $email, $method, $address, $total_products, $total_price]);
+      
+      $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, name, number, email, method, address, total_products, total_price) 
+        VALUES(?,?,?,?,?,?,?,?)");
+      $insert_store_order->execute([$user_id, $name, $number, $email, $method, $address, $total_products, $total_price]);
+      
+        for ($x = 0; $x < $cart_count; $x++) {
+            $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, name, number, email, method, address, image, total_products, total_price, store, sid) 
+                VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+            $insert_store_order->execute([$user_id, $name, $number, $email, $method, $address, $image, $sid_array[$x], $total_price, $store, $sido]);
+        }
 
       $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
       $delete_cart->execute([$user_id]);
@@ -70,6 +97,8 @@ if(isset($_POST['order'])){
 
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/home-style.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 
 </head>
 <body>
@@ -80,7 +109,7 @@ if(isset($_POST['order'])){
 
    <form action="" method="POST">
 
-   <h3>your orders</h3>
+        <h3>your orders</h3>
 
       <div class="display-orders">
       <?php
@@ -94,7 +123,7 @@ if(isset($_POST['order'])){
                $total_products = implode($cart_items);
                $grand_total += ($fetch_cart['price'] * $fetch_cart['quantity']);
       ?>
-         <p> <?= $fetch_cart['name']; ?> <span>(<?= '$'.$fetch_cart['price'].'/- x '. $fetch_cart['quantity']; ?>)</span> </p>
+         <p> <?= 'SID[<span>' . $fetch_cart['sid'] . '</span>] ' . $fetch_cart['name']; ?> <span>(<?= '$'.$fetch_cart['price'].'/- x '. $fetch_cart['quantity']; ?>)</span> </p>
       <?php
             }
          }else{
@@ -105,24 +134,78 @@ if(isset($_POST['order'])){
          <input type="hidden" name="total_price" value="<?= $grand_total; ?>" value="">
          <div class="grand-total">grand total : <span>$<?= $grand_total; ?>/-</span></div>
       </div>
+      
+        <!-- your store orders -->
+        <h3>your store orders</h3>
+        
+        <div class="display-orders">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col" style="text-align: center;">SID</th>
+                      <th scope="col" style="text-align: center;">Product Name</th>
+                      <th scope="col" style="text-align: center;">Price</th>
+                      <th scope="col" style="text-align: center;">Quantity</th>
+                      <th scope="col" style="text-align: center;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                      <?php
+                        $i = 1;
+                        //////////////////////// TRICKS ////////////////////////
+                        $sids = 0;
+                        $names = 0;
+                        $prices = 0;
+                        $quantitys = 0;
+                        $totals = 0;
+                        //////////////////////// TRICKS ////////////////////////
+                         $grand_total = 0;
+                         $cart_items[] = '';
+                         $select_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+                         $select_cart->execute([$user_id]);
+                         if($select_cart->rowCount() > 0){
+                            while($fetch_cart = $select_cart->fetch(PDO::FETCH_ASSOC)){
+                               $cart_items[] = $fetch_cart['name'].' ('.$fetch_cart['price'].' x '. $fetch_cart['quantity'].') - ';
+                               $total_products = implode($cart_items);
+                               $grand_total += ($fetch_cart['price'] * $fetch_cart['quantity']);
+                            ?>
+                                <tr>
+                                  <th scope="row"><?php echo $i++; ?></th>
+                                  <td><input style="text-align: center;" type="text" name="sid_<?php echo $sids++;?>" value="<?= $fetch_cart['sid']; ?>" readonly></td>
+                                  <td><input style="text-align: center;" type="text" name="name_<?php echo $names++;?>" value="<?= $fetch_cart['name']; ?>" readonly></td>
+                                  <td><input style="text-align: center;" type="text" name="price_<?php echo $prices++;?>" value="<?= $fetch_cart['price']; ?>" readonly></td>
+                                  <td><input style="text-align: center;" type="text" name="quantity_<?php echo $quantitys++;?>" value="<?= $fetch_cart['quantity']; ?>" readonly></td>
+                                  <td><input style="text-align: center;" type="text" name="total_<?php echo $totals++;?>" value="<?= $fetch_cart['price'] * $fetch_cart['quantity']; ?>" readonly></td>
+                                </tr>
+                                
+                    <?php } ?>
+          </tbody>
+        </table>
+         <?php echo 'Cart Length: ' . $select_cart->rowCount(); echo ' CART COUNT(' . $cart_count . ')'; }else{
+            echo '<p class="empty">your cart is empty!</p>';
+         }
+      ?>
+      </div><br>
+        <!-- your store orders -->
 
-      <h3>place your orders</h3>
+        <h3>place your orders</h3>
 
       <div class="flex">
          <div class="inputBox">
-            <span>your name :</span>
+            <span>Your Name :</span>
             <input type="text" name="name" placeholder="enter your name" class="box" maxlength="20" value="<?php echo $name; ?>" required>
          </div>
          <div class="inputBox">
-            <span>your number :</span>
+            <span>Your Number :</span>
             <input type="number" name="number" placeholder="enter your number" class="box" min="0" max="9999999999" onkeypress="if(this.value.length == 10) return false;" required>
          </div>
          <div class="inputBox">
-            <span>your email :</span>
+            <span>Your Email :</span>
             <input type="email" name="email" placeholder="enter your email" class="box" maxlength="50" value="<?php echo $email; ?>" required>
          </div>
          <div class="inputBox">
-            <span>payment method :</span>
+            <span>Payment Method :</span>
             <select name="method" class="box" required>
                <option value="cash on delivery">cash on delivery</option>
                <option value="credit card">credit card</option>
@@ -131,38 +214,38 @@ if(isset($_POST['order'])){
             </select>
          </div>
          <div class="inputBox">
-            <span>address line 01 :</span>
+            <span>Address line 01 :</span>
             <input type="text" name="flat" placeholder="e.g. flat number" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>address line 02 :</span>
+            <span>Address line 02 :</span>
             <input type="text" name="street" placeholder="e.g. street name" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>city :</span>
-            <input type="text" name="city" placeholder="e.g. mumbai" class="box" maxlength="50" required>
+            <span>City :</span>
+            <input type="text" name="city" placeholder="e.g. tokyo" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>state :</span>
-            <input type="text" name="state" placeholder="e.g. maharashtra" class="box" maxlength="50" required>
+            <span>State :</span>
+            <input type="text" name="state" placeholder="e.g. hokkaido" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>country :</span>
-            <input type="text" name="country" placeholder="e.g. India" class="box" maxlength="50" required>
+            <span>Country :</span>
+            <input type="text" name="country" placeholder="e.g. Japan" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>pin code :</span>
-            <input type="number" min="0" name="pin_code" placeholder="e.g. 123456" min="0" max="999999" onkeypress="if(this.value.length == 6) return false;" class="box" required>
+            <span>Pin Code :</span>
+            <input type="number" min="0" name="pin_code" placeholder="e.g. 〒060-8588" min="0" max="999999" onkeypress="if(this.value.length == 6) return false;" class="box" required>
          </div>
          <div class="inputBox">
-            <span>date :</span>
+            <span>Date :</span>
             <?php
                 $dateNow = date('d-m-Y');
                 echo '<input type="datetime" name="store" placeholder="e.g. '.$dateNow.'" value="'.$dateNow.'" class="box" maxlength="50" readonly required>';
             ?>
          </div>
          <div class="inputBox">
-            <span>store :</span>
+            <span>Store :</span>
             <input type="text" name="store" placeholder="e.g. India" class="box" maxlength="50" value="<?php echo $store; ?>" required>
          </div>
       </div>

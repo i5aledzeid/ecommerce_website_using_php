@@ -31,43 +31,59 @@ if(isset($_SESSION['user_id'])){
    
 <?php include 'components/user_header.php'; ?>
 
-<section class="orders">
+<style>
+    /** {
+        text-align: right;
+    }*/
+</style>
 
-   <h1 class="heading">placed orders</h1>
+<section class="orders" style="direction: rtl; text-align: right;">
+
+   <h1 class="heading">الطلبات المقدمة</h1>
 
    <div class="box-container">
 
    <?php
       if($user_id == ''){
-         echo '<p class="empty">please login to see your orders</p>';
+         //echo '<p class="empty">please login to see your orders</p>';
+        echo '<p class="empty">من فضلك سجل دخول لرؤية طلباتك!</p>';
       }else{
          $select_orders = $conn->prepare("SELECT * FROM `orders` WHERE user_id = ?");
          $select_orders->execute([$user_id]);
          if($select_orders->rowCount() > 0){
             while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
    ?>
-   <div class="box">
-      <p>placed on : <span><?= $fetch_orders['placed_on']; ?></span></p>
-      <p>name : <span><?= $fetch_orders['name']; ?></span></p>
-      <p>email : <span><?= $fetch_orders['email']; ?></span></p>
-      <p>number : <span><?= $fetch_orders['number']; ?></span></p>
-      <p>address : <span><?= $fetch_orders['address']; ?></span></p>
-      <p>payment method : <span><?= $fetch_orders['method']; ?></span></p>
-      <p>your orders : <span><?= $fetch_orders['total_products']; ?></span></p>
-      <p>total price : <span>$<?= $fetch_orders['total_price']; ?>/-</span></p>
-      <p> payment status : <span style="color:<?php
-          if($fetch_orders['payment_status'] == 'pending'){
-            echo '#88A0AD';
-          }else if($fetch_orders['payment_status'] == 'delivered'){
-            echo '#108510';
-          }else if($fetch_orders['payment_status'] == 'shipped'){
-            echo '#8A2BE2';
-          }else if($fetch_orders['payment_status'] == 'cancelled'){
-            echo '#DC143C';
-          }else{
-            echo 'green';
-        }; ?>"><?= $fetch_orders['payment_status']; ?></span>
-       </p>
+   <div class="box" style="font-size: 18px; font-weight: bold;">
+      <!--<p>placed on : <span><?= $fetch_orders['placed_on']; ?></span></p>-->
+        <p><span>تاريخ الطلب: </span><?= $fetch_orders['placed_on']; ?></p>
+        <p><span>الإسم: </span><?= $fetch_orders['name']; ?></p>
+        <p><span>البريد الإلكتروني: </span><?= $fetch_orders['email']; ?></p>
+        <p><span>رقم الهاتف: </span><?= $fetch_orders['number']; ?></p>
+        <p><span>العنوان: </span><?= $fetch_orders['address']; ?></p>
+        <p><span>طريقة الدفع او السداد: </span><?= $fetch_orders['method']; ?></p>
+        <p><span>الطلب: </span><?= $fetch_orders['total_products']; ?></p>
+        <p><span>السعر: </span>-/<?= $fetch_orders['total_price']; ?>$</p>
+      <p style="color: #2980b9;">حالة الدفع/الطلب:
+        <span style="color:<?php
+            if ($fetch_orders['payment_status'] == 'pending') {
+                echo '#88A0AD';
+                $status = 'معلق';
+            } else if ($fetch_orders['payment_status'] == 'delivered') {
+                echo '#108510';
+                $status = 'تم التوصيل';
+            } else if ($fetch_orders['payment_status'] == 'shipped') {
+                echo '#8A2BE2';
+                $status = 'تم الشحن';
+            } else if ($fetch_orders['payment_status'] == 'cancelled') {
+                echo '#DC143C';
+                $status = 'تم الإلغاء';
+            } else {
+                echo 'green';
+                $status = 'مكتمل';
+            };
+        ?>"><?= $fetch_orders['payment_status']; echo ' (' . $status . ')'; ?>
+        </span>
+    </p>
    </div>
    <?php
       }
@@ -93,7 +109,7 @@ if(isset($_SESSION['user_id'])){
 
 
 
-<?php include 'components/footer.php'; ?>
+<?php include 'components/orders/footer.php'; ?>
 
 <script src="js/script.js"></script>
 

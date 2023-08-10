@@ -10,6 +10,7 @@ if(isset($_SESSION['user_id'])){
    $user_id = '';
 };
 
+
 include 'components/wishlist_cart.php';
 
 ?>
@@ -172,44 +173,57 @@ include 'components/wishlist_cart.php';
       <input type="hidden" name="name" value="<?= $fetch_product['name']; ?>">
       <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
       <input type="hidden" name="image" value="<?= $fetch_product['image_01']; ?>">
+      <input type="hidden" name="store" value="<?= $fetch_product['created_by']; ?>">
+      <input type="hidden" name="sid" value="<?= $fetch_product['sid']; ?>">
       <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
       <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
       <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
       <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
       <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
       <div class="name" style="font-size: 16px; color: #198754;">
-          <i class="bi bi-shop"></i> <?= $fetch_product['created_by']; ?>
-          <?php
-            //echo $pid = $fetch_product['id'];
-            //$select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$pid'"); 
-            //$select_products->execute();
-            $status = $fetch_store['status'];
-            if ($status == 0) { ?>
-                <i class="fa fa-info-circle" style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="جديد" id="blah"></i>
-            <?php } else if ($status == 1) { ?>
-                <i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>
-            <?php } else if ($status == 2) { ?>
-                <i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>
-            <?php } else if ($status == 3) { ?>
-                <i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>
-            <?php } else if ($status == 4) { ?>
-                <i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>
-            <?php } else if ($status == 5) { ?>
-                <i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>
-            <?php } else if ($status == 6) { ?>
-                <i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>
-                <script>
-                    $(document).ready(function() {
-                        $("[rel=tooltip]").tooltip({ placement: 'right'});
-                    });
-                </script>
-            <?php } ?>
+            <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
+            <?php
+            $by = $fetch_product['created_by'];
+            $select_stores = $conn->prepare("SELECT * FROM `store` WHERE `title`='$by'"); 
+            $select_stores->execute();
+            if($select_stores->rowCount() > 0){
+                while($fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php
+                        $status = $fetch_store['status'];
+                        if ($status == 0) {
+                            echo '<i class="fa fa-info-circle" style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="جديد" id="blah"></i>';
+                        } else if ($status == 1) {
+                            echo '<i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>';
+                        } else if ($status == 2) {
+                            echo '<i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>';
+                        } else if ($status == 3) {
+                            echo '<i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>';
+                        } else if ($status == 4) {
+                            echo '<i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>';
+                        } else if ($status == 5) {
+                            echo '<i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>';
+                        } else if ($status == 6) {
+                            echo '<i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>';
+                        }
+                    
+                }
+            }
+            ?>
+            <script>
+                $(document).ready(function() {
+                    $("[rel=tooltip]").tooltip({ placement: 'right'});
+                });
+            </script>
       </div>
       <div class="flex">
          <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
          <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
       </div>
-      <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php if ($user_id != $fetch_product['sid']) { ?>
+            <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php } else { ?>
+            <input type="button" value="" class="btn" name="" style="background: white;">
+        <?php } ?>
    </form>
    <?php
       }
@@ -228,7 +242,7 @@ include 'components/wishlist_cart.php';
 
 <section class="home-products">
 
-   <h1 class="heading">new products</h1>
+   <h1 class="heading">apple products</h1>
 
    <div class="swiper products-slider">
 
@@ -245,17 +259,57 @@ include 'components/wishlist_cart.php';
           <input type="hidden" name="name" value="<?= $fetch_product['name']; ?>">
           <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
           <input type="hidden" name="image" value="<?= $fetch_product['image_01']; ?>">
+          <input type="hidden" name="store" value="<?= $fetch_product['created_by']; ?>">
+          <input type="hidden" name="sid" value="<?= $fetch_product['sid']; ?>">
           <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
           <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
           <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
           <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
           <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
-          <div class="name" style="font-size: 16px; color: #198754;"><i class="bi bi-shop"></i> <?= $fetch_product['created_by']; ?></div>
+          <div class="name" style="font-size: 16px; color: #198754;">
+            <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
+            <?php
+            $by = $fetch_product['created_by'];
+            $select_stores = $conn->prepare("SELECT * FROM `store` WHERE `title`='$by'"); 
+            $select_stores->execute();
+            if($select_stores->rowCount() > 0){
+                while($fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php
+                        $status = $fetch_store['status'];
+                        if ($status == 0) {
+                            echo '<i class="fa fa-info-circle" style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="جديد" id="blah"></i>';
+                        } else if ($status == 1) {
+                            echo '<i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>';
+                        } else if ($status == 2) {
+                            echo '<i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>';
+                        } else if ($status == 3) {
+                            echo '<i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>';
+                        } else if ($status == 4) {
+                            echo '<i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>';
+                        } else if ($status == 5) {
+                            echo '<i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>';
+                        } else if ($status == 6) {
+                            echo '<i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>';
+                        }
+                    
+                }
+            }
+            ?>
+            <script>
+                $(document).ready(function() {
+                    $("[rel=tooltip]").tooltip({ placement: 'right'});
+                });
+            </script>
+        </div>
           <div class="flex">
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
-          <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php if ($user_id != $fetch_product['sid']) { ?>
+            <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php } else { ?>
+            <input type="button" value="" class="btn" name="" style="background: white;">
+        <?php } ?>
        </form>
        <?php
           }
@@ -335,7 +389,7 @@ include 'components/wishlist_cart.php';
           <div class="flex">
              <div class="price" style="font-size: 12px;"><?= $fetch_store['created_at']; ?></div>
           </div>
-          <a href="../store/store.php?user_id=<?php echo $fetch_store['id'] ?>" class="btn"><i class="fa fa-shopping-bag" aria-hidden="true"></i> مشاهدة السوق </a>
+          <a href="../store/store.php?user_id=<?php echo $fetch_store['id'] ?>&id=<?php echo $user_id ?>" class="btn"><i class="fa fa-shopping-bag" aria-hidden="true"></i> مشاهدة السوق </a>
           <!--<input type="submit" value="add to cart" class="btn" name="add_to_cart">-->
        </form>
        <?php
@@ -372,17 +426,57 @@ include 'components/wishlist_cart.php';
           <input type="hidden" name="name" value="<?= $fetch_product['name']; ?>">
           <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
           <input type="hidden" name="image" value="<?= $fetch_product['image_01']; ?>">
+          <input type="hidden" name="store" value="<?= $fetch_product['created_by']; ?>">
+          <input type="hidden" name="sid" value="<?= $fetch_product['sid']; ?>">
           <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
           <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
           <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
           <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
           <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
-          <div class="name" style="font-size: 16px; color: #198754;"><i class="bi bi-shop"></i> <?= $fetch_product['created_by']; ?></div>
-          <div class="flex">
+            <div class="name" style="font-size: 16px; color: #198754;">
+            <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
+            <?php
+            $by = $fetch_product['created_by'];
+            $select_stores = $conn->prepare("SELECT * FROM `store` WHERE `title`='$by'"); 
+            $select_stores->execute();
+            if($select_stores->rowCount() > 0){
+                while($fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php
+                        $status = $fetch_store['status'];
+                        if ($status == 0) {
+                            echo '<i class="fa fa-info-circle" style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="جديد" id="blah"></i>';
+                        } else if ($status == 1) {
+                            echo '<i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>';
+                        } else if ($status == 2) {
+                            echo '<i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>';
+                        } else if ($status == 3) {
+                            echo '<i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>';
+                        } else if ($status == 4) {
+                            echo '<i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>';
+                        } else if ($status == 5) {
+                            echo '<i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>';
+                        } else if ($status == 6) {
+                            echo '<i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>';
+                        }
+                    
+                }
+            }
+            ?>
+            <script>
+                $(document).ready(function() {
+                    $("[rel=tooltip]").tooltip({ placement: 'right'});
+                });
+            </script>
+        </div>
+            <div class="flex">
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
-          <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php if ($user_id != $fetch_product['sid']) { ?>
+            <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php } else { ?>
+            <input type="button" value="" class="btn" name="" style="background: white;">
+        <?php } ?>
        </form>
        <?php
           }
@@ -442,6 +536,11 @@ var swiper = new Swiper(".home-slider", {
       1024: {
         slidesPerView: 5,
       },
+      // ADDED NEW 08-08-2023
+      1400: {
+         slidesPerView: 6,
+       },
+       // ADDED NEW 08-08-2023
    },
 });
 
@@ -462,6 +561,11 @@ var swiper = new Swiper(".products-slider", {
       1024: {
         slidesPerView: 3,
       },
+      // ADDED NEW 08-08-2023
+      1400: {
+        slidesPerView: 4,
+      },
+      // ADDED NEW 08-08-2023
    },
 });
 

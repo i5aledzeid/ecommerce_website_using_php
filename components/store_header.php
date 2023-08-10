@@ -18,16 +18,14 @@
       <a href="home.php" class="logo">Shopie<span>.</span></a>
 
       <nav class="navbar">
-         <a href="https://shopy101.000webhostapp.com/home.php">home</a>
-         <a href="../about.php">about</a>
-         <a href="../orders.php">orders</a>
-         <a href="../shop.php">shop</a>
-         <a href="../admin/stores.php">
-            <i class="fa fa-shopping-bag" aria-hidden="true"></i> stores
-         </a>
-         <!--<a href="category.php">category</a>
-         <a href="brand.php">brand</a>-->
-         <a href="../contact.php">contact</a>
+            <a href="https://shopy101.000webhostapp.com/home.php">home</a>
+            <a href="../about.php">about</a>
+            <a href="../orders.php">orders</a>
+            <a href="../shop.php">shop</a>
+            <a href="../admin/stores.php">
+                <i class="fa fa-shopping-bag" aria-hidden="true"></i> my stores
+            </a>
+            <a href="../contact.php">contact</a>
       </nav>
 
       <div class="icons">
@@ -45,6 +43,7 @@
          <a href="cart.php"><i class="fas fa-shopping-cart"></i><span>(<?= $total_cart_counts; ?>)</span></a>
          <div id="user-btn" class="fas fa-user"></div>
         <div id="menu-btn" class="fas fa-bars"></div>
+
       </div>
 
       <div class="profile">
@@ -54,16 +53,25 @@
             if($select_profile->rowCount() > 0){
             $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
          ?>
-         <p><?= $fetch_profile["name"]; ?></p>
-         <a href="update_user.php" class="btn">update profile</a>
+         <p style="text-align: right;">
+             <?= $fetch_profile["name"] . ' - '; ?>
+             مرحباً بك
+          </p>
+         <a href="update_user.php" class="btn">تحديث الملف الشخصي</a>
+         <a href="index.php?user_id=<?php echo $user_id; ?>" class="option-btn">متجري</a>
          <!--<div class="flex-btn">
             <a href="user_register.php" class="option-btn">register</a>
             <a href="user_login.php" class="option-btn">login</a>
          </div>-->
-         <a href="components/user_logout.php" class="delete-btn" onclick="return confirm('logout from the website?');">logout</a> 
+         <a href="../components/user_logout.php" class="delete-btn" onclick="return confirm('logout from the website?');">تسجيل خروج</a> 
          <?php
             }else{
          ?>
+         <!--<p>please login or register first!</p>
+         <div class="flex-btn">
+            <a href="user_register.php" class="option-btn">register</a>
+            <a href="user_login.php" class="option-btn">login</a>
+         </div>-->
          <p>من فضلك سجل دخول أو أنشئ حساب؟</p>
          <div class="flex-btn">
             <a href="user_register.php" class="sign-btn" id="sign-btn">

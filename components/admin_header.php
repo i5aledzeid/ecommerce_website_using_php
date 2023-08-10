@@ -57,6 +57,7 @@
     <?php if(isset($admin_id)) { ?>
        <section class="flex">
             <a href="../admin/dashboard.php" class="logo">Admin<span>Panel</span></a>
+            <!--<a href="../admin/dashboard.php" class="logo">لوحة<span> الإدارة</span></a>-->
 
             <nav class="navbar">
                 <a href="../admin/dashboard.php">home</a>
@@ -65,6 +66,7 @@
                 <a href="../admin/placed_orders.php">orders</a>
                 <a href="../admin/admin_accounts.php">admins</a>
                 <a href="../admin/users_accounts.php">users</a>
+                <a href="../admin/user_stores.php">stores</a>
                 <a href="../admin/messages.php">messages</a>
             </nav>
 

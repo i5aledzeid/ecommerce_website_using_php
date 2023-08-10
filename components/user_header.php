@@ -67,10 +67,32 @@
          <?php
             }else{
          ?>
-         <p>please login or register first!</p>
+         <style>
+            #sign-btn {
+               display: block;
+               width: 100%;
+               margin-top: 1rem;
+               border-radius: .5rem;
+               padding:1rem 3rem;
+               font-size: 1.3rem;
+               text-transform: capitalize;
+               color:var(--white);
+               cursor: pointer;
+               text-align: center;
+               background-color: var(--orange);
+            }
+            
+            #sign-btn:hover{
+               background-color: var(--black);
+            }
+         </style>
+         <p>من فضلك سجل دخول أو أنشئ حساب؟</p>
          <div class="flex-btn">
-            <a href="user_register.php" class="option-btn">register</a>
-            <a href="user_login.php" class="option-btn">login</a>
+            <a href="user_register.php" class="sign-btn" id="sign-btn">
+                إنشاء حساب
+                <!--<i class="bi bi-person-plus-fill"></i>-->
+            </a>
+            <a href="user_login.php" class="sign-btn" id="sign-btn">تسجيل دخول</a>
          </div>
          <?php
             }

@@ -22,6 +22,7 @@ if(isset($_POST['add_product'])){
    $category = $_POST['category'];
    $brand = $_POST['brand'];
    $store = $_POST['store'];
+   $sid = $_POST['sid'];
 
    $image_01 = $_FILES['image_01']['name'];
    $image_01 = filter_var($image_01, FILTER_SANITIZE_STRING);
@@ -48,8 +49,8 @@ if(isset($_POST['add_product'])){
       $message[] = 'product name already exist!';
    }else{
 
-      $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image_01, image_02, image_03, category, brand, created_by) VALUES(?,?,?,?,?,?,?,?,?)");
-      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $category, $brand, $store]);
+      $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image_01, image_02, image_03, category, brand, created_by, sid) VALUES(?,?,?,?,?,?,?,?,?,?)");
+      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $category, $brand, $store, $sid]);
 
       if($insert_products){
          if($image_size_01 > 2000000 OR $image_size_02 > 2000000 OR $image_size_03 > 2000000){
@@ -173,6 +174,14 @@ if(isset($_GET['delete'])){
          </div>
          <div class="inputBox">
             <span>إسم السوق (مطلوب)</span>
+            <?php
+                $select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$user_id'");
+                $select_products->execute();
+                $number_of_brand = $select_products->rowCount();
+                if($select_products->rowCount() > 0) {
+                    while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
+                        <input type="text" name="sid" value="<?php echo $fetch_accounts['id']; ?>" class="box" readonly required>
+            <?php } } ?>
             <select class="box" name="store" id="store">
                 <?php
                     $select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$user_id'");

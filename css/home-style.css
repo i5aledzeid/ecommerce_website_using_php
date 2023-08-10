@@ -76,6 +76,23 @@ section{
    text-align: center;
 }
 
+#sign-btn {
+   display: block;
+   width: 100%;
+   margin-top: 1rem;
+   border-radius: .5rem;
+   padding:1rem 3rem;
+   font-size: 1.7rem;
+   text-transform: capitalize;
+   color:var(--white);
+   cursor: pointer;
+   text-align: center;
+}
+
+#sign-btn:hover{
+   background-color: var(--black);
+}
+
 .btn:hover,
 .delete-btn:hover,
 .option-btn:hover{

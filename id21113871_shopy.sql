@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Aug 07, 2023 at 09:35 PM
+-- Host: localhost:3306
+-- Generation Time: Aug 10, 2023 at 05:41 PM
 -- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.3.33
 
@@ -76,8 +76,17 @@ CREATE TABLE `cart` (
   `name` varchar(100) NOT NULL,
   `price` int(10) NOT NULL,
   `quantity` int(10) NOT NULL,
-  `image` varchar(100) NOT NULL
+  `image` varchar(100) NOT NULL,
+  `store` varchar(255) NOT NULL,
+  `sid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`id`, `user_id`, `pid`, `name`, `price`, `quantity`, `image`, `store`, `sid`) VALUES
+(3, 3, 1, 'MacBook Air 16', 666, 1, '4ebc92d70ccc33b1c731e398976cd32c57d72014_589225.jpg', 'Khaled Zeid', 1);
 
 -- --------------------------------------------------------
 
@@ -143,13 +152,6 @@ CREATE TABLE `orders` (
   `payment_status` varchar(20) NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `user_id`, `name`, `number`, `email`, `method`, `address`, `total_products`, `total_price`, `placed_on`, `payment_status`) VALUES
-(1, 2, 'user', '1004039239', 'user@gmail.com', 'cash on delivery', 'flat no. 2, Tokyo Ghoul, Tokyo, Osaka, Japan - 123456', 'LG (1359 x 1) - ', 1359, '2023-08-07', 'pending');
-
 -- --------------------------------------------------------
 
 --
@@ -166,19 +168,21 @@ CREATE TABLE `products` (
   `image_03` varchar(100) NOT NULL,
   `category` varchar(255) NOT NULL,
   `brand` varchar(255) NOT NULL,
-  `created_by` varchar(255) NOT NULL
+  `created_by` varchar(255) NOT NULL,
+  `sid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `details`, `price`, `image_01`, `image_02`, `image_03`, `category`, `brand`, `created_by`) VALUES
-(1, 'MacBook Air 16', 'Product details', 666, '4ebc92d70ccc33b1c731e398976cd32c57d72014_589225.jpg', '123fd9e53305d0bee7140768cb2c03968bbdc65c_571594_4.jpg', '558437_0.jpg', 'Laptop', 'Apple', 'Khaled Zeid'),
-(2, 'MacBook Air 14', 'Product details', 323, '558437_1.jpg', '558437_2.jpg', '558437_4.jpg', 'Laptop', 'Apple', 'Khaled Zeid'),
-(3, 'MacBook Air 13', 'Product details (required) \r\nenter product details', 5443, '558437_5.jpg', '571594_0.jpg', 'b8a02514bdff679ae03ed0b4ddf57fffe38f0f88_571594_1.jpg', 'Laptop', 'Apple', 'Khaled Zeid'),
-(4, 'iPhone 14', 'no note', 1425, '0c8af9460cf39ace9fa43e0b4442c39778006905_620141.jpg', '6f1933f06f9b04613b5a31e4b9a06dc9282e01bc_620225.jpg', '004579b9568bb0f607102e178e181903fd6b9618_620113.jpg', 'Smartphone', 'Apple', 'Khaled Zeid'),
-(5, 'LG', 'ألوان نقية بدقة Real 4K\r\nتقنية NanoCell\r\nمعالج (α5 Gen5 AI Processor 4K) من LG\r\nThinQ AI', 1359, '4f9d8f573c516463af00776702dd8986edf5c5e6_610730.jpg', 'eb9251b7e213f6fb711ddfa7ad86d912beab0d0d_610730_1.jpg', 'ac8137f0b27c7b016e1cfd25f68a1440bc689a43_610730_2.jpg', 'Television', 'LG', 'User');
+INSERT INTO `products` (`id`, `name`, `details`, `price`, `image_01`, `image_02`, `image_03`, `category`, `brand`, `created_by`, `sid`) VALUES
+(1, 'MacBook Air 16', 'Product details', 666, '4ebc92d70ccc33b1c731e398976cd32c57d72014_589225.jpg', '123fd9e53305d0bee7140768cb2c03968bbdc65c_571594_4.jpg', '558437_0.jpg', 'Laptop', 'Apple', 'Khaled Zeid', 1),
+(2, 'MacBook Air 14', 'Product details', 323, '558437_1.jpg', '558437_2.jpg', '558437_4.jpg', 'Laptop', 'Apple', 'Khaled Zeid', 1),
+(3, 'MacBook Air 13', 'Product details (required) ', 5443, '558437_5.jpg', '571594_0.jpg', 'b8a02514bdff679ae03ed0b4ddf57fffe38f0f88_571594_1.jpg', 'Laptop', 'Apple', 'Khaled Zeid', 1),
+(4, 'iPhone 14', 'Big and bigger.\r\nThe looongest battery life of any iPhone. ', 1425, '0c8af9460cf39ace9fa43e0b4442c39778006905_620141.jpg', '6f1933f06f9b04613b5a31e4b9a06dc9282e01bc_620225.jpg', '004579b9568bb0f607102e178e181903fd6b9618_620113.jpg', 'Smartphone', 'Apple', 'Khaled Zeid', 1),
+(5, 'LG', 'ألوان نقية بدقة Real 4K\r\nتقنية NanoCell\r\nمعالج (α5 Gen5 AI Processor 4K) من LG\r\nThinQ AI', 1359, '4f9d8f573c516463af00776702dd8986edf5c5e6_610730.jpg', 'eb9251b7e213f6fb711ddfa7ad86d912beab0d0d_610730_1.jpg', 'ac8137f0b27c7b016e1cfd25f68a1440bc689a43_610730_2.jpg', 'Television', 'LG', 'User', 2),
+(6, 'iPad Pro 9.12', 'ابل 2022 -‎‎ آيباد برو 9.12 كمبيوتر لوحي يدعم شبكة الجيل الخامس.', 2585, '8aca8a4868b0412f6fb66a3bcadc8a8b3aa53c09_598731_1.jpg', '694c3dcbc6f34c3dd7894b938efdbd472a1f6051_598731.jpg', 'd2176bce1a01f5479cbf7d32668653531a8fee3e_598731_2.jpg', 'Smartphone', 'Apple', 'User', 2);
 
 -- --------------------------------------------------------
 
@@ -193,7 +197,7 @@ CREATE TABLE `store` (
   `status` int(11) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `background` varchar(255) DEFAULT NULL,
-  `created_by` varchar(255) NOT NULL,
+  `created_by` int(11) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -202,9 +206,35 @@ CREATE TABLE `store` (
 --
 
 INSERT INTO `store` (`id`, `title`, `subtitle`, `status`, `image`, `background`, `created_by`, `created_at`) VALUES
-(1, 'Khaled Zeid', 'khaled zeid store.', 6, '@i5aledzeid-profile.jpeg', 'home-bg.png', '1', '2023-08-06 15:55:34'),
-(2, 'User', 'user store.', 0, 'avatar_man_muslim_icon.png', 'home-bg-1.png', '2', '2023-08-06 15:58:12'),
-(3, 'Customer', 'customer store.', 0, 'avatar_male_man_portrait_icon.png', 'home-bg-1.png', '3', '2023-08-07 13:22:58');
+(1, 'Khaled Zeid', 'Khaled Zeid store.', 6, 'owner_avatar_male_man_icon.png\n', 'home-bg.png', 1, '2023-08-06 15:55:34'),
+(2, 'User', 'User store.', 0, 'avatar_man_muslim_icon.png', 'home-bg-1.jpg\n', 2, '2023-08-06 15:58:12'),
+(3, 'Customer', 'Customer store.', 1, 'avatar_male_man_portrait_icon.png', 'home-bg-2.jpg', 3, '2023-08-07 13:22:58'),
+(4, 'Client', 'client store.', 2, 'actor_chaplin_comedy_man_icon.png', 'home-bg-3.jpg', 4, '2023-08-10 09:27:46'),
+(5, 'Developer', 'developer store.', 3, 'avatar_geisha_japanese_woman_icon.png', 'home-bg-4.jpg', 5, '2023-08-10 09:35:29'),
+(6, 'Info', 'info store.', 5, 'avatar_hindi_indian_woman_icon.png', 'home-bg-5.jpg', 6, '2023-08-10 09:32:44');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `store_orders`
+--
+
+CREATE TABLE `store_orders` (
+  `id` int(11) NOT NULL,
+  `user_id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `number` varchar(10) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `method` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `total_products` varchar(1275) NOT NULL,
+  `total_price` int(11) NOT NULL,
+  `placed_on` date NOT NULL DEFAULT current_timestamp(),
+  `payment_status` varchar(255) NOT NULL DEFAULT 'pending',
+  `store` varchar(255) NOT NULL,
+  `sid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -226,7 +256,10 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 (1, 'i5aledzeid', 'i5aledzeid@gmail.com', '7239e5187ddaca70eb2b4b8c1b169d7ba43a1808'),
 (2, 'user', 'user@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
-(3, 'customer', 'customer@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d');
+(3, 'customer', 'customer@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
+(4, 'client', 'client@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
+(5, 'developer', 'developer@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
+(6, 'info', 'info@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d');
 
 -- --------------------------------------------------------
 
@@ -240,7 +273,9 @@ CREATE TABLE `wishlist` (
   `pid` int(100) NOT NULL,
   `name` varchar(100) NOT NULL,
   `price` int(100) NOT NULL,
-  `image` varchar(100) NOT NULL
+  `image` varchar(100) NOT NULL,
+  `store` varchar(255) NOT NULL,
+  `sid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -296,6 +331,12 @@ ALTER TABLE `store`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `store_orders`
+--
+ALTER TABLE `store_orders`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -327,7 +368,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -345,25 +386,31 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `store`
 --
 ALTER TABLE `store`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `store_orders`
+--
+ALTER TABLE `store_orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `wishlist`

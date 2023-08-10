@@ -18,11 +18,21 @@ if(!isset($admin_id)){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>لوحة التحكم</title>
+   <title>
+       لوحة التحكم
+       <?php
+            $select_profile = $conn->prepare("SELECT * FROM `users` WHERE id = ?");
+            $select_profile->execute([$admin_id]);
+            $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
+            echo ' | ' . $fetch_profile['name'];
+        ?>
+   </title>
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
    <link rel="stylesheet" href="../css/admin_style.css">
+   
+    <link rel="icon" type="image/x-icon" href="/images/admin/bag_shopping_store_shop_icon.ico">
 
 </head>
 <body>
@@ -37,7 +47,7 @@ if(!isset($admin_id)){
 
       <div class="box">
          <h3>welcome!</h3>
-         <p><?= $fetch_profile['name']; ?></p>
+         <p><?= '@' . $fetch_profile['name']; ?></p>
          <a href="update_profile.php" class="btn"><i class="fa fa-database" aria-hidden="true"></i> update profile</a>
       </div>
 
@@ -46,6 +56,7 @@ if(!isset($admin_id)){
             $total_pendings = 0;
             $select_pendings = $conn->prepare("SELECT * FROM `orders` WHERE payment_status = ?");
             $select_pendings->execute(['pending']);
+            $count = $select_pendings->rowCount();
             if($select_pendings->rowCount() > 0){
                while($fetch_pendings = $select_pendings->fetch(PDO::FETCH_ASSOC)){
                   $total_pendings += $fetch_pendings['total_price'];
@@ -53,8 +64,8 @@ if(!isset($admin_id)){
             }
          ?>
          <h3><span>$</span><?= $total_pendings; ?><span>/-</span></h3>
-         <p>total pendings</p>
-         <a href="placed_orders.php" class="btn"><i class="fa fa-table" aria-hidden="true"></i> see orders</a>
+         <p><?= '(' . $count . ')'; ?> total pendings</p>
+         <a href="pending_orders.php" class="btn"><i class="fa fa-table" aria-hidden="true"></i> see orders</a>
       </div>
 
       <div class="box">
@@ -62,6 +73,7 @@ if(!isset($admin_id)){
             $total_completes = 0;
             $select_completes = $conn->prepare("SELECT * FROM `orders` WHERE payment_status = ?");
             $select_completes->execute(['completed']);
+            $count = $select_completes->rowCount();
             if($select_completes->rowCount() > 0){
                while($fetch_completes = $select_completes->fetch(PDO::FETCH_ASSOC)){
                   $total_completes += $fetch_completes['total_price'];
@@ -69,8 +81,8 @@ if(!isset($admin_id)){
             }
          ?>
          <h3><span>$</span><?= $total_completes; ?><span>/-</span></h3>
-         <p>completed orders</p>
-         <a href="placed_orders.php" class="btn"><i class="fa fa-bookmark" aria-hidden="true"></i> see orders</a>
+         <p><?= '(' . $count . ')'; ?> completed orders</p>
+         <a href="completed_orders.php" class="btn"><i class="fa fa-bookmark" aria-hidden="true"></i> see orders</a>
       </div>
 
       <div class="box">
@@ -158,7 +170,7 @@ if(!isset($admin_id)){
          ?>
          <h3><?= $number_of_messages; ?></h3>
          <p>new store</p>
-         <a href="stores.php" class="btn"><i class="fa fa-shopping-bag" aria-hidden="true"></i> see store</a>
+         <a href="user_stores.php" class="btn"><i class="fa fa-shopping-bag" aria-hidden="true"></i> see store</a>
       </div>
       
       <div class="box">
