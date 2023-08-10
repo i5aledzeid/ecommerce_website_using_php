@@ -78,7 +78,7 @@ if(!isset($admin_id) && !isset($user_id)){
             <div class="box">
                 <h3><?= $fetch_product['title'] ?></h3>
                 <p>new store</p>
-                <a href="../store/store.php?user_id=<?php echo $fetch_product['id'] ?>" class="btn"><i class="fa fa-shopping-bag" aria-hidden="true"></i> مشاهدة السوق </a>
+                <a href="../store/store.php?user_id=<?php echo $fetch_product['id'].'&id='.$user_id; ?>" class="btn"><i class="fa fa-shopping-bag" aria-hidden="true"></i> مشاهدة السوق </a>
             </div>
         <?php }
     }

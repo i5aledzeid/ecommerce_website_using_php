@@ -250,7 +250,7 @@ else {
    <div class="swiper-wrapper">
 
    <?php
-     $select_products = $conn->prepare("SELECT * FROM `store_orders` WHERE store='$name' LIMIT 6"); 
+     $select_products = $conn->prepare("SELECT * FROM `store_orders` WHERE sid='$user_id' LIMIT 6"); 
      $select_products->execute();
      if($select_products->rowCount() > 0){
       while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){

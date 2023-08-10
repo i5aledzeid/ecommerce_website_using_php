@@ -46,14 +46,19 @@ if(isset($_POST['order'])){
    
     //////////////////////// TRICKS ////////////////////////
     $c = $cart_count;
+    $ca = $cart_count;
     $xx = 0;
+    $yy = 0;
     $sid_array = array();
+    $name_array = array();
     for ($x = 0; $x < $c; $x++) {
-        $sid_array[$x] = $_POST['name_' . $xx++];
+        $sid_array[$x] = $_POST['sid_' . $xx++];
+    }
+    for ($y = 0; $y < $ca; $y++) {
+        $name_array[$y] = $_POST['name_' . $yy++];
     }
     $image = "";
     $store = "Khaled Zeid";
-    $sido = 1;
     //////////////////////// TRICKS ////////////////////////
 
    if($check_cart->rowCount() > 0){
@@ -69,7 +74,7 @@ if(isset($_POST['order'])){
         for ($x = 0; $x < $cart_count; $x++) {
             $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, name, number, email, method, address, image, total_products, total_price, store, sid) 
                 VALUES(?,?,?,?,?,?,?,?,?,?,?)");
-            $insert_store_order->execute([$user_id, $name, $number, $email, $method, $address, $image, $sid_array[$x], $total_price, $store, $sido]);
+            $insert_store_order->execute([$user_id, $name, $number, $email, $method, $address, $image, $name_array[$x], $total_price, $store, $sid_array[$x]]);
         }
 
       $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
