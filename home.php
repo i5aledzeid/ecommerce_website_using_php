@@ -132,18 +132,16 @@ include 'components/wishlist_cart.php';
         <div class="swiper-wrapper">
            
            <?php
-                $i = 1;
-                $select_products = $conn->prepare("SELECT * FROM `category`");
-                $select_products->execute();
-                $number_of_brand = $select_products->rowCount();
-                if($select_products->rowCount() > 0) {
-                    while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                        <?php
-                            echo '<a href="category.php?category='.$fetch_accounts['link'].'" class="swiper-slide slide">';
-                        ?>
-                        <?php echo '<img src="images/icon-'.$i++.'.png" alt="category-logo">'; ?>
-                        <h3><?= $fetch_accounts['title']; ?></h3>
-                       </a>
+            $i = 1;
+            $select_products = $conn->prepare("SELECT * FROM `category`");
+            $select_products->execute();
+            $number_of_brand = $select_products->rowCount();
+            if($select_products->rowCount() > 0) {
+                while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
+                <?php echo '<a href="category.php?category='.$fetch_accounts['link'].'" class="swiper-slide slide">'; ?>
+                <?php echo '<img src="images/icon-'.$i++.'.png" alt="category-logo">'; ?>
+                <h3><?= $fetch_accounts['title']; ?></h3>
+                </a>
             <?php } } ?>
             
         </div>
@@ -222,7 +220,7 @@ include 'components/wishlist_cart.php';
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="add to cart" class="btn" name="add_to_cart">
         <?php } else { ?>
-            <input type="button" value="" class="btn" name="" style="background: white;">
+            <input type="button" value="لا يمكن إضافة منتج من نفس السوق" class="btn" name="" style="background: white; color: black;">
         <?php } ?>
    </form>
    <?php
@@ -308,7 +306,7 @@ include 'components/wishlist_cart.php';
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="add to cart" class="btn" name="add_to_cart">
         <?php } else { ?>
-            <input type="button" value="" class="btn" name="" style="background: white;">
+            <input type="button" value="لا يمكن إضافة منتج من نفس السوق" class="btn" name="" style="background: white; color: black;">
         <?php } ?>
        </form>
        <?php
@@ -475,7 +473,7 @@ include 'components/wishlist_cart.php';
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="add to cart" class="btn" name="add_to_cart">
         <?php } else { ?>
-            <input type="button" value="" class="btn" name="" style="background: white;">
+            <input type="button" value="لا يمكن إضافة منتج من نفس السوق" class="btn" name="" style="background: white; color: black;">
         <?php } ?>
        </form>
        <?php
