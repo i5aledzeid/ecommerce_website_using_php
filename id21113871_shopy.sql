@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 11, 2023 at 12:31 PM
+-- Generation Time: Aug 11, 2023 at 06:13 PM
 -- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.3.33
 
@@ -39,6 +39,31 @@ CREATE TABLE `admins` (
 
 INSERT INTO `admins` (`id`, `name`, `password`) VALUES
 (1, 'i5aledzeid', '7239e5187ddaca70eb2b4b8c1b169d7ba43a1808');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `banner`
+--
+
+CREATE TABLE `banner` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `subtitle` text NOT NULL,
+  `image_1` varchar(255) NOT NULL,
+  `image_2` varchar(255) NOT NULL,
+  `image_3` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_by` int(11) NOT NULL,
+  `created_at` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `banner`
+--
+
+INSERT INTO `banner` (`id`, `title`, `subtitle`, `image_1`, `image_2`, `image_3`, `status`, `created_by`, `created_at`) VALUES
+(1, 'Banner Title 1', 'Banner Subtitle 1', 'home-bg.png', 'home-bg-1.jpg', 'home-bg-5.jpg', 0, 1, '2023-08-11');
 
 -- --------------------------------------------------------
 
@@ -223,6 +248,7 @@ CREATE TABLE `store_orders` (
   `image` varchar(255) NOT NULL,
   `total_products` varchar(1275) NOT NULL,
   `total_price` int(11) NOT NULL,
+  `qty` int(10) NOT NULL,
   `placed_on` date NOT NULL DEFAULT current_timestamp(),
   `payment_status` varchar(255) NOT NULL DEFAULT 'pending',
   `store` varchar(255) NOT NULL,
@@ -305,6 +331,12 @@ ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `banner`
+--
+ALTER TABLE `banner`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `brand`
 --
 ALTER TABLE `brand`
@@ -381,6 +413,12 @@ ALTER TABLE `admins`
   MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `banner`
+--
+ALTER TABLE `banner`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `brand`
 --
 ALTER TABLE `brand`
@@ -390,7 +428,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -444,7 +482,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -302,7 +302,7 @@ else {
       </div>
       <div class="flex">
          <div class="price"><span>$</span><?= $fetch_product['total_price']; ?><span>/-</span></div>
-         <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
+         <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="<?= $fetch_product['qty']; ?>">
       </div>
         <?php
             if ($user_id != $id) { ?>

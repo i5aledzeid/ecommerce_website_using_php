@@ -47,15 +47,27 @@ if(isset($_POST['order'])){
     //////////////////////// TRICKS ////////////////////////
     $c = $cart_count;
     $ca = $cart_count;
+    $ca2 = $cart_count;
+    $ca3 = $cart_count;
     $xx = 0;
     $yy = 0;
+    $yy2 = 0;
+    $yy3 = 0;
     $sid_array = array();
     $name_array = array();
+    $price_array = array();
+    $quantity_array = array();
     for ($x = 0; $x < $c; $x++) {
         $sid_array[$x] = $_POST['sid_' . $xx++];
     }
     for ($y = 0; $y < $ca; $y++) {
         $name_array[$y] = $_POST['name_' . $yy++];
+    }
+    for ($y2 = 0; $y2 < $ca2; $y2++) {
+        $price_array[$y2] = $_POST['price_' . $yy2++];
+    }
+    for ($y3 = 0; $y3 < $ca3; $y3++) {
+        $quantity_array[$y3] = $_POST['qty_' . $yy3++];
     }
     $image = "";
     $store = "Khaled Zeid";
@@ -72,9 +84,9 @@ if(isset($_POST['order'])){
       $insert_store_order->execute([$user_id, $name, $number, $email, $method, $address, $total_products, $total_price]);
       
         for ($x = 0; $x < $cart_count; $x++) {
-            $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, name, number, email, method, address, image, total_products, total_price, store, sid) 
-                VALUES(?,?,?,?,?,?,?,?,?,?,?)");
-            $insert_store_order->execute([$user_id, $name, $number, $email, $method, $address, $image, $name_array[$x], $total_price, $store, $sid_array[$x]]);
+            $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, name, number, email, method, address, image, total_products, total_price, qty, store, sid) 
+                VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insert_store_order->execute([$user_id, $name, $number, $email, $method, $address, $image, $name_array[$x], $price_array[$x], $quantity_array[$x], $store, $sid_array[$x]]);
         }
 
       $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
@@ -180,7 +192,7 @@ if(isset($_POST['order'])){
                                   <td><input style="text-align: center;" type="text" name="sid_<?php echo $sids++;?>" value="<?= $fetch_cart['sid']; ?>" readonly></td>
                                   <td><input style="text-align: center;" type="text" name="name_<?php echo $names++;?>" value="<?= $fetch_cart['name']; ?>" readonly></td>
                                   <td><input style="text-align: center;" type="text" name="price_<?php echo $prices++;?>" value="<?= $fetch_cart['price']; ?>" readonly></td>
-                                  <td><input style="text-align: center;" type="text" name="quantity_<?php echo $quantitys++;?>" value="<?= $fetch_cart['quantity']; ?>" readonly></td>
+                                  <td><input style="text-align: center;" type="text" name="qty_<?php echo $quantitys++;?>" value="<?= $fetch_cart['quantity']; ?>" readonly></td>
                                   <td><input style="text-align: center;" type="text" name="total_<?php echo $totals++;?>" value="<?= $fetch_cart['price'] * $fetch_cart['quantity']; ?>" readonly></td>
                                 </tr>
                                 
