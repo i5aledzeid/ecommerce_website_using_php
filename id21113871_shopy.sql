@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 10, 2023 at 05:41 PM
+-- Generation Time: Aug 11, 2023 at 12:31 PM
 -- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.3.33
 
@@ -80,13 +80,6 @@ CREATE TABLE `cart` (
   `store` varchar(255) NOT NULL,
   `sid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`id`, `user_id`, `pid`, `name`, `price`, `quantity`, `image`, `store`, `sid`) VALUES
-(3, 3, 1, 'MacBook Air 16', 666, 1, '4ebc92d70ccc33b1c731e398976cd32c57d72014_589225.jpg', 'Khaled Zeid', 1);
 
 -- --------------------------------------------------------
 
@@ -239,6 +232,29 @@ CREATE TABLE `store_orders` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `system`
+--
+
+CREATE TABLE `system` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `subtitle` varchar(255) NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp(),
+  `image` varchar(255) NOT NULL,
+  `background` varchar(255) NOT NULL,
+  `icon` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `system`
+--
+
+INSERT INTO `system` (`id`, `title`, `subtitle`, `date`, `image`, `background`, `icon`) VALUES
+(1, 'System', 'see system info', '2023-08-10', 'owner_avatar_male_man_icon.png', 'home-bg.png', 'bag_shopping_store_shop_icon.ico');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -337,6 +353,12 @@ ALTER TABLE `store_orders`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `system`
+--
+ALTER TABLE `system`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -368,7 +390,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -405,6 +427,12 @@ ALTER TABLE `store`
 --
 ALTER TABLE `store_orders`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `system`
+--
+ALTER TABLE `system`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
