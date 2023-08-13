@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Aug 11, 2023 at 06:13 PM
+-- Host: localhost
+-- Generation Time: Aug 13, 2023 at 06:08 PM
 -- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.3.33
 
@@ -53,6 +53,7 @@ CREATE TABLE `banner` (
   `image_1` varchar(255) NOT NULL,
   `image_2` varchar(255) NOT NULL,
   `image_3` varchar(255) NOT NULL,
+  `image_4` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 0,
   `created_by` int(11) NOT NULL,
   `created_at` date NOT NULL DEFAULT current_timestamp()
@@ -62,8 +63,8 @@ CREATE TABLE `banner` (
 -- Dumping data for table `banner`
 --
 
-INSERT INTO `banner` (`id`, `title`, `subtitle`, `image_1`, `image_2`, `image_3`, `status`, `created_by`, `created_at`) VALUES
-(1, 'Banner Title 1', 'Banner Subtitle 1', 'home-bg.png', 'home-bg-1.jpg', 'home-bg-5.jpg', 0, 1, '2023-08-11');
+INSERT INTO `banner` (`id`, `title`, `subtitle`, `image_1`, `image_2`, `image_3`, `image_4`, `status`, `created_by`, `created_at`) VALUES
+(1, 'Banner Title 1', 'Banner Subtitle 1', 'home-bg.png', 'home-bg-1.jpg', 'home-bg-5.jpg', 'home-bg-8.jpg', 0, 1, '2023-08-11');
 
 -- --------------------------------------------------------
 
@@ -138,6 +139,29 @@ INSERT INTO `category` (`id`, `title`, `subtitle`, `link`, `image`, `created_at`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `deliveries`
+--
+
+CREATE TABLE `deliveries` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `phone` varchar(10) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_at` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `deliveries`
+--
+
+INSERT INTO `deliveries` (`id`, `name`, `phone`, `email`, `password`, `status`, `created_at`) VALUES
+(1, 'deliveries', '1004039239', 'deliveries@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d', 0, '2023-08-13');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `messages`
 --
 
@@ -159,6 +183,7 @@ CREATE TABLE `messages` (
 CREATE TABLE `orders` (
   `id` int(100) NOT NULL,
   `user_id` int(100) NOT NULL,
+  `oid` bigint(255) NOT NULL,
   `name` varchar(20) NOT NULL,
   `number` varchar(10) NOT NULL,
   `email` varchar(50) NOT NULL,
@@ -240,6 +265,7 @@ INSERT INTO `store` (`id`, `title`, `subtitle`, `status`, `image`, `background`,
 CREATE TABLE `store_orders` (
   `id` int(11) NOT NULL,
   `user_id` varchar(255) NOT NULL,
+  `oid` bigint(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `number` varchar(10) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -276,7 +302,7 @@ CREATE TABLE `system` (
 --
 
 INSERT INTO `system` (`id`, `title`, `subtitle`, `date`, `image`, `background`, `icon`) VALUES
-(1, 'System', 'see system info', '2023-08-10', 'owner_avatar_male_man_icon.png', 'home-bg.png', 'bag_shopping_store_shop_icon.ico');
+(1, 'النظام', 'رؤية معلومات النظام', '2023-08-10', 'owner_avatar_male_man_icon.png', 'home-bg.png', 'bag_shopping_store_shop_icon.ico');
 
 -- --------------------------------------------------------
 
@@ -355,6 +381,12 @@ ALTER TABLE `category`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `deliveries`
+--
+ALTER TABLE `deliveries`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `messages`
 --
 ALTER TABLE `messages`
@@ -428,13 +460,19 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `deliveries`
+--
+ALTER TABLE `deliveries`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `messages`

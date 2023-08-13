@@ -34,7 +34,7 @@ if(isset($_POST['updatedata'])) {
     
     $payment_status = $_POST['status'];
     $payment_status = filter_var($payment_status, FILTER_SANITIZE_STRING);
-    $update_payment = $conn->prepare("UPDATE `store_orders` SET payment_status = ? WHERE id = ?");
+    $update_payment = $conn->prepare("UPDATE `store_orders` SET payment_status = ? WHERE oid = ?");
     $update_payment->execute([$payment_status, $oid]);
         
     if($update_payment) {
@@ -97,7 +97,7 @@ if(isset($_POST['updatedata'])) {
       $select_orders = $conn->prepare("SELECT * FROM `orders`");
       $select_orders->execute();
       if($select_orders->rowCount() > 0){
-         while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
+         //while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
    ?>
    <!--<div class="box">
       <p> placed on : <span><?= $fetch_orders['placed_on']; ?></span> </p>
@@ -140,13 +140,14 @@ if(isset($_POST['updatedata'])) {
             </tr>
         </thead>
         <tbody>
+            
         <?php
             $i = 1;
             $select_store_orders = $conn->prepare("SELECT * FROM `store_orders` WHERE sid='$user_id'"); 
             $select_store_orders->execute();
             if($select_store_orders->rowCount() > 0){
-                while($fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC)){
-                    echo '<tr>'; ?>
+                while($fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <tr>
                     <th scope="row">
                     <!--<button type="submit" value="update" name="update_payment">
                         <i class="bi bi-pencil-square"></i> تحديث
@@ -180,20 +181,21 @@ if(isset($_POST['updatedata'])) {
                           <td>$' .$fetch_store_orders['total_price']. '</td>
                           <td>' .$fetch_store_orders['name']. '</td>
                           <td>' .$fetch_store_orders['total_products']. '</td>
-                          <td><a id="id" style="color: #D49797; text-decoration: none;" href=""></a>' .$fetch_store_orders['id']. '</td>
+                          <td><a id="id" style="color: #D49797; text-decoration: none;" href=""></a>' .$fetch_store_orders['oid']. '</td>
                           <td>'. $i++ .'</td>
-                        </tr>
-                    ';
-            } } ?>
-        </tbody>
+                        </tr>'; ?>
+            <?php } } ?>
+                    </tbody>
     </table>
     <?php
-         }
+            
+         //}
       }else{
          echo '<p class="empty">no orders placed yet!</p>';
       }
    ?>
-
+   
+   
 </div>
 
 </section>

@@ -72,21 +72,21 @@ if(isset($_POST['order'])){
     $image = "";
     $store = "Khaled Zeid";
     //////////////////////// TRICKS ////////////////////////
-
+    $oid = rand(10, 10000000000);
    if($check_cart->rowCount() > 0){
 
-      $insert_order = $conn->prepare("INSERT INTO `orders`(user_id, name, number, email, method, address, total_products, total_price) 
-        VALUES(?,?,?,?,?,?,?,?)");
-      $insert_order->execute([$user_id, $name, $number, $email, $method, $address, $total_products, $total_price]);
+      $insert_order = $conn->prepare("INSERT INTO `orders`(user_id, oid, name, number, email, method, address, total_products, total_price) 
+        VALUES(?,?,?,?,?,?,?,?,?)");
+      $insert_order->execute([$user_id, $oid, $name, $number, $email, $method, $address, $total_products, $total_price]);
       
       $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, name, number, email, method, address, total_products, total_price) 
-        VALUES(?,?,?,?,?,?,?,?)");
-      $insert_store_order->execute([$user_id, $name, $number, $email, $method, $address, $total_products, $total_price]);
+        VALUES(?,?,?,?,?,?,?,?,?)");
+      $insert_store_order->execute([$user_id, $oid, $name, $number, $email, $method, $address, $total_products, $total_price]);
       
         for ($x = 0; $x < $cart_count; $x++) {
-            $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, name, number, email, method, address, image, total_products, total_price, qty, store, sid) 
-                VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-            $insert_store_order->execute([$user_id, $name, $number, $email, $method, $address, $image, $name_array[$x], $price_array[$x], $quantity_array[$x], $store, $sid_array[$x]]);
+            $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, oid, name, number, email, method, address, image, total_products, total_price, qty, store, sid) 
+                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insert_store_order->execute([$user_id, $oid, $name, $number, $email, $method, $address, $image, $name_array[$x], $price_array[$x], $quantity_array[$x], $store, $sid_array[$x]]);
         }
 
       $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
@@ -136,7 +136,7 @@ if(isset($_POST['order'])){
          $select_cart->execute([$user_id]);
          if($select_cart->rowCount() > 0){
             while($fetch_cart = $select_cart->fetch(PDO::FETCH_ASSOC)){
-               $cart_items[] = $fetch_cart['name'].' ('.$fetch_cart['price'].' x '. $fetch_cart['quantity'].') - ';
+               $cart_items[] = $fetch_cart['name'].' ('.$fetch_cart['price'].' x '. $fetch_cart['quantity'].') -';
                $total_products = implode($cart_items);
                $grand_total += ($fetch_cart['price'] * $fetch_cart['quantity']);
       ?>

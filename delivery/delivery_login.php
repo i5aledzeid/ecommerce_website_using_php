@@ -62,7 +62,7 @@ if(isset($_POST['submit'])){
       <input type="password" value="12345678" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="submit" value="تسجيل دخول" class="btn" name="submit">
       <p>لا تملك حساباً؟</p>
-      <a href="user_register.php" class="option-btn">أنشئ حساب</a>
+      <a href="delivery_register.php" class="option-btn">أنشئ حساب</a>
    </form>
 
 </section>

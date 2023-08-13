@@ -35,7 +35,7 @@ if(isset($_POST['submit'])){
     /******************* CREATE NEW STORE *********************/
 
    if($select_user->rowCount() > 0){
-      $message[] = 'email/phone already exists!';
+      $message[] = 'البريد الإكتروني/الهاتف مسجل مسبقاً';
    }else{
       if($pass != $cpass){
          $message[] = 'confirm password not matched!';
@@ -92,7 +92,7 @@ if(isset($_POST['submit'])){
       <input type="password" name="cpass" required placeholder="أعد إدخال كلمة المرور" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="submit" value="أنشئ حساب جديد الآن" class="btn" name="submit">
       <p>تملك حساباً بالفعل؟</p>
-      <a href="user_login.php" class="option-btn">سجل دخول الآن</a>
+      <a href="delivery_login.php" class="option-btn">سجل دخول الآن</a>
    </form>
 
 </section>
