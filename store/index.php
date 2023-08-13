@@ -223,6 +223,11 @@ else {
 
 <section class="home-products">
 
+<style>
+#alink:hover {
+  background-color: yellow;
+}
+</style>
     <h1 class="heading">
     <?php
         $select_stores = $conn->prepare("SELECT * FROM `store_orders` WHERE sid='$user_id'"); 
@@ -239,7 +244,7 @@ else {
         if($select_products->rowCount() > 0){
             while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
                 $name = $fetch_products['title'];
-                echo '<a style="color: #FE4445;">' . $name . '</a>\'s store [<a style="color: #FE4445;">' . $number_of_store . '</a>] orders';
+                echo '<a style="color: #FE4445;">' . $name . '</a>\'s store [<a style="color: #FE4445;">' . $number_of_store . '</a>] orders | <i style="color: blue;" class="bi bi-eye-fill"></i><a id="alink" style="color: blue;" href="placed_orders.php"> SEE MORE</a>';
             }
         }
    ?>
@@ -260,9 +265,9 @@ else {
       <input type="hidden" name="name" value="<?= $fetch_product['name']; ?>">
       <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
       <input type="hidden" name="image" value="<?= $fetch_product['image']; ?>">
-      <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
+      <!--<button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
       <a href="../quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
-      <img src="../images/<?= $fetch_product['image']; ?>" alt="">
+      <img src="../images/<?= $fetch_product['image']; ?>" alt="">-->
       <div class="name" style="font-weight: bold;"><?= $fetch_product['total_products']; ?></div>
       <div class="name"><?= '<i class="bi bi-bag-check-fill"></i> ' . $fetch_product['name']; ?> <a style="font-size: 12px;">(<?= $fetch_product['payment_status']; ?>)</a></div>
       <div class="name" style="font-size: 16px; color: #198754;">

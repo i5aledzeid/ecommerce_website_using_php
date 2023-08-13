@@ -177,7 +177,7 @@ include 'components/wishlist_cart.php';
       <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
       <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
       <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
-      <div class="name" style="font-size: 12px;"><i class="bi bi-tags-fill"></i> <?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
+      <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
       <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -263,7 +263,7 @@ include 'components/wishlist_cart.php';
           <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
           <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
           <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
-          <div class="name" style="font-size: 12px;"><i class="bi bi-tags-fill"></i> <?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
+          <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
           <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -383,7 +383,7 @@ include 'components/wishlist_cart.php';
                             </script>
                         <?php } ?>
           </div>
-          <div class="name"><?= '[' . $fetch_store['created_by'] . '] ' . $fetch_store['subtitle']; ?></div>
+          <div class="name"><?= $fetch_store['subtitle']; ?></div>
           <div class="flex">
              <div class="price" style="font-size: 12px;"><?= $fetch_store['created_at']; ?></div>
           </div>
@@ -399,7 +399,7 @@ include 'components/wishlist_cart.php';
 
    </div>
 
-   <div class="swiper-pagination"></div>
+   <!--<div class="swiper-pagination"></div>-->
 
    </div>
 
@@ -430,7 +430,7 @@ include 'components/wishlist_cart.php';
           <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
           <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
           <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
-          <div class="name" style="font-size: 12px;"><i class="bi bi-tags-fill"></i> <?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
+          <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
             <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php

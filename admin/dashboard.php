@@ -225,7 +225,7 @@ $number_of_system = $select_system->rowCount();
              echo $number_of_products . ' delivery lists';
          }
           ?></p>
-         <a href="delivery.php" class="btn"><i class="fa fa-truck" aria-hidden="true"></i> see products</a>
+         <a href="delivery.php" class="btn"><i class="fa fa-truck" aria-hidden="true"></i> see delivery</a>
       </div>
       
       <div class="box">
@@ -243,7 +243,7 @@ $number_of_system = $select_system->rowCount();
              echo $number_of_products . ' banner lists';
          }
           ?></p>
-         <a href="banner.php" class="btn"><i class="fa fa-credit-card" aria-hidden="true"></i> see banner</a>
+         <a href="banners.php" class="btn"><i class="fa fa-credit-card" aria-hidden="true"></i> see banner</a>
       </div>
       
       <div class="box">
