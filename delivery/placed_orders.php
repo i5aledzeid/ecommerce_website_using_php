@@ -6,6 +6,7 @@ session_start();
 
 //$admin_id = $_SESSION['admin_id'];
 $user_id = $_SESSION['user_id'];
+$delivery_id = $_SESSION['delivery_id'];
 
 /*if(!isset($admin_id)){
    header('location:admin_login.php');
@@ -57,7 +58,7 @@ if(isset($_POST['updatedata'])) {
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>store | placed orders</title>
+   <title>delivery | placed orders</title>
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
@@ -83,16 +84,30 @@ if(isset($_POST['updatedata'])) {
 
 <h1 class="heading">
     <?php
-    $select_store_orders = $conn->prepare("SELECT * FROM `store` WHERE id='$user_id'"); 
+    $select_store_orders = $conn->prepare("SELECT * FROM `deliveries` WHERE id='$delivery_id'"); 
     $select_store_orders->execute();
     if($select_store_orders->rowCount() > 0){
         while($fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC)){
-            echo ' ' . $fetch_store_orders['title'] . 'الطلبات المقدمة لـ ';
-            echo '<a href="index.php?user_id='.$user_id.'"><i class="bi bi-backspace-reverse-fill"></i></a>';
+            echo ' ' . $fetch_store_orders['name'] . 'الطلبات المقدمة لـ ';
+            echo '<a href="index.php?delivery_id='.$delivery_id.'"><i class="bi bi-backspace-reverse-fill"></i></a>';
         }
     }
     ?>
 </h1>
+<div class="row">
+    <div class="col">
+        <button type="button" class="btn btn-success"> طلبات مكتملة </button>
+    </div>
+    <div class="col">
+        <button type="button" class="btn btn-warning"> طلبات محجوزة </button>
+    </div>
+    <div class="col">
+        <button type="button" class="btn btn-danger"> طلبات غير محجوزة </button>
+    </div>
+</div>
+
+<br>
+
 
 <!--<div class="box-container">-->
 <div class="container">
@@ -103,30 +118,6 @@ if(isset($_POST['updatedata'])) {
       if($select_orders->rowCount() > 0){
          //while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
    ?>
-   <!--<div class="box">
-      <p> placed on : <span><?= $fetch_orders['placed_on']; ?></span> </p>
-      <p> name : <span><?= $fetch_orders['name']; ?></span> </p>
-      <p> number : <span><?= $fetch_orders['number']; ?></span> </p>
-      <p> address : <span><?= $fetch_orders['address']; ?></span> </p>
-      <p> total products : <span><?= $fetch_orders['total_products']; ?></span> </p>
-      <p> total price : <span>$<?= $fetch_orders['total_price']; ?>/-</span> </p>
-      <p> payment method : <span><?= $fetch_orders['method']; ?></span> </p>
-      <form action="" method="post">
-         <input type="hidden" name="order_id" value="<?= $fetch_orders['id']; ?>">
-         <select name="payment_status" class="select">
-            <option selected disabled><?= $fetch_orders['payment_status']; ?></option>
-            <option value="pending">معلق</option>
-            <option value="delivered">تم التوصيل</option>
-            <option value="shipped">تم شحنها</option>
-            <option value="completed">مكتمل</option>
-            <option value="cancelled">تم إلغاء الطلب</option>
-         </select>
-        <div class="flex-btn">
-         <input type="submit" value="update" class="option-btn" name="update_payment">
-         <a href="placed_orders.php?delete=<?= $fetch_orders['id']; ?>" class="delete-btn" onclick="return confirm('delete this order?');">delete</a>
-        </div>
-      </form>
-   </div>-->
    <table class="table">
         <thead>
             <tr>
@@ -146,36 +137,29 @@ if(isset($_POST['updatedata'])) {
         <tbody>
             
         <?php
-            $i = 1;
-            $select_store_orders = $conn->prepare("SELECT * FROM `store_orders` WHERE sid='$user_id'"); 
-            $select_store_orders->execute();
-            if($select_store_orders->rowCount() > 0){
-                while($fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC)){ ?>
-                    <tr>
+        $i = 1;
+        $select_store_orders = $conn->prepare("SELECT * FROM `store_orders`"); 
+        $select_store_orders->execute();
+        if($select_store_orders->rowCount() > 0){
+            while($fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC)){ ?>
+                <tr>
                     <th scope="row">
-                    <!--<button type="submit" value="update" name="update_payment">
-                        <i class="bi bi-pencil-square"></i> تحديث
-                    </button>-->
                         <form action="" method="post">
                             <input type="hidden" name="order_id" value="<?= $fetch_store_orders['id']; ?>">
-                            <!--<button type="submit" value="update" name="update_payment">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>-->
-                            <button type="button" class="btn btn-success editbtn"> EDIT </button>
-                            <!-- Button trigger modal -->
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-                            <a href="placed_orders.php?delete=<?= $fetch_store_orders['id']; ?>" onclick="return confirm('هل أنت متاكد من حذف الطلب؟');">
-                                <i style="color: #FE4445;" class="bi bi-trash-fill"></i>
-                            </a>
+                            <button type="button" class="btn btn-success editbtn"> تحديث </button>
                         </form>
                     </th>
                     <?php
                         /*if ($fetch_store_orders['payment_status'] == 'pending') {
                             echo '<td scope="row" style="color: green;">معلق</td>';
                         }*/
-                        echo  '<td>' .$fetch_store_orders['payment_status']. '</td>';
+                        $status = $fetch_store_orders['payment_status'];
+                        if ($status == "pending") {
+                            echo  '<td>pending</td>';
+                        }
+                        else {
+                            echo  '<td>' .$fetch_store_orders['payment_status']. '</td>';
+                        }
                         echo '<td scope="row">'.$fetch_store_orders['placed_on'].'</td>';
                         if ($fetch_store_orders['method'] == 'cash on delivery') {
                             echo '<td scope="row">الدفع عند الاستلام</td>';
@@ -200,7 +184,148 @@ if(isset($_POST['updatedata'])) {
    ?>
    
    
-</div>
+    <!--<div class="card">
+      <img src="..." class="card-img-top" alt="...">
+    
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>-->
+
+    <!--<div class="row">
+        <div class="col">
+            <div class="card" aria-hidden="true">
+                <img src="../images/avatar_geisha_japanese_woman_icon.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                        <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder col-7"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-6"></span>
+                        <span class="placeholder col-8"></span>
+                    </p>
+                    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" aria-hidden="true">
+                <img src="../images/avatar_geisha_japanese_woman_icon.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                        <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder col-7"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-6"></span>
+                        <span class="placeholder col-8"></span>
+                    </p>
+                    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" aria-hidden="true">
+                <img src="../images/avatar_geisha_japanese_woman_icon.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                        <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder col-7"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-6"></span>
+                        <span class="placeholder col-8"></span>
+                    </p>
+                    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" aria-hidden="true">
+                <img src="../images/avatar_geisha_japanese_woman_icon.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                        <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder col-7"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-6"></span>
+                        <span class="placeholder col-8"></span>
+                    </p>
+                    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" aria-hidden="true">
+                <img src="../images/avatar_geisha_japanese_woman_icon.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                        <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder col-7"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-6"></span>
+                        <span class="placeholder col-8"></span>
+                    </p>
+                    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" aria-hidden="true">
+                <img src="../images/avatar_geisha_japanese_woman_icon.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                        <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder col-7"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-6"></span>
+                        <span class="placeholder col-8"></span>
+                    </p>
+                    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    
+    <!--<div class="row">
+        <?php
+        $i = 1;
+        $select_store_orders = $conn->prepare("SELECT * FROM `store_orders`"); 
+        $select_store_orders->execute();
+        if($select_store_orders->rowCount() > 0 && $select_store_orders->rowCount() <= 6){
+            while($fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC)){
+                    for ($i = 0; $i < 6; $i++) { ?>
+                        <div class="col">
+                    <div class="card">
+                        <img src="../images/avatar_geisha_japanese_woman_icon.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+        <?php } } } ?>
+    </div>-->
+    
 
 </section>
 
@@ -263,38 +388,28 @@ if(isset($_POST['updatedata'])) {
                                 <label for="exampleFormControlInput1" class="form-label">الحالة</label>
                                 <!--<input type="text" class="form-control" name="status" id="status" placeholder="حالة الطلب">-->
                                 <select class="form-select" aria-label="Default select example" name="status" id="status">
-                                  <option selected>إختر حالة الطلب</option>
-                                  <option value="pending">تم التأكيد</option>
-                                  <option value="delivery">تم التوصيل</option>
-                                  <option value="completed">مكتمل</option>
-                                  <option value="cancelled">ملغي</option>
+                                    <!--<option selected>إختر حالة الطلب</option>-->
+                                  <?php
+                                    $select_store_orders = $conn->prepare("SELECT * FROM `store_orders`"); 
+                                    $select_store_orders->execute();
+                                    $fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC);
+                                    $payment_status = $fetch_store_orders['payment_status']; ?>
+                                    <?php if ($payment_status == "reservation") { ?>
+                                        <option selected><?php echo $payment_status; ?></option>
+                                        <option value="unreservation">إلغاء الحجز</option>
+                                    <?php } else if ($payment_status == "pending") { ?>
+                                        <option selected>معلق</option>
+                                        <option value="pending">معلق</option>
+                                        <option value="reservation">إحجز الآن</option>
+                                    <?php } else { ?>
+                                        <option selected><?php echo $payment_status; ?></option>
+                                        <option value="reservation">إحجز الآن</option>
+                                    <?php }
+                                  ?>
                                 </select>
                             </div>
                         </div>
 
-                        <!--<div class="form-group">
-                            <label> First Name </label>
-                            <input type="text" name="fname" id="fname" class="form-control"
-                                placeholder="Enter First Name">
-                        </div>
-
-                        <div class="form-group">
-                            <label> Last Name </label>
-                            <input type="text" name="lname" id="lname" class="form-control"
-                                placeholder="Enter Last Name">
-                        </div>
-
-                        <div class="form-group">
-                            <label> Course </label>
-                            <input type="text" name="course" id="course" class="form-control"
-                                placeholder="Enter Course">
-                        </div>
-
-                        <div class="form-group">
-                            <label> Phone Number </label>
-                            <input type="text" name="contact" id="contact" class="form-control"
-                                placeholder="Enter Phone Number">
-                        </div>-->
                     </div>
                     <div class="modal-footer">
                         <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
@@ -305,66 +420,6 @@ if(isset($_POST['updatedata'])) {
             </div>
         </div>
     </div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="direction: rtl;">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-      </div>
-      <div class="modal-body">
-        <div class="row mb-3">
-            <div class="col">
-              <label for="exampleFormControlInput1" class="form-label">رقم الطلب</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="XYZ-XXXXX">
-            </div>
-            <div class="col">
-              <label for="exampleFormControlInput1" class="form-label">إسم المنتج</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="إسم المنتج">
-            </div>
-        </div>
-        <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label">إسم الطالب</label>
-          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="إسم الطالب">
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-              <label for="exampleFormControlInput1" class="form-label">الكمية</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="الكمية">
-            </div>
-            <div class="col">
-              <label for="exampleFormControlInput1" class="form-label">السعر</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="السعر">
-            </div>
-            <div class="col">
-              <label for="exampleFormControlInput1" class="form-label">الإجمالي</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="السعر X الكمية">
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                <label for="exampleFormControlInput1" class="form-label">حالة الدفع</label>
-                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="حالة الدفع">
-            </div>
-            <div class="col">
-                <label for="exampleFormControlInput1" class="form-label">الحالة</label>
-                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="حالة الطلب">
-            </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">حفظ التغيرات</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
 
 
 

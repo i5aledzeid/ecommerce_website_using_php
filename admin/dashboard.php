@@ -52,48 +52,14 @@ $number_of_system = $select_system->rowCount();
 
    <h1 class="heading">dashboard | لوحة التحكم</h1>
 
-   <div class="box-container">
+   <div class="box-container" style="direction: rtl;">
 
       <div class="box">
          <h3>!مرحباً بك</h3>
          <p><?= '@' . $fetch_profile['name']; ?></p>
          <a href="update_profile.php" class="btn">تحديث الملف الشخصي <i class="fa fa-database" aria-hidden="true"></i></a>
       </div>
-
-      <div class="box">
-         <?php
-            $total_pendings = 0;
-            $select_pendings = $conn->prepare("SELECT * FROM `orders` WHERE payment_status = ?");
-            $select_pendings->execute(['pending']);
-            $count = $select_pendings->rowCount();
-            if($select_pendings->rowCount() > 0){
-               while($fetch_pendings = $select_pendings->fetch(PDO::FETCH_ASSOC)){
-                  $total_pendings += $fetch_pendings['total_price'];
-               }
-            }
-         ?>
-         <h3><span>$</span><?= $total_pendings; ?><span>/-</span></h3>
-         <p><?= '(' . $count . ')'; ?> total pendings</p>
-         <a href="pending_orders.php" class="btn">رؤية الطلبات المعلقة <i class="fa fa-table" aria-hidden="true"></i></a>
-      </div>
-
-      <div class="box">
-         <?php
-            $total_completes = 0;
-            $select_completes = $conn->prepare("SELECT * FROM `orders` WHERE payment_status = ?");
-            $select_completes->execute(['completed']);
-            $count = $select_completes->rowCount();
-            if($select_completes->rowCount() > 0){
-               while($fetch_completes = $select_completes->fetch(PDO::FETCH_ASSOC)){
-                  $total_completes += $fetch_completes['total_price'];
-               }
-            }
-         ?>
-         <h3><span>$</span><?= $total_completes; ?><span>/-</span></h3>
-         <p><?= '(' . $count . ')'; ?> completed orders</p>
-         <a href="completed_orders.php" class="btn">رؤية الطلبات المكتملة <i class="fa fa-bookmark" aria-hidden="true"></i></a>
-      </div>
-
+      
       <div class="box">
          <?php
             $select_orders = $conn->prepare("SELECT * FROM `orders`");
@@ -112,6 +78,40 @@ $number_of_system = $select_system->rowCount();
          </p>
          <!--<p>orders placed</p>-->
          <a href="placed_orders.php" class="btn">رؤية الطلبات <i class="fa fa-list" aria-hidden="true"></i></a>
+      </div>
+
+      <div class="box">
+         <?php
+            $total_pendings = 0;
+            $select_pendings = $conn->prepare("SELECT * FROM `orders` WHERE payment_status = ?");
+            $select_pendings->execute(['pending']);
+            $count = $select_pendings->rowCount();
+            if($select_pendings->rowCount() > 0){
+               while($fetch_pendings = $select_pendings->fetch(PDO::FETCH_ASSOC)){
+                  $total_pendings += $fetch_pendings['total_price'];
+               }
+            }
+         ?>
+         <h3 style="direction: ltr;"><span>$</span><?= $total_pendings; ?><span>/-</span></h3>
+         <p><?= '(' . $count . ')'; ?> total pendings</p>
+         <a href="pending_orders.php" class="btn">رؤية الطلبات المعلقة <i class="fa fa-table" aria-hidden="true"></i></a>
+      </div>
+
+      <div class="box">
+         <?php
+            $total_completes = 0;
+            $select_completes = $conn->prepare("SELECT * FROM `orders` WHERE payment_status = ?");
+            $select_completes->execute(['completed']);
+            $count = $select_completes->rowCount();
+            if($select_completes->rowCount() > 0){
+               while($fetch_completes = $select_completes->fetch(PDO::FETCH_ASSOC)){
+                  $total_completes += $fetch_completes['total_price'];
+               }
+            }
+         ?>
+         <h3 style="direction: ltr;"><span>$</span><?= $total_completes; ?><span>/-</span></h3>
+         <p><?= '(' . $count . ')'; ?> completed orders</p>
+         <a href="completed_orders.php" class="btn">رؤية الطلبات المكتملة <i class="fa fa-bookmark" aria-hidden="true"></i></a>
       </div>
       
       <div class="box">
@@ -200,7 +200,7 @@ $number_of_system = $select_system->rowCount();
             $select_brand->execute();
             $number_of_brand = $select_brand->rowCount();
          ?>
-         <h3><?= $number_of_messages; ?> / <?= $number_of_brand; ?></h3>
+         <h3 style="direction: ltr;"><?= $number_of_messages; ?> / <?= $number_of_brand; ?></h3>
          <p>new category/brand</p>
          <a href="messagess.php" class="btn">التصنيفات/العلامات التجارية <i class="fa fa-hashtag" aria-hidden="true"></i></a>
       </div>
