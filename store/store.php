@@ -100,11 +100,22 @@ include '../components/wishlist_cart.php';
                 <h3 style="font-size: 8px;"><?= $fetch_products['created_at']; ?></h3>
                 <a href="" class="btn">shop now</a>
                 <?php
-                    if ($user_id == $id) { ?>
-                        <a href="products.php" class="btn">+</a>
-                    <?php }
+                $select_products6 = $conn->prepare("SELECT * FROM `store` WHERE created_by='$user_id' AND status='6'");
+                $select_products6->execute();
+                $select_products5 = $conn->prepare("SELECT * FROM `store` WHERE created_by='$user_id' AND status='5'");
+                $select_products5->execute();
+                $select_products3 = $conn->prepare("SELECT * FROM `store` WHERE created_by='$user_id' AND status='3'");
+                $select_products3->execute();
+                if($select_products6->rowCount() > 0){
+                    //while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ ?>
+                        <a href="products.php" class="btn add-product">+</a>
+                    <?php //}
+                } if($select_products5->rowCount() > 0){ ?>
+                    <a href="products.php" class="btn add-product">+</a>
+                <?php } if($select_products3->rowCount() > 0){ ?>
+                    <a href="products.php" class="btn add-product">+</a>
+                <?php }
                 ?>
-
             </div>
       </div>
       

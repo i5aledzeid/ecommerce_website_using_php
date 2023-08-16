@@ -146,6 +146,11 @@ $number_of_system = $select_system->rowCount();
         <?php } } ?>
         
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    
+    <style>
+        img[src="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"]{ display: none; }
+
+    </style>
 
 </head>
 <body>
@@ -155,23 +160,23 @@ $number_of_system = $select_system->rowCount();
 <section class="dashboard">
 
     <h1 class="heading" style="font-size: 16px;">
-        الطلبات
+        <a style="text-decoration: none; color: black; font-weight: bold;">الطلبات: </a>
         <?php if ($status == 'pending') { ?>
         <a href="dashboard.php?status=pending" style="background: red; padding: 8px; border-radius: 16px; color: white; text-decoration: underline;">المتاحة</a>
         |
-        <a href="dashboard.php?status=reservation">المحجوزة</a>
+        <a href="dashboard.php?status=reservation" style="text-decoration: none; color: black;">المحجوزة</a>
         |
-        <a href="dashboard.php?status=completed">المكتملة</a>
+        <a href="dashboard.php?status=completed" style="text-decoration: none; color: black;">المكتملة</a>
         <?php } else if ($status == 'reservation') {?>
-        <a href="dashboard.php?status=pending">المتاحة</a>
+        <a href="dashboard.php?status=pending" style="text-decoration: none; color: black;">المتاحة</a>
         |
         <a href="dashboard.php?status=reservation" style="background: red; padding: 8px; border-radius: 16px; color: white; text-decoration: underline;">المحجوزة</a>
         |
-        <a href="dashboard.php?status=completed">المكتملة</a>
+        <a href="dashboard.php?status=completed" style="text-decoration: none; color: black;">المكتملة</a>
         <?php } else if ($status == 'completed') {?>
-        <a href="dashboard.php?status=pending">المتاحة</a>
+        <a href="dashboard.php?status=pending" style="text-decoration: none; color: black;">المتاحة</a>
         |
-        <a href="dashboard.php?status=reservation">المحجوزة</a>
+        <a href="dashboard.php?status=reservation" style="text-decoration: none; color: black;">المحجوزة</a>
         |
         <a href="dashboard.php?status=completed" style="background: red; padding: 8px; border-radius: 16px; color: white; text-decoration: underline;">المكتملة</a>
         <?php } ?>
@@ -211,7 +216,7 @@ $number_of_system = $select_system->rowCount();
                 
                 //for ($x = 1; $x < $count; $x++) { ?>
                     <div class="box" style="background: <?php //echo('#' . $rand); ?>;">
-                        <h3 id="number"><?php echo '#' . $i++; ?></h3>
+                        <h3 id="number"><?php echo '' . $i++ . '#'; ?></h3>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['payment_status']; ?></p>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['total_price']; ?></p>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['qty']; ?></p>
@@ -219,7 +224,7 @@ $number_of_system = $select_system->rowCount();
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['qty'] * $fetch_store_orders['total_price']; ?></p>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['user_id']; ?></p>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['name']; ?></p>
-                        <p style="font-size: 12px;"><?= $fetch_store_orders['total_products']; ?></p>
+                        <p style="font-size: 12px; padding: 0;"><?= $fetch_store_orders['total_products']; ?></p>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['oid']; ?></p>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['placed_on']; ?></p>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['id']; ?></p>
@@ -228,31 +233,53 @@ $number_of_system = $select_system->rowCount();
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['delivery_price']; ?></p>
                         
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['delivery_by']; ?></p>
+                        <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['address']; ?></p>
                         <div class="row">
                             <div class="col-4">
-                                <p style="font-size: 12px;"><?= $fetch_store_orders['payment_status']; ?></p>
+                                <?php if ($fetch_store_orders['payment_status'] == 'pending') { ?>
+                                    <p style="font-size: 12px; padding: 0; color: white; background: #826880;"><?= $fetch_store_orders['payment_status']; ?></p>
+                                <?php } else if ($fetch_store_orders['payment_status'] == 'delivery') { ?>
+                                    <p style="font-size: 12px; padding: 0; color: white; background: #65a63f;"><?= $fetch_store_orders['payment_status']; ?></p>
+                                <?php } else if ($fetch_store_orders['payment_status'] == 'shipped') { ?>
+                                    <p style="font-size: 12px; padding: 0; color: white; background: #d6a033;"><?= $fetch_store_orders['payment_status']; ?></p>
+                                <?php } else if ($fetch_store_orders['payment_status'] == 'reservation') { ?>
+                                    <p style="font-size: 12px; padding: 0; color: white; background: #a63f57;"><?= $fetch_store_orders['payment_status']; ?></p>
+                                <?php } else if ($fetch_store_orders['payment_status'] == 'completed') { ?>
+                                    <p style="font-size: 12px; padding: 0; color: white; background: #3f46a6;"><?= $fetch_store_orders['payment_status']; ?></p>
+                                <?php } else if ($fetch_store_orders['payment_status'] == 'cancelled') { ?>
+                                    <p style="font-size: 12px; padding: 0; color: white; background: #c2152c;"><?= $fetch_store_orders['payment_status']; ?></p>
+                                <?php } ?>
                             </div>
                             <div class="col">
-                                <p style="font-size: 12px;"><?= $fetch_store_orders['placed_on']; ?></p>
+                                <p style="font-size: 12px; padding: 0;"><?= $fetch_store_orders['placed_on']; ?> <i class="bi bi-calendar3"></i></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <p style="font-size: 12px;"><?= $fetch_store_orders['total_price']; ?></p>
+                                <p style="font-size: 12px; padding: 0;"><?= $fetch_store_orders['total_price']; ?></p>
                             </div>
                             <div class="col">
-                                <p style="font-size: 12px;"><?= $fetch_store_orders['qty']; ?></p>
+                                <p style="font-size: 12px; padding: 0;"><?= $fetch_store_orders['qty']; ?></p>
                             </div>
                             <div class="col">
-                                <p style="font-size: 12px;"><?= $fetch_store_orders['total_price'] * $fetch_store_orders['qty']; ?></p>
+                                <p style="font-size: 12px; padding: 0;"><?= $fetch_store_orders['total_price'] * $fetch_store_orders['qty']; ?></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <p style="font-size: 12px;"><?= 'delivery_by: ' . $fetch_store_orders['delivery_by']; ?></p>
+                                <?php if ($fetch_store_orders['delivery_by'] == "") { ?>
+                                    <p style="font-size: 12px; padding: 0;"><?= 'delivery_by: ' . $fetch_store_orders['delivery_by']; ?></p>
+                                <?php } else { ?>
+                                    <p style="font-size: 12px; padding: 0;"><?= 'delivery by '; ?><i class="bi bi-car-front-fill"></i></p>
+                                <?php } ?>
                             </div>
+                            <div class="col-4">
+                                <p style="font-size: 12px; padding: 0;"><?= '$' . $fetch_store_orders['delivery_price']; ?></p>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col">
-                                <p style="font-size: 12px;"><?= 'delivery_price: ' . $fetch_store_orders['delivery_price']; ?></p>
+                                <p style="font-size: 12px; padding: 0;"><?= $fetch_store_orders['address'] . ' '; ?><i class="bi bi-geo-alt-fill"></i></p>
                             </div>
                         </div>
                         <form action="" method="post">
@@ -272,8 +299,53 @@ $number_of_system = $select_system->rowCount();
                         </form>
                     </div>
             <?php   //}
-                }
-            } ?>
+            }
+        } else { 
+            for ($n = 1; $n <= 10; $n++) { ?>
+                    <div class="box">
+                        <h3 id="number"><?php echo '' . $i++ . '#'; ?></h3>
+                        <p style="font-size: 12px;"></p>
+                        <div class="row">
+                            <div class="col-4">
+                                <p style="font-size: 8px;"></p>
+                            </div>
+                            <div class="col">
+                                <p style="font-size: 12px;"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p style="font-size: 12px;"></p>
+                            </div>
+                            <div class="col">
+                                <p style="font-size: 12px;"></p>
+                            </div>
+                            <div class="col">
+                                <p style="font-size: 8px;"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p style="font-size: 12px;"></p>
+                            </div>
+                            <div class="col">
+                                <p style="font-size: 12px;"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p style="font-size: 12px;"></p>
+                            </div>
+                        </div>
+                        <form action="" method="post">
+                            <input type="hidden" name="order_id" value="<?= $fetch_store_orders['id']; ?>">
+                            <button type="button" class="btn btn-success"> ~ </button>
+                        </form>
+                    </div>
+
+        <?php }
+        
+        }?>
       
    </div>
 
@@ -364,7 +436,7 @@ $number_of_system = $select_system->rowCount();
                                 <input type="text" class="form-control" name="methods" id="methods" placeholder="حالة الدفع" readonly>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col">
                                 <label for="exampleFormControlInput1" class="form-label">delivery_price</label>
                                 <input type="text" class="form-control" name="delivery_price" id="delivery_price" placeholder="توصيل بوسطة">
@@ -374,6 +446,28 @@ $number_of_system = $select_system->rowCount();
                                 <input type="text" class="form-control" name="delivery_by" id="delivery_by" placeholder="سعر التوصيل" readonly>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="exampleFormControlInput1" class="form-label">المكان</label>
+                                <input type="text" class="form-control is-invalid" name="address" id="address" placeholder="المكان" readonly>
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    لا يمكن تغير الخانة المحددة باللون الأحمر إلا من قبل المشتري
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Confirm code -->
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                                <label class="form-check-label" for="invalidCheck">
+                                    في حال الموافقة سيتم حجز الطلب لك فقط.
+                                </label>
+                                <div class="invalid-feedback">
+                                    You must agree before submitting.
+                                 </div>
+                            </div>
+                        </div>
+                        <!-- Confirm code -->
                     </div>
                     <div class="modal-footer">
                         <button type="submit" name="updatedata" class="btn btn-primary">تحديث</button>
@@ -514,6 +608,7 @@ $number_of_system = $select_system->rowCount();
                 $('#uid').val(data[10]);
                 $('#delivery_by').val(data[11]);
                 $('#delivery_price').val(data[12]);
+                $('#address').val(data[13]);
             });
         });
         

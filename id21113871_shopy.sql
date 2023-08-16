@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Aug 13, 2023 at 06:08 PM
+-- Host: localhost:3306
+-- Generation Time: Aug 14, 2023 at 11:27 PM
 -- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.3.33
 
@@ -195,6 +195,14 @@ CREATE TABLE `orders` (
   `payment_status` varchar(20) NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `oid`, `name`, `number`, `email`, `method`, `address`, `total_products`, `total_price`, `placed_on`, `payment_status`) VALUES
+(1, 7, 2855530004, 'shop', '5435435364', 'shop@gmail.com', 'cash on delivery', 'flat no. 4, Street 101, Tokyo, Hokkaido, Japan - 345634', 'MacBook Air 16 (666 x 1) -iPhone 14 (1425 x 3) -LG (1359 x 1) -iPad Pro 9.12 (2585 x 2) -', 11470, '2023-08-14', 'pending'),
+(2, 7, 1029606175, 'shop', '6576575676', 'shop@gmail.com', 'cash on delivery', 'flat no. 1, street 1, Tokyo, Hokkaido, Japan - 123456', 'MacBook Air 16 (666 x 1) -MacBook Air 14 (323 x 1) -iPhone 14 (1425 x 1) -LG (1359 x 1) -', 3773, '2023-08-14', 'pending');
+
 -- --------------------------------------------------------
 
 --
@@ -254,7 +262,8 @@ INSERT INTO `store` (`id`, `title`, `subtitle`, `status`, `image`, `background`,
 (3, 'Customer', 'Customer store.', 1, 'avatar_male_man_portrait_icon.png', 'home-bg-2.jpg', 3, '2023-08-07 13:22:58'),
 (4, 'Client', 'client store.', 2, 'actor_chaplin_comedy_man_icon.png', 'home-bg-3.jpg', 4, '2023-08-10 09:27:46'),
 (5, 'Developer', 'developer store.', 3, 'avatar_geisha_japanese_woman_icon.png', 'home-bg-4.jpg', 5, '2023-08-10 09:35:29'),
-(6, 'Info', 'info store.', 5, 'avatar_hindi_indian_woman_icon.png', 'home-bg-5.jpg', 6, '2023-08-10 09:32:44');
+(6, 'Info', 'info store.', 5, 'avatar_hindi_indian_woman_icon.png', 'home-bg-5.jpg', 6, '2023-08-10 09:32:44'),
+(7, 'Shop', 'shop info.', 4, 'avatar_male_man_portrait_icon.png', 'home-bg-1.png', 7, '2023-08-14 17:48:32');
 
 -- --------------------------------------------------------
 
@@ -278,8 +287,24 @@ CREATE TABLE `store_orders` (
   `placed_on` date NOT NULL DEFAULT current_timestamp(),
   `payment_status` varchar(255) NOT NULL DEFAULT 'pending',
   `store` varchar(255) NOT NULL,
-  `sid` int(11) NOT NULL
+  `sid` int(11) NOT NULL,
+  `delivery_by` int(11) NOT NULL DEFAULT 0,
+  `delivery_price` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `store_orders`
+--
+
+INSERT INTO `store_orders` (`id`, `user_id`, `oid`, `name`, `number`, `email`, `method`, `address`, `image`, `total_products`, `total_price`, `qty`, `placed_on`, `payment_status`, `store`, `sid`, `delivery_by`, `delivery_price`) VALUES
+(1, '7', 2855530004, 'shop', '5435435364', 'shop@gmail.com', 'cash on delivery', 'flat no. 4, Street 101, Tokyo, Hokkaido, Japan - 345634', '', 'MacBook Air 16', 666, 1, '2023-08-14', 'pending', 'Khaled Zeid', 1, 1, 0),
+(2, '7', 2855530004, 'shop', '5435435364', 'shop@gmail.com', 'cash on delivery', 'flat no. 4, Street 101, Tokyo, Hokkaido, Japan - 345634', '', 'iPhone 14', 1425, 3, '2023-08-14', 'pending', 'Khaled Zeid', 1, 0, 0),
+(3, '7', 2855530004, 'shop', '5435435364', 'shop@gmail.com', 'cash on delivery', 'flat no. 4, Street 101, Tokyo, Hokkaido, Japan - 345634', '', 'LG', 1359, 1, '2023-08-14', 'pending', 'Khaled Zeid', 2, 0, 0),
+(4, '7', 2855530004, 'shop', '5435435364', 'shop@gmail.com', 'cash on delivery', 'flat no. 4, Street 101, Tokyo, Hokkaido, Japan - 345634', '', 'iPad Pro 9.12', 2585, 2, '2023-08-14', 'pending', 'Khaled Zeid', 2, 0, 0),
+(5, '7', 1029606175, 'shop', '6576575676', 'shop@gmail.com', 'cash on delivery', 'flat no. 1, street 1, Tokyo, Hokkaido, Japan - 123456', '', 'MacBook Air 16', 666, 1, '2023-08-14', 'pending', 'Khaled Zeid', 1, 0, 0),
+(6, '7', 1029606175, 'shop', '6576575676', 'shop@gmail.com', 'cash on delivery', 'flat no. 1, street 1, Tokyo, Hokkaido, Japan - 123456', '', 'MacBook Air 14', 323, 1, '2023-08-14', 'pending', 'Khaled Zeid', 1, 0, 0),
+(7, '7', 1029606175, 'shop', '6576575676', 'shop@gmail.com', 'cash on delivery', 'flat no. 1, street 1, Tokyo, Hokkaido, Japan - 123456', '', 'iPhone 14', 1425, 1, '2023-08-14', 'pending', 'Khaled Zeid', 1, 0, 0),
+(8, '7', 1029606175, 'shop', '6576575676', 'shop@gmail.com', 'cash on delivery', 'flat no. 1, street 1, Tokyo, Hokkaido, Japan - 123456', '', 'LG', 1359, 1, '2023-08-14', 'pending', 'Khaled Zeid', 2, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -327,7 +352,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 (3, 'customer', 'customer@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
 (4, 'client', 'client@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
 (5, 'developer', 'developer@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
-(6, 'info', 'info@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d');
+(6, 'info', 'info@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
+(7, 'shop', 'shop@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d');
 
 -- --------------------------------------------------------
 
@@ -460,7 +486,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -484,7 +510,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -496,13 +522,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `store`
 --
 ALTER TABLE `store`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `store_orders`
 --
 ALTER TABLE `store_orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `system`
@@ -514,13 +540,13 @@ ALTER TABLE `system`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
