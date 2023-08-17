@@ -36,7 +36,7 @@ if(isset($_POST['updatedata'])) {
     $payment_status = $_POST['status'];
     $payment_status = filter_var($payment_status, FILTER_SANITIZE_STRING);
     
-    $update_payment = $conn->prepare("UPDATE `store_orders` SET payment_status = ? WHERE oid = ?");
+    $update_payment = $conn->prepare("UPDATE `order_store` SET payment_status = ? WHERE oid = ?");
     $update_payment->execute([$payment_status, $oid]);
     
     $update_payment_order = $conn->prepare("UPDATE `orders` SET payment_status = ? WHERE oid = ?");
@@ -138,7 +138,7 @@ if(isset($_POST['updatedata'])) {
             
         <?php
         $i = 1;
-        $select_store_orders = $conn->prepare("SELECT * FROM `store_orders`"); 
+        $select_store_orders = $conn->prepare("SELECT * FROM `order_store`"); 
         $select_store_orders->execute();
         if($select_store_orders->rowCount() > 0){
             while($fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC)){ ?>
@@ -308,7 +308,7 @@ if(isset($_POST['updatedata'])) {
     <!--<div class="row">
         <?php
         $i = 1;
-        $select_store_orders = $conn->prepare("SELECT * FROM `store_orders`"); 
+        $select_store_orders = $conn->prepare("SELECT * FROM `order_store`"); 
         $select_store_orders->execute();
         if($select_store_orders->rowCount() > 0 && $select_store_orders->rowCount() <= 6){
             while($fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC)){

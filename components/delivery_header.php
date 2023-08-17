@@ -18,7 +18,7 @@
 
    <section class="flex">
 
-      <a href="../home.php" class="logo">Shopie<span>.</span></a>
+      <a href="../" class="logo">Shopie<span>.</span></a>
 
       <nav class="navbar">
             <a href="">home</a>
@@ -32,7 +32,7 @@
 
       <div class="icons">
          <?php
-            $count_wishlist_items = $conn->prepare("SELECT * FROM `store_orders` WHERE payment_status = ?");
+            $count_wishlist_items = $conn->prepare("SELECT * FROM `order_store` WHERE payment_status = ?");
             $count_wishlist_items->execute(["pending"]);
             $total_wishlist_counts = $count_wishlist_items->rowCount();
 
@@ -41,7 +41,7 @@
             $total_cart_counts = $count_cart_items->rowCount();
          ?>
          <a href="search_page.php"><i class="fas fa-search"></i></a>
-         <a href="../delivery/dashboard.php?status=pending"><i class="bi bi-app-indicator"></i><span>(<?= $total_wishlist_counts; ?>)</span></a>
+         <a href="../delivery/dashboard.php?status=all"><i class="bi bi-app-indicator"></i><span>(<?= $total_wishlist_counts; ?>)</span></a>
          <a href="cart.php"><i class="bi bi-bell-fill"></i><span>(<?= $total_cart_counts; ?>)</span></a>
          <div id="user-btn" class="fas fa-user"></div>
         <div id="menu-btn" class="fas fa-bars"></div>

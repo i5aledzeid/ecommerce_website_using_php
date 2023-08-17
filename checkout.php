@@ -40,25 +40,32 @@ if(isset($_POST['order'])){
    $address = filter_var($address, FILTER_SANITIZE_STRING);
    $total_products = $_POST['total_products'];
    $total_price = $_POST['total_price'];
+   $image = $_POST['image'];
 
    $check_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
    $check_cart->execute([$user_id]);
    
     //////////////////////// TRICKS ////////////////////////
     $c = $cart_count;
+    $cz = $cart_count;
     $ca = $cart_count;
     $ca2 = $cart_count;
     $ca3 = $cart_count;
     $xx = 0;
+    $zz = 0;
     $yy = 0;
     $yy2 = 0;
     $yy3 = 0;
     $sid_array = array();
+    $pid_array = array();
     $name_array = array();
     $price_array = array();
     $quantity_array = array();
     for ($x = 0; $x < $c; $x++) {
         $sid_array[$x] = $_POST['sid_' . $xx++];
+    }
+    for ($z = 0; $z < $cz; $z++) {
+        $pid_array[$z] = $_POST['pid_' . $zz++];
     }
     for ($y = 0; $y < $ca; $y++) {
         $name_array[$y] = $_POST['name_' . $yy++];
@@ -69,33 +76,32 @@ if(isset($_POST['order'])){
     for ($y3 = 0; $y3 < $ca3; $y3++) {
         $quantity_array[$y3] = $_POST['qty_' . $yy3++];
     }
-    $image = "";
     $store = "Khaled Zeid";
     //////////////////////// TRICKS ////////////////////////
     $oid = rand(10, 10000000000);
    if($check_cart->rowCount() > 0){
 
-      $insert_order = $conn->prepare("INSERT INTO `orders`(user_id, oid, name, number, email, method, address, total_products, total_price) 
-        VALUES(?,?,?,?,?,?,?,?,?)");
+      $insert_order = $conn->prepare("INSERT INTO `orders`(user_id, oid, name, number, email, method, address, total_products, total_price) VALUES(?,?,?,?,?,?,?,?,?)");
       $insert_order->execute([$user_id, $oid, $name, $number, $email, $method, $address, $total_products, $total_price]);
       
-      $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, name, number, email, method, address, total_products, total_price) 
-        VALUES(?,?,?,?,?,?,?,?,?)");
-      $insert_store_order->execute([$user_id, $oid, $name, $number, $email, $method, $address, $total_products, $total_price]);
+        /*for ($i = 0; $i < $cart_count; $i++) {
+            $insert_store_order = $conn->prepare("INSERT INTO `order_store`(user_id, pid, oid, name, number, email, method, address, image, total_products, total_price, qty, store, sid) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insert_store_order->execute([$user_id, $pid_array[$i], $oid, $name, $number, $email, $method, $address, $image, $name_array[$i], $price_array[$i], $quantity_array[$i], $store, $sid_array[$i]]);
+        }*/
       
-        for ($x = 0; $x < $cart_count; $x++) {
-            $insert_store_order = $conn->prepare("INSERT INTO `store_orders`(user_id, oid, name, number, email, method, address, image, total_products, total_price, qty, store, sid) 
-                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $insert_store_order->execute([$user_id, $oid, $name, $number, $email, $method, $address, $image, $name_array[$x], $price_array[$x], $quantity_array[$x], $store, $sid_array[$x]]);
+        for ($i = 0; $i < $cart_count; $i++) {
+           $insert_store_order = $conn->prepare("INSERT INTO `order_store`(user_id, pid, oid, name, number, email, method, address, image, total_products, total_price, qty, store, sid) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insert_store_order->execute([$user_id, $pid_array[$i], $oid, $name, $number, $email, $method, $address, $image, $name_array[$i], $price_array[$i], $quantity_array[$i], $store, $sid_array[$i]]);
         }
-
-      $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
-      $delete_cart->execute([$user_id]);
-
+        
+        $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
+        $delete_cart->execute([$user_id]);
+      
       $message[] = 'order placed successfully!';
    }else{
       $message[] = 'your cart is empty';
    }
+   
 
 }
 
@@ -140,7 +146,7 @@ if(isset($_POST['order'])){
                $total_products = implode($cart_items);
                $grand_total += ($fetch_cart['price'] * $fetch_cart['quantity']);
       ?>
-         <p> <?= 'SID[<span>' . $fetch_cart['sid'] . '</span>] ' . $fetch_cart['name']; ?> <span>(<?= '$'.$fetch_cart['price'].'/- x '. $fetch_cart['quantity']; ?>)</span> </p>
+         <p> <?= '<a href="quick_view.php?pid='.$fetch_cart['pid'].'"><img src="uploaded_img/'.$fetch_cart['image'].'" alt="logo" style="width: 32px;"></a> SID[<span><a href="store/store.php?user_id='.$fetch_cart['sid'].'&id='.$user_id.'">' . $fetch_cart['sid'] . '</a></span>] ' . 'PID[<span><a href="quick_view.php?pid='.$fetch_cart['pid'].'">' . $fetch_cart['pid'] . '</a></span>] ' . $fetch_cart['name']; ?> <span>(<?= '$'.$fetch_cart['price'].'/- x '. $fetch_cart['quantity']; ?>)</span> </p>
       <?php
             }
          }else{
@@ -153,14 +159,16 @@ if(isset($_POST['order'])){
       </div>
       
         <!-- your store orders -->
-        <h3>your store orders</h3>
+        <h3 style="display: none;">your store orders</h3>
         
-        <div class="display-orders">
+        <div class="display-orders" style="display: none;">
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col" style="text-align: center;">SID</th>
+                      <th scope="col" style="text-align: center;">PID</th>
+                      <th scope="col" style="text-align: center;">Image</th>
                       <th scope="col" style="text-align: center;">Product Name</th>
                       <th scope="col" style="text-align: center;">Price</th>
                       <th scope="col" style="text-align: center;">Quantity</th>
@@ -172,6 +180,7 @@ if(isset($_POST['order'])){
                         $i = 1;
                         //////////////////////// TRICKS ////////////////////////
                         $sids = 0;
+                        $pids = 0;
                         $names = 0;
                         $prices = 0;
                         $quantitys = 0;
@@ -190,6 +199,8 @@ if(isset($_POST['order'])){
                                 <tr>
                                   <th scope="row"><?php echo $i++; ?></th>
                                   <td><input style="text-align: center;" type="text" name="sid_<?php echo $sids++;?>" value="<?= $fetch_cart['sid']; ?>" readonly></td>
+                                  <td><input style="text-align: center;" type="text" name="pid_<?php echo $pids++;?>" value="<?= $fetch_cart['pid']; ?>" readonly></td>
+                                  <td><input style="text-align: center;" type="text" name="image" value="<?= $fetch_cart['image']; ?>" readonly></td>
                                   <td><input style="text-align: center;" type="text" name="name_<?php echo $names++;?>" value="<?= $fetch_cart['name']; ?>" readonly></td>
                                   <td><input style="text-align: center;" type="text" name="price_<?php echo $prices++;?>" value="<?= $fetch_cart['price']; ?>" readonly></td>
                                   <td><input style="text-align: center;" type="text" name="qty_<?php echo $quantitys++;?>" value="<?= $fetch_cart['quantity']; ?>" readonly></td>
@@ -267,7 +278,7 @@ if(isset($_POST['order'])){
          </div>
       </div>
 
-      <input type="submit" name="order" class="btn <?= ($grand_total > 1)?'':'disabled'; ?>" value="place order">
+      <input type="submit" name="order" class="btn <?= ($grand_total > 1)?'':'disabled'; ?>" value="place order" style="height: 52px; font-size: 24px;">
 
    </form>
 

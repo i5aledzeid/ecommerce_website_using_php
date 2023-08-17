@@ -121,7 +121,7 @@ else {
                             <!--<svg style="color: #1D9BF0;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
                                 <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
                             </svg>-->
-                            <i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>
+                            <i class="bi bi-patch-check-fill" style="color: #ffffff; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>
                             <script>
                                 $(document).ready(function() {
                                     $("[rel=tooltip]").tooltip({ placement: 'right'});
@@ -246,7 +246,7 @@ else {
 </style>
     <h1 class="heading">
     <?php
-        $select_stores = $conn->prepare("SELECT * FROM `store_orders` WHERE sid='$user_id'"); 
+        $select_stores = $conn->prepare("SELECT * FROM `order_store` WHERE sid='$user_id'"); 
         $select_stores->execute();
         if($select_stores->rowCount() > 0){
             $number_of_store = $select_stores->rowCount();
@@ -271,7 +271,7 @@ else {
    <div class="swiper-wrapper">
 
    <?php
-     $select_products = $conn->prepare("SELECT * FROM `store_orders` WHERE sid='$user_id' LIMIT 6"); 
+     $select_products = $conn->prepare("SELECT * FROM `order_store` WHERE sid='$user_id' LIMIT 6"); 
      $select_products->execute();
      if($select_products->rowCount() > 0){
       while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){

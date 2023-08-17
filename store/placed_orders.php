@@ -140,6 +140,7 @@ if(isset($_POST['updatedata'])) {
               <th scope="col">إسم الطالب</th>
               <th scope="col">إسم المنتج</th>
               <th scope="col">رقم الطلب</th>
+              <th scope="col">صورة المنتج</th>
               <th scope="col">#</th>
             </tr>
         </thead>
@@ -147,7 +148,7 @@ if(isset($_POST['updatedata'])) {
             
         <?php
             $i = 1;
-            $select_store_orders = $conn->prepare("SELECT * FROM `store_orders` WHERE sid='$user_id'"); 
+            $select_store_orders = $conn->prepare("SELECT * FROM `order_store` WHERE sid='$user_id'"); 
             $select_store_orders->execute();
             if($select_store_orders->rowCount() > 0){
                 while($fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC)){ ?>
@@ -186,6 +187,8 @@ if(isset($_POST['updatedata'])) {
                           <td>' .$fetch_store_orders['name']. '</td>
                           <td>' .$fetch_store_orders['total_products']. '</td>
                           <td><a id="id" style="color: #D49797; text-decoration: none;" href=""></a>' .$fetch_store_orders['oid']. '</td>
+                          <td>'.$fetch_store_orders['image'].'</td>
+                          <!--<td>'.$fetch_store_orders['image'].'<a href="#"><img src="../uploaded_img/'.$fetch_store_orders['image'].'" alt="logo" style="width: 64px;"></a></td>-->
                           <td>'. $i++ .'</td>
                         </tr>'; ?>
             <?php } } ?>
@@ -222,6 +225,7 @@ if(isset($_POST['updatedata'])) {
                     <div class="modal-body">
 
                         <input type="hidden" name="update_id" id="update_id">
+                        
                         <div class="row mb-3">
                             <div class="col">
                               <label for="exampleFormControlInput1" class="form-label">رقم الطلب</label>
@@ -263,15 +267,30 @@ if(isset($_POST['updatedata'])) {
                                 <label for="exampleFormControlInput1" class="form-label">الحالة</label>
                                 <!--<input type="text" class="form-control" name="status" id="status" placeholder="حالة الطلب">-->
                                 <select class="form-select" aria-label="Default select example" name="status" id="status">
-                                  <option selected>إختر حالة الطلب</option>
+                                  <option selected disabled>إختر حالة الطلب</option>
                                   <option value="pending">تم التأكيد</option>
                                   <option value="delivery">تم التوصيل</option>
                                   <option value="completed">مكتمل</option>
                                   <option value="cancelled">ملغي</option>
                                 </select>
                             </div>
+                            <!--<div class="d-flex justify-content-center">
+                                <?php
+                                $select_store_orders = $conn->prepare("SELECT * FROM `order_store` WHERE sid='$user_id'"); 
+                                $select_store_orders->execute();
+                                $select_store_orders->rowCount();
+                                $fetch_store_orders = $select_store_orders->fetch(PDO::FETCH_ASSOC);
+                                echo '
+                                    <img src="../uploaded_img/'.$fetch_store_orders['image'].'" alt="logo" style="width: 64px;" name="order-image" id="order-image">
+                                ';
+                                ?>
+                            </div>-->
+                            
                         </div>
-
+                        <div class="col">
+                            <label for="exampleFormControlInput1" class="form-label">صورة المنتج</label>
+                            <input style="direction: ltr;" type="text" class="form-control" name="order-image" id="order-image" placeholder="حالة الدفع" readonly>
+                        </div>
                         <!--<div class="form-group">
                             <label> First Name </label>
                             <input type="text" name="fname" id="fname" class="form-control"
@@ -295,6 +314,7 @@ if(isset($_POST['updatedata'])) {
                             <input type="text" name="contact" id="contact" class="form-control"
                                 placeholder="Enter Phone Number">
                         </div>-->
+                        
                     </div>
                     <div class="modal-footer">
                         <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
@@ -411,6 +431,7 @@ if(isset($_POST['updatedata'])) {
 
                 console.log(data);
 
+                $('#order-image').val(data[9]);
                 $('#status').val(data[0]);
                 $('#qty').val(data[4]);
                 $('#price').val(data[5]);
