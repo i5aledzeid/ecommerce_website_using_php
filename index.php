@@ -52,9 +52,9 @@ include 'components/wishlist_cart.php';
             <img src="images/home-img-1.png" alt="" style="height: 100px;">
          </div>
          <div class="content">
-            <span>upto 50% off</span>
-            <h3 style="font-size: 16px;">latest smartphones</h3>
-            <a href="shop.php" class="btn">shop now</a>
+            <span>خصم بنسبة %50</span>
+            <h3 style="font-size: 16px;">أحدث الهواتف الذكية</h3>
+            <a href="shop.php" class="btn">تسوق الآن</a>
          </div>
       </div>
 
@@ -63,9 +63,9 @@ include 'components/wishlist_cart.php';
             <img src="images/home-img-2.png" alt="" style="height: 100px;">
          </div>
          <div class="content">
-            <span>upto 50% off</span>
-            <h3 style="font-size: 16px;">latest watches</h3>
-            <a href="shop.php" class="btn">shop now</a>
+            <span>خصم بنسبة %50</span>
+            <h3 style="font-size: 16px;">أحدث الساعات الرقمية</h3>
+            <a href="shop.php" class="btn">تسوق الآن</a>
          </div>
       </div>
 
@@ -75,8 +75,8 @@ include 'components/wishlist_cart.php';
          </div>
          <div class="content">
             <span>upto 50% off</span>
-            <h3 style="font-size: 16px;">latest headsets</h3>
-            <a href="shop.php" class="btn">shop now</a>
+            <h3 style="font-size: 16px;">أحدث السماعات الرياضية</h3>
+            <a href="shop.php" class="btn">تسوق الآن</a>
          </div>
       </div>
       
@@ -177,7 +177,11 @@ include 'components/wishlist_cart.php';
       <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
       <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
       <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
-      <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
+      <div class="name" style="font-size: 12px;">
+          <i class="bi bi-tags-fill"></i> <a href="category.php?category=<?php echo $fetch_product['category']; ?>">
+              <?= $fetch_product['category']; ?>
+          </a> (<?= $fetch_product['brand']; ?>)
+      </div>
       <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -263,7 +267,11 @@ include 'components/wishlist_cart.php';
           <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
           <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
           <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
-          <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
+            <div class="name" style="font-size: 12px;">
+                <i class="bi bi-tags-fill"></i> <a href="category.php?category=<?php echo $fetch_product['category']; ?>">
+                    <?= $fetch_product['category']; ?>
+                    </a> (<?= $fetch_product['brand']; ?>)
+            </div>
           <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -383,7 +391,7 @@ include 'components/wishlist_cart.php';
                             </script>
                         <?php } ?>
           </div>
-          <div class="name"><?= $fetch_store['subtitle']; ?></div>
+          <div class="name"><?= '[' . $fetch_store['created_by'] . '] ' . $fetch_store['subtitle']; ?></div>
           <div class="flex">
              <div class="price" style="font-size: 12px;"><?= $fetch_store['created_at']; ?></div>
           </div>
@@ -399,7 +407,7 @@ include 'components/wishlist_cart.php';
 
    </div>
 
-   <!--<div class="swiper-pagination"></div>-->
+   <div class="swiper-pagination"></div>
 
    </div>
 
@@ -430,8 +438,13 @@ include 'components/wishlist_cart.php';
           <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
           <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
           <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
-          <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
-            <div class="name" style="font-size: 16px; color: #198754;">
+          <div class="name" style="font-size: 12px;">
+                <i class="bi bi-tags-fill"></i>
+                <a href="category.php?category=<?php echo $fetch_product['category']; ?>">
+                    <?= $fetch_product['category']; ?>
+                </a> (<?= $fetch_product['brand']; ?>)
+           </div>
+           <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
             $by = $fetch_product['created_by'];
@@ -491,6 +504,104 @@ include 'components/wishlist_cart.php';
 
 </section>
 
+<section class="home-products">
+
+   <h1 class="heading">
+   <?php
+        $select_products = $conn->prepare("SELECT * FROM `products` LIMIT 10"); 
+        $select_products->execute();
+        if($select_products->rowCount() > 0){
+            echo 'top ' . $select_products->rowCount() . ' products';
+        }
+   ?>
+   </h1>
+
+   <div class="swiper top-slider">
+
+   <div class="swiper-wrapper">
+
+       <?php
+         $select_products = $conn->prepare("SELECT * FROM `products` LIMIT 10"); 
+         $select_products->execute();
+         if($select_products->rowCount() > 0){
+          while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
+       ?>
+       <form action="" method="post" class="swiper-slide slide">
+          <input type="hidden" name="pid" value="<?= $fetch_product['id']; ?>">
+          <input type="hidden" name="name" value="<?= $fetch_product['name']; ?>">
+          <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
+          <input type="hidden" name="image" value="<?= $fetch_product['image_01']; ?>">
+          <input type="hidden" name="store" value="<?= $fetch_product['created_by']; ?>">
+          <input type="hidden" name="sid" value="<?= $fetch_product['sid']; ?>">
+          <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
+          <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
+          <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
+          <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
+            <div class="name" style="font-size: 12px;">
+                <i class="bi bi-tags-fill"></i>
+                <a href="category.php?category=<?php echo $fetch_product['category']; ?>">
+                    <?= $fetch_product['category']; ?>
+                </a> (<?= $fetch_product['brand']; ?>)
+            </div>
+            <div class="name" style="font-size: 16px; color: #198754;">
+            <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
+            <?php
+            $by = $fetch_product['created_by'];
+            $select_stores = $conn->prepare("SELECT * FROM `store` WHERE `title`='$by'"); 
+            $select_stores->execute();
+            if($select_stores->rowCount() > 0){
+                while($fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php
+                        $status = $fetch_store['status'];
+                        if ($status == 0) {
+                            echo '<i class="fa fa-info-circle" style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="جديد" id="blah"></i>';
+                        } else if ($status == 1) {
+                            echo '<i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>';
+                        } else if ($status == 2) {
+                            echo '<i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>';
+                        } else if ($status == 3) {
+                            echo '<i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>';
+                        } else if ($status == 4) {
+                            echo '<i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>';
+                        } else if ($status == 5) {
+                            echo '<i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>';
+                        } else if ($status == 6) {
+                            echo '<i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>';
+                        }
+                    
+                }
+            }
+            ?>
+            <script>
+                $(document).ready(function() {
+                    $("[rel=tooltip]").tooltip({ placement: 'right'});
+                });
+            </script>
+        </div>
+            <div class="flex">
+             <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
+             <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
+          </div>
+        <?php if ($user_id != $fetch_product['sid']) { ?>
+            <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php } else { ?>
+            <input type="button" value="لا يمكن إضافة منتج من نفس السوق" class="btn" name="" style="background: white; color: black;">
+        <?php } ?>
+       </form>
+       <?php
+          }
+       }else{
+          echo '<p class="empty">no products added yet!</p>';
+       }
+       ?>
+
+   </div>
+
+   <div class="swiper-pagination"></div>
+
+   </div>
+
+</section>
 
 
 
@@ -543,6 +654,31 @@ var swiper = new Swiper(".home-slider", {
 });
 
 var swiper = new Swiper(".products-slider", {
+   loop:true,
+   spaceBetween: 20,
+   pagination: {
+      el: ".swiper-pagination",
+      clickable:true,
+   },
+   breakpoints: {
+      550: {
+        slidesPerView: 2,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 3,
+      },
+      // ADDED NEW 08-08-2023
+      1400: {
+        slidesPerView: 4,
+      },
+      // ADDED NEW 08-08-2023
+   },
+});
+
+var swiper = new Swiper(".top-slider", {
    loop:true,
    spaceBetween: 20,
    pagination: {

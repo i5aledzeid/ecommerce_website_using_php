@@ -38,7 +38,7 @@ include 'components/wishlist_cart.php';
 
 <section class="products">
 
-   <h1 class="heading">category</h1>
+   <h1 class="heading">category <span style="color: #FE4445;"><?php echo $category = $_GET['category']; ?></span></h1>
 
    <div class="box-container">
 

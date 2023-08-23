@@ -74,15 +74,15 @@ if(isset($_GET['delete'])){
    unlink('../uploaded_img/'.$fetch_delete_image['image_01']);
    unlink('../uploaded_img/'.$fetch_delete_image['image_02']);
    unlink('../uploaded_img/'.$fetch_delete_image['image_03']);
-   $delete_product = $conn->prepare("DELETE FROM `products` WHERE id = ?");
+   unlink('../uploaded_img/'.$fetch_delete_image['image_04']);
+   $delete_product = $conn->prepare("DELETE FROM `banner` WHERE id = ?");
    $delete_product->execute([$delete_id]);
-   $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE pid = ?");
-   $delete_cart->execute([$delete_id]);
-   $delete_wishlist = $conn->prepare("DELETE FROM `wishlist` WHERE pid = ?");
-   $delete_wishlist->execute([$delete_id]);
-   header('location:products.php');
+   header('location:banners.php');
 }
 
+    $select_system = $conn->prepare("SELECT * FROM `system`");
+    $select_system->execute();
+    $number_of_system = $select_system->rowCount();
 
 ?>
 
@@ -98,6 +98,13 @@ if(isset($_GET['delete'])){
 
    <link rel="stylesheet" href="../css/admin_style.css">
      <link rel="stylesheet" href="style.css">
+     
+        <?php
+            if($select_system->rowCount() > 0){
+                while($fetch_product = $select_system->fetch(PDO::FETCH_ASSOC)){
+         ?>
+    <link rel="icon" type="image/x-icon" href="/images/admin/<?php echo $fetch_product['icon']; ?>">
+        <?php } } ?>
 
 </head>
 <body>
@@ -106,7 +113,10 @@ if(isset($_GET['delete'])){
 
 <section class="show-products">
 
-   <h1 class="heading">Banners</h1>
+   <h1 class="heading">
+       Banners
+        <a href="add_banner.php?add=<?= $fetch_products['id']; ?>"><i class="fa fa-plus" aria-hidden="true" style="color: black;"></i></a>
+   </h1>
 
    <div class="box-container">
 
@@ -118,14 +128,16 @@ if(isset($_GET['delete'])){
    ?>
    <div class="box">
       <img src="../uploaded_img/banner/<?= $fetch_products['image_1']; ?>" alt="">
-      <div class="name"><?= $fetch_products['title']; ?></div>
-      <div class="price"><span><?= $fetch_products['subtitle']; ?></span></div>
+      <div class="name"><?= $fetch_products['title_1']; ?></div>
+      <div class="price"><span><?= $fetch_products['subtitle_1']; ?></span></div>
       <div class="details">
           <span><?= $fetch_products['date']; ?></span>
       </div>
       <div class="flex-btn">
-         <a href="update_banner.php?update=<?= $fetch_products['id']; ?>" class="option-btn">update</a>
-         <a href="banners.php?delete=<?= $fetch_products['id']; ?>" class="delete-btn" onclick="return confirm('delete this product?');">delete</a>
+         <a href="update_banner.php?update=<?= $fetch_products['id']; ?>" class="option-btn">تحديث</a>
+         <a href="banners.php?delete=<?= $fetch_products['id']; ?>" class="delete-btn" onclick="return confirm('delete this banner?');">
+             <i class="fa fa-trash" aria-hidden="true"></i>
+         </a>
       </div>
    </div>
    <?php

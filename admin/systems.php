@@ -83,7 +83,9 @@ if(isset($_GET['delete'])){
    header('location:products.php');
 }
 
-
+    $select_system = $conn->prepare("SELECT * FROM `system`");
+    $select_system->execute();
+    $number_of_system = $select_system->rowCount();
 ?>
 
 <!DOCTYPE html>
@@ -98,6 +100,13 @@ if(isset($_GET['delete'])){
 
    <link rel="stylesheet" href="../css/admin_style.css">
      <link rel="stylesheet" href="style.css">
+
+        <?php
+            if($select_system->rowCount() > 0){
+                while($fetch_product = $select_system->fetch(PDO::FETCH_ASSOC)){
+         ?>
+    <link rel="icon" type="image/x-icon" href="/images/admin/<?php echo $fetch_product['icon']; ?>">
+        <?php } } ?>
 
 </head>
 <body>

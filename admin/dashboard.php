@@ -56,7 +56,7 @@ $number_of_system = $select_system->rowCount();
 
       <div class="box">
          <h3>!مرحباً بك</h3>
-         <p><?= '@' . $fetch_profile['name']; ?></p>
+         <p style="direction: ltr;"><?= '@' . $fetch_profile['name']; ?></p>
          <a href="update_profile.php" class="btn">تحديث الملف الشخصي <i class="fa fa-database" aria-hidden="true"></i></a>
       </div>
       
@@ -66,7 +66,7 @@ $number_of_system = $select_system->rowCount();
             $select_orders->execute();
             $number_of_orders = $select_orders->rowCount()
          ?>
-         <h3><?= '(' . $number_of_orders . ') إجمالي الطلبات'; ?></h3>
+         <h3><?= 'إجمالي الطلبات (' . $number_of_orders . ')'; ?></h3>
          <p>
          <select class="form-select" style="background: transparent; direction: rtl;" aria-label="Default select example">
             <option selected>إختر نوع الطلب؟</option>
@@ -77,7 +77,8 @@ $number_of_system = $select_system->rowCount();
          </select>
          </p>
          <!--<p>orders placed</p>-->
-         <a href="placed_orders.php" class="btn">رؤية الطلبات <i class="fa fa-list" aria-hidden="true"></i></a>
+         <!--<a href="placed_orders.php" class="btn">رؤية الطلبات <i class="fa fa-list" aria-hidden="true"></i></a>-->
+         <a href="orders.php" class="btn">رؤية الطلبات <i class="fa fa-list" aria-hidden="true"></i></a>
       </div>
 
       <div class="box">
@@ -92,7 +93,7 @@ $number_of_system = $select_system->rowCount();
                }
             }
          ?>
-         <h3 style="direction: ltr;"><span>$</span><?= $total_pendings; ?><span>/-</span></h3>
+         <h3 style="direction: ltr;"><span>$</span><?= number_format($total_pendings, 2); ?><span>/-</span></h3>
          <p><?= '(' . $count . ')'; ?> total pendings</p>
          <a href="pending_orders.php" class="btn">رؤية الطلبات المعلقة <i class="fa fa-table" aria-hidden="true"></i></a>
       </div>
@@ -109,7 +110,7 @@ $number_of_system = $select_system->rowCount();
                }
             }
          ?>
-         <h3 style="direction: ltr;"><span>$</span><?= $total_completes; ?><span>/-</span></h3>
+         <h3 style="direction: ltr;"><span>$</span><?= number_format($total_completes, 2); ?><span>/-</span></h3>
          <p><?= '(' . $count . ')'; ?> completed orders</p>
          <a href="completed_orders.php" class="btn">رؤية الطلبات المكتملة <i class="fa fa-bookmark" aria-hidden="true"></i></a>
       </div>
@@ -177,7 +178,29 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= $number_of_messages; ?></h3>
          <p>new cart</p>
-         <a href="messagess.php" class="btn">رؤية السلة <i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+         <a href="carts.php" class="btn">رؤية السلة <i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+      </div>
+      
+      <div class="box">
+         <?php
+            $select_messages = $conn->prepare("SELECT * FROM `category`");
+            $select_messages->execute();
+            $number_of_messages = $select_messages->rowCount();
+         ?>
+         <h3 style="direction: ltr;"><?= $number_of_messages; ?></h3>
+         <p>new category</p>
+         <a href="category.php" class="btn"> التصنيفات <i class="fa fa-hashtag" aria-hidden="true"></i></a>
+      </div>
+      
+      <div class="box">
+         <?php
+            $select_brand = $conn->prepare("SELECT * FROM `brand`");
+            $select_brand->execute();
+            $number_of_brand = $select_brand->rowCount();
+         ?>
+         <h3 style="direction: ltr;"><?= $number_of_brand; ?></h3>
+         <p>new brand</p>
+         <a href="brand.php" class="btn"> العلامات التجارية <i class="fa fa-hashtag" aria-hidden="true"></i></a>
       </div>
       
       <div class="box">
@@ -189,38 +212,6 @@ $number_of_system = $select_system->rowCount();
          <h3><?= $number_of_messages; ?></h3>
          <p>new store</p>
          <a href="user_stores.php" class="btn">رؤية المتاجر <i class="fa fa-shopping-bag" aria-hidden="true"></i></a>
-      </div>
-      
-      <div class="box">
-         <?php
-            $select_messages = $conn->prepare("SELECT * FROM `category`");
-            $select_messages->execute();
-            $number_of_messages = $select_messages->rowCount();
-            $select_brand = $conn->prepare("SELECT * FROM `brand`");
-            $select_brand->execute();
-            $number_of_brand = $select_brand->rowCount();
-         ?>
-         <h3 style="direction: ltr;"><?= $number_of_messages; ?> / <?= $number_of_brand; ?></h3>
-         <p>new category/brand</p>
-         <a href="messagess.php" class="btn">التصنيفات/العلامات التجارية <i class="fa fa-hashtag" aria-hidden="true"></i></a>
-      </div>
-      
-      <div class="box">
-         <?php
-            $select_products = $conn->prepare("SELECT * FROM `deliveries`");
-            $select_products->execute();
-            $number_of_products = $select_products->rowCount()
-         ?>
-         <h3><?= $number_of_products; ?></h3>
-         <p><?php
-         if ($number_of_products <= 1) {
-            echo $number_of_products . ' delivery list';
-         }
-         else {
-             echo $number_of_products . ' delivery lists';
-         }
-          ?></p>
-         <a href="delivery_accounts.php" class="btn">رؤية الدليفري <i class="fa fa-truck" aria-hidden="true"></i></a>
       </div>
       
       <div class="box">
@@ -257,6 +248,110 @@ $number_of_system = $select_system->rowCount();
          }
           ?></p>
          <a href="ad.php" class="btn">رؤية الإعلانات <i class="fa fa-window-maximize" aria-hidden="true"></i></a>
+      </div>
+      
+      <div class="box">
+         <?php
+            $select_bank_transfers = $conn->prepare("SELECT * FROM `order_store`");
+            $select_bank_transfers->execute();
+            $number_of_bank_transfers = $select_bank_transfers->rowCount();
+            if($select_bank_transfers->rowCount() > 0){
+                //while($fetch_bank_transfers = $select_bank_transfers->fetch(PDO::FETCH_ASSOC)){
+         ?>
+         <h3><?= 'جدول الطلبات' ?></h3>
+         <p>
+             <?php echo '(' . $number_of_bank_transfers . ')'; ?>
+             منتجات تم طلبها
+         </p>
+         <a href="delivery_dashboard.php?status=all" class="btn">قائمة الطلبات <i class="fa fa-bar-chart" aria-hidden="true"></i></a>
+         <?php } //} ?>
+      </div>
+
+      <div class="box">
+          <style>
+              #notify {
+                  position: relative;
+                  top: -12px;
+                  left: -120px;
+                  padding: 8px;
+                  background: red;
+                  color: white;
+              }
+              @media only screen and (max-width: 600px) {
+              #notify {
+                  position: relative;
+                  top: -8px;
+                  left: -160px;
+                  padding: 8px;
+                  background: red;
+                  color: white;
+              }
+            }
+          </style>
+        <?php
+            $dateTimeNow = date("Y-m-d h:i:s");
+            // echo $dateNow = date("Y-m-d");
+            $dateNow = date("Y-m-d");
+            //echo $SevenDaysAgo = strtotime("-7 day");
+            //echo date("d.m.Y", $SevenDaysAgo);
+            $SevenDaysAgo = strtotime("-1 day");
+            // echo $dateAgo = date("Y-m-d", $SevenDaysAgo);
+            $dateAgo = date("Y-m-d", $SevenDaysAgo);
+            $select_bank_transfers = $conn->prepare("SELECT * FROM `bank_transfers` WHERE `created_at` <='$dateNow' AND `created_at` >='$dateAgo';");
+            $select_bank_transfers->execute();
+            $number_of_bank_transfers = $select_bank_transfers->rowCount();
+            if($select_bank_transfers->rowCount() > 0){
+                //while($fetch_bank_transfers = $select_bank_transfers->fetch(PDO::FETCH_ASSOC)){
+         ?>
+          <a href="#" id="notify"><?php
+            if ($number_of_bank_transfers > 99) {
+                echo '+99';
+            }
+            else {
+                echo $number_of_bank_transfers;
+            }
+          ?></a>
+         <h3><?= 'التحويلات البنكية' ?></h3>
+         <p style="font-size: 16px;">
+             <?php echo '[' . date("Y-m-d h:i:s") . ']'; ?>
+         </p>
+         <a href="bank_transfers.php" class="btn">التحويلات البنكية <i class="fa fa-university" aria-hidden="true"></i></a>
+         <?php } //} 
+         else { ?>
+             <a href="#" id="notify">
+             <?php
+             if ($number_of_bank_transfers > 99) {
+                echo '+99';
+            }
+            else {
+                echo $number_of_bank_transfers;
+            } ?>
+            </a>
+          <h3><?= 'التحويلات البنكية' ?></h3>
+         <p style="font-size: 16px;">
+             <?php echo '[' . date("Y-m-d h:i:s") . ']'; ?>
+         </p>
+         <a href="bank_transfers.php" class="btn">التحويلات البنكية <i class="fa fa-university" aria-hidden="true"></i></a>
+         <?php }
+         ?>
+      </div>
+
+      <div class="box">
+         <?php
+            $select_bank_transfers = $conn->prepare("SELECT * FROM `deliveries`");
+            $select_bank_transfers->execute();
+            $number_of_bank_transfers = $select_bank_transfers->rowCount();
+            if($select_bank_transfers->rowCount() > 0){
+                //while($fetch_bank_transfers = $select_bank_transfers->fetch(PDO::FETCH_ASSOC)){
+         ?>
+         <h3><?= 'الموصلين' ?></h3>
+         <p>
+             يعمل
+             <?php echo '<a style="color: #FE4445;" href=""> ' . $number_of_bank_transfers . '</a>'; ?>
+             من الموصلين
+         </p>
+         <a href="delivery_accounts.php" class="btn">قائمة الموصلين <i class="fa fa-car" aria-hidden="true"></i></a>
+         <?php } //} ?>
       </div>
       
       <div class="box">

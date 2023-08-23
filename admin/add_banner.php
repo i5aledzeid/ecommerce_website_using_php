@@ -14,12 +14,23 @@ if(isset($_POST['add_product'])){
 
    $name = $_POST['name'];
    $name = filter_var($name, FILTER_SANITIZE_STRING);
-   $price = $_POST['price'];
-   $price = filter_var($price, FILTER_SANITIZE_STRING);
    $details = $_POST['details'];
    $details = filter_var($details, FILTER_SANITIZE_STRING);
-   $category = $_POST['category'];
-   $brand = $_POST['brand'];
+   
+   $name2 = $_POST['name2'];
+   $name2 = filter_var($name2, FILTER_SANITIZE_STRING);
+   $details2 = $_POST['details2'];
+   $details2 = filter_var($details2, FILTER_SANITIZE_STRING);
+   
+   $name3 = $_POST['name3'];
+   $name3 = filter_var($name3, FILTER_SANITIZE_STRING);
+   $details3 = $_POST['details3'];
+   $details3 = filter_var($details3, FILTER_SANITIZE_STRING);
+   
+   $name4 = $_POST['name4'];
+   $name4 = filter_var($name, FILTER_SANITIZE_STRING);
+   $details4 = $_POST['details4'];
+   $details4 = filter_var($details4, FILTER_SANITIZE_STRING);
 
    $image_01 = $_FILES['image_01']['name'];
    $image_01 = filter_var($image_01, FILTER_SANITIZE_STRING);
@@ -38,24 +49,31 @@ if(isset($_POST['add_product'])){
    $image_size_03 = $_FILES['image_03']['size'];
    $image_tmp_name_03 = $_FILES['image_03']['tmp_name'];
    $image_folder_03 = '../uploaded_img/'.$image_03;
+   
+   $image_04 = $_FILES['image_04']['name'];
+   $image_04 = filter_var($image_04, FILTER_SANITIZE_STRING);
+   $image_size_04 = $_FILES['image_04']['size'];
+   $image_tmp_name_04 = $_FILES['image_04']['tmp_name'];
+   $image_folder_04 = '../uploaded_img/'.$image_04;
 
-   $select_products = $conn->prepare("SELECT * FROM `products` WHERE name = ?");
+   $select_products = $conn->prepare("SELECT * FROM `banner` WHERE id = ?");
    $select_products->execute([$name]);
 
    if($select_products->rowCount() > 0){
       $message[] = 'product name already exist!';
    }else{
 
-      $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image_01, image_02, image_03, category, brand) VALUES(?,?,?,?,?,?,?,?)");
-      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03]);
+      $insert_products = $conn->prepare("INSERT INTO `banner`(title_1, title_2, title_3, title_4, subtitle_1, subtitle_2, subtitle_3, subtitle_4, image_1, image_2, image_3, image_4, created_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+      $insert_products->execute([$name, $details, $name2, $details2, $name3, $details3, $name4, $details4, $image_01, $image_02, $image_03, $image_04, $admin_id]);
 
       if($insert_products){
-         if($image_size_01 > 2000000 OR $image_size_02 > 2000000 OR $image_size_03 > 2000000){
+         if($image_size_01 > 2000000 OR $image_size_02 > 2000000 OR $image_size_03 > 2000000 OR $image_size_04 > 2000000){
             $message[] = 'image size is too large!';
          }else{
             move_uploaded_file($image_tmp_name_01, $image_folder_01);
             move_uploaded_file($image_tmp_name_02, $image_folder_02);
             move_uploaded_file($image_tmp_name_03, $image_folder_03);
+            move_uploaded_file($image_tmp_name_04, $image_folder_04);
             $message[] = 'new product added!';
          }
 
@@ -95,7 +113,7 @@ if(isset($_GET['delete'])){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>products</title>
+   <title>add banner</title>
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
@@ -117,17 +135,25 @@ if(isset($_GET['delete'])){
 
 <section class="add-products">
 
-   <h1 class="heading">add product | إضافة منتج</h1>
+   <h1 class="heading">add banner | إضافة بانر</h1>
 
    <form action="" method="post" enctype="multipart/form-data">
       <div class="flex">
          <div class="inputBox">
-            <span>إسم المنتج (مطلوب)</span>
+            <span>إسم البانر 1 (مطلوب)</span>
             <input type="text" class="box" required maxlength="100" placeholder="enter product name" name="name">
          </div>
          <div class="inputBox">
-            <span>سعر المنتج (مطلوب)</span>
-            <input type="number" min="0" class="box" required max="9999999999" placeholder="enter product price" onkeypress="if(this.value.length == 10) return false;" name="price">
+            <span>إسم البانر 2 (مطلوب)</span>
+            <input type="text" class="box" required maxlength="100" placeholder="enter product name" name="name2">
+         </div>
+         <div class="inputBox">
+            <span>إسم البانر 3 (مطلوب)</span>
+            <input type="text" class="box" required maxlength="100" placeholder="enter product name" name="name3">
+         </div>
+         <div class="inputBox">
+            <span>إسم البانر 4 (مطلوب)</span>
+            <input type="text" class="box" required maxlength="100" placeholder="enter product name" name="name4">
          </div>
         <div class="inputBox">
             <span>صور 1 المنتج (مطلوب)</span>
@@ -141,61 +167,33 @@ if(isset($_GET['delete'])){
             <span>صور 3 المنتج (مطلوب)</span>
             <input type="file" name="image_03" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
         </div>
+        <div class="inputBox">
+            <span>صور 4 المنتج (مطلوب)</span>
+            <input type="file" name="image_04" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
+        </div>
          <div class="inputBox">
-            <span>تفاصيل المنتج (مطلوب)</span>
+            <span>تفاصيل المنتج 1 (مطلوب)</span>
             <textarea name="details" placeholder="enter product details" class="box" required maxlength="500" cols="30" rows="10"></textarea>
          </div>
          <div class="inputBox">
-            <span>صنف المنتج (مطلوب)</span>
-            <!--<input type="text" class="box" required maxlength="100" placeholder="enter product category" name="category">-->
-            <select class="box" name="category" id="category">
-                <?php
-                    $select_category = $conn->prepare("SELECT * FROM `category`");
-                    $select_category->execute();
-                    $number_of_category = $select_category->rowCount();
-                    if($select_category->rowCount() > 0) {
-                        while($fetch_category = $select_category->fetch(PDO::FETCH_ASSOC)) { ?>
-                            <option value="<?= $fetch_category['title']; ?>">
-                                <?php //echo $number_of_category; ?>
-                                <?= $fetch_category['title']; ?>
-                            </option>
-                <?php } } ?>
-            </select>
+            <span>تفاصيل المنتج 2 (مطلوب)</span>
+            <textarea name="details2" placeholder="enter product details" class="box" required maxlength="500" cols="30" rows="10"></textarea>
          </div>
          <div class="inputBox">
-            <span>العلامة التجارية للمنتج (مطلوب)</span>
-            <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
-            <select class="box" name="brand" id="brand">
-                <?php
-                    $select_products = $conn->prepare("SELECT * FROM `brand`");
-                    $select_products->execute();
-                    $number_of_brand = $select_products->rowCount();
-                    if($select_products->rowCount() > 0) {
-                        while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                            <option value="<?= $fetch_accounts['title']; ?>">
-                                <?= $fetch_accounts['title']; ?>
-                            </option>
-                <?php } } ?>
-            </select>
+            <span>تفاصيل المنتج 3 (مطلوب)</span>
+            <textarea name="details3" placeholder="enter product details" class="box" required maxlength="500" cols="30" rows="10"></textarea>
          </div>
          <div class="inputBox">
-            <span>إسم السوق (مطلوب)</span>
-            <select class="box" name="store" id="store">
-                <?php
-                    $select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$admin_id'");
-                    $select_products->execute();
-                    $number_of_brand = $select_products->rowCount();
-                    if($select_products->rowCount() > 0) {
-                        while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                            <option value="<?= $fetch_accounts['title']; ?>">
-                                <?= $fetch_accounts['title']; ?>
-                            </option>
-                <?php } } ?>
-            </select>
+            <span>تفاصيل المنتج 4 (مطلوب)</span>
+            <textarea name="details4" placeholder="enter product details" class="box" required maxlength="500" cols="30" rows="10"></textarea>
+         </div>
+          <div class="inputBox">
+            <span>المنشئ (مطلوب)</span>
+            <input type="text" class="box" required maxlength="100" placeholder="enter product name" name="name0" value="<?php echo $admin_id; ?>" readonly>
          </div>
       </div>
       
-      <input type="submit" value="add product | إضافة المنتج" class="btn" name="add_product">
+      <input type="submit" value="add banner | إضافة بانر" class="btn" name="add_product">
    </form>
 
 </section>
@@ -212,43 +210,6 @@ if(isset($_GET['delete'])){
         <section class="uploaded-area"></section>
     </div>
 </section>-->
-
-<section class="show-products">
-
-   <h1 class="heading">products added</h1>
-
-   <div class="box-container">
-
-   <?php
-      $select_products = $conn->prepare("SELECT * FROM `products`");
-      $select_products->execute();
-      if($select_products->rowCount() > 0){
-         while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
-   ?>
-   <div class="box">
-      <img src="../uploaded_img/<?= $fetch_products['image_01']; ?>" alt="">
-      <div class="name"><?= $fetch_products['name']; ?></div>
-      <div class="price">$<span><?= $fetch_products['price']; ?></span>/-</div>
-      <div class="details"><span><?= $fetch_products['details']; ?></span></div>
-      <div class="details">
-          <span><?= $fetch_products['category']; ?></span>
-          <span>(<?= $fetch_products['brand']; ?>)</span>
-      </div>
-      <div class="flex-btn">
-         <a href="update_product.php?update=<?= $fetch_products['id']; ?>" class="option-btn">update</a>
-         <a href="products.php?delete=<?= $fetch_products['id']; ?>" class="delete-btn" onclick="return confirm('delete this product?');">delete</a>
-      </div>
-   </div>
-   <?php
-         }
-      }else{
-         echo '<p class="empty">no products added yet!</p>';
-      }
-   ?>
-   
-   </div>
-
-</section>
 
 
 

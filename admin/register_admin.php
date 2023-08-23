@@ -14,6 +14,8 @@ if(isset($_POST['submit'])){
 
    $name = $_POST['name'];
    $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $email = $_POST['email'];
+   $email = filter_var($email, FILTER_SANITIZE_STRING);
    $pass = sha1($_POST['pass']);
    $pass = filter_var($pass, FILTER_SANITIZE_STRING);
    $cpass = sha1($_POST['cpass']);
@@ -28,8 +30,8 @@ if(isset($_POST['submit'])){
       if($pass != $cpass){
          $message[] = 'confirm password not matched!';
       }else{
-         $insert_admin = $conn->prepare("INSERT INTO `admins`(name, password) VALUES(?,?)");
-         $insert_admin->execute([$name, $cpass]);
+         $insert_admin = $conn->prepare("INSERT INTO `admins`(name, email, password) VALUES(?,?,?)");
+         $insert_admin->execute([$name, $email, $cpass]);
          $message[] = 'new admin registered successfully!';
       }
    }
@@ -60,6 +62,7 @@ if(isset($_POST['submit'])){
    <form action="" method="post">
       <h3>register now</h3>
       <input type="text" name="name" required placeholder="enter your username" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="email" name="email" required placeholder="enter your email" maxlength="225"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="password" name="cpass" required placeholder="confirm your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="submit" value="register now" class="btn" name="submit">

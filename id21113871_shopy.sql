@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 16, 2023 at 02:34 PM
+-- Generation Time: Aug 23, 2023 at 02:23 PM
 -- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.3.33
 
@@ -30,15 +30,44 @@ SET time_zone = "+00:00";
 CREATE TABLE `admins` (
   `id` int(100) NOT NULL,
   `name` varchar(20) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `email` varchar(255) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `name`, `password`) VALUES
-(1, 'i5aledzeid', '7239e5187ddaca70eb2b4b8c1b169d7ba43a1808');
+INSERT INTO `admins` (`id`, `name`, `email`, `password`, `created_at`) VALUES
+(1, 'i5aledzeid', 'i5aledzeid@gmail.com', '7239e5187ddaca70eb2b4b8c1b169d7ba43a1808', '1996-06-09 16:49:55');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_transfers`
+--
+
+CREATE TABLE `bank_transfers` (
+  `id` int(11) NOT NULL,
+  `tid` bigint(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `subtitle` text NOT NULL,
+  `price` double(8,2) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `note` text NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `bank_transfers`
+--
+
+INSERT INTO `bank_transfers` (`id`, `tid`, `title`, `subtitle`, `price`, `image`, `note`, `status`, `created_by`, `created_at`) VALUES
+(1, 65286242230, 'Title', 'Subtitle', 666.00, 'DTAaA3hVwAAZW34.jpg', 'No note!', 0, 1, '2023-08-19 18:49:16'),
+(2, 99504363131, 'Title', 'Subtitle', 25200.00, 'download (1).png', 'No Note!', 0, 3, '2023-08-21 10:58:54');
 
 -- --------------------------------------------------------
 
@@ -48,8 +77,14 @@ INSERT INTO `admins` (`id`, `name`, `password`) VALUES
 
 CREATE TABLE `banner` (
   `id` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `subtitle` text NOT NULL,
+  `title_1` varchar(255) NOT NULL,
+  `title_2` varchar(255) NOT NULL,
+  `title_3` varchar(255) NOT NULL,
+  `title_4` varchar(255) NOT NULL,
+  `subtitle_1` text NOT NULL,
+  `subtitle_2` varchar(255) NOT NULL,
+  `subtitle_3` text NOT NULL,
+  `subtitle_4` text NOT NULL,
   `image_1` varchar(255) NOT NULL,
   `image_2` varchar(255) NOT NULL,
   `image_3` varchar(255) NOT NULL,
@@ -63,8 +98,10 @@ CREATE TABLE `banner` (
 -- Dumping data for table `banner`
 --
 
-INSERT INTO `banner` (`id`, `title`, `subtitle`, `image_1`, `image_2`, `image_3`, `image_4`, `status`, `created_by`, `created_at`) VALUES
-(1, 'Banner Title 1', 'Banner Subtitle 1', 'home-bg.png', 'home-bg-1.jpg', 'home-bg-5.jpg', 'home-bg-8.jpg', 0, 1, '2023-08-11');
+INSERT INTO `banner` (`id`, `title_1`, `title_2`, `title_3`, `title_4`, `subtitle_1`, `subtitle_2`, `subtitle_3`, `subtitle_4`, `image_1`, `image_2`, `image_3`, `image_4`, `status`, `created_by`, `created_at`) VALUES
+(1, 'Banner Title 1', 'Banner Title 2', 'Banner Title 3', 'Banner Title 4', 'Banner Subtitle 1', 'Banner Subtitle 2', 'Banner Subtitle 3', 'Banner Subtitle 4', 'home-bg.png', 'home-bg-1.jpg', 'home-bg-5.jpg', 'home-bg-8.jpg', 0, 1, '2023-08-11'),
+(2, 'Banner Title 1', 'Banner Title 2', 'Banner Title 3', 'Banner Title 4', 'Banner Subtitle 1', 'Banner Subtitle 2', 'Banner Subtitle 3', 'Banner Subtitle 4', 'cover_635622410d6933-43493776-58945343.jpg', 'home-bg-1.jpg', 'home-bg-5.jpg', 'home-bg-8.jpg', 0, 1, '2023-08-11'),
+(3, 'Banner Title 1', 'Banner Title 2', 'Banner Title 3', 'Banner Title 4', 'Banner Subtitle 1', 'Banner Subtitle 2', 'Banner Subtitle 3', 'Banner Subtitle 4', 'home-bg.png', 'home-bg-1.jpg', 'home-bg-5.jpg', 'home-bg-8.jpg', 0, 1, '2023-08-11');
 
 -- --------------------------------------------------------
 
@@ -86,9 +123,12 @@ CREATE TABLE `brand` (
 --
 
 INSERT INTO `brand` (`id`, `title`, `subtitle`, `link`, `image`, `created_at`) VALUES
-(1, 'Apple', 'Apple Inc. is an American multinational technology company headquartered in Cupertino, California. Apple is the world\'s largest technology company by revenue, with US$394.3 billion in 2022 revenue. As of March 2023, Apple is the world\'s biggest company by market capitalization.', 'apple', 'laptop-2.webp', '2023-08-05'),
-(2, 'LG', 'LG Corporation, known as LG and formerly Lucky-Goldstar from 1983 to 1995, is a South Korean multinational conglomerate founded by Koo In-hwoi and managed by successive generations of his family. It is the fourth-largest chaebol in South Korea.', 'lg', 'laptop-2.webp', '2023-08-05'),
-(3, 'Samsung', 'Samsung is committed to complying with local laws and regulations as well as applying a strict global code of conduct to all employees. It believes that ethical management is not only a tool for responding to the rapid changes in the global business environment, but also a vehicle for building trust with its various stakeholders including customers, shareholders, employees, business partners and local communities. With an aim to become one of the most ethical companies In the world, Samsung continues to train its employees and operate monitoring systems, while practicing fair and transparent corporate management.', 'samsung', 'laptop-2.webp', '2023-08-05');
+(1, 'Apple', 'Apple Inc. is an American multinational technology company headquartered in Cupertino, California. Apple is the world\'s largest technology company by revenue, with US$394.3 billion in 2022 revenue. As of March 2023, Apple is the world\'s biggest company by market capitalization.', 'apple', 'apple_icon.png', '2023-08-05'),
+(2, 'LG', 'LG Corporation, known as LG and formerly Lucky-Goldstar from 1983 to 1995, is a South Korean multinational conglomerate founded by Koo In-hwoi and managed by successive generations of his family. It is the fourth-largest chaebol in South Korea.', 'lg', 'lg_icon.png', '2023-08-05'),
+(3, 'Samsung', 'Samsung is committed to complying with local laws and regulations as well as applying a strict global code of conduct to all employees. It believes that ethical management is not only a tool for responding to the rapid changes in the global business environment, but also a vehicle for building trust with its various stakeholders including customers, shareholders, employees, business partners and local communities.', 'samsung', 'samsung_icon.png', '2023-08-05'),
+(4, 'Nike', 'Nike, Inc. is an American athletic footwear and apparel corporation headquartered near Beaverton, Oregon, United States. It is the world\'s largest supplier of athletic shoes and apparel and a major manufacturer of sports equipment, with revenue in excess of US$46 billion in its fiscal year 2022.', 'nike', 'nike_icon.png', '2023-08-05'),
+(5, 'Puma', 'Puma SE is a German multinational corporation that designs and manufactures athletic and casual footwear, apparel and accessories, headquartered in Herzogenaurach, Bavaria, Germany. Puma is the third largest sportswear manufacturer in the world. The company was founded in 1948 by Rudolf Dassler.', 'puma', 'puma_animal_shoes_clothes_sport_icon.png', '2023-08-05'),
+(6, 'Hewlett Packard', 'Puma SE is a German multinational corporation that designs and manufactures athletic and casual footwear, apparel and accessories, headquartered in Herzogenaurach, Bavaria, Germany. Puma is the third largest sportswear manufacturer in the world. The company was founded in 1948 by Rudolf Dassler.', 'hp', 'hp_icon.png', '2023-08-05');
 
 -- --------------------------------------------------------
 
@@ -107,6 +147,13 @@ CREATE TABLE `cart` (
   `store` varchar(255) NOT NULL,
   `sid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`id`, `user_id`, `pid`, `name`, `price`, `quantity`, `image`, `store`, `sid`) VALUES
+(8, 3, 1, 'MacBook Pro 14', 2666, 2, '571627.jpg', 'Khaled Zeid', 1);
 
 -- --------------------------------------------------------
 
@@ -128,14 +175,15 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `title`, `subtitle`, `link`, `image`, `created_at`) VALUES
-(1, 'Laptop', 'A portable microcomputer having its main components (such as processor, keyboard, and display screen) integrated into a single unit capable of battery-powered operation.', 'laptop', '', '2023-08-06'),
-(2, 'Television', 'A system for converting visual images (with sound) into electrical signals, transmitting them by radio or other means, and displaying them electronically on a screen.', 'television', '', '2023-08-06'),
-(3, 'Camera', 'A device for recording visual images in the form of photographs, film, or video signals.', 'camera', '', '2023-08-06'),
-(4, 'Mouse', 'A small handheld device which is moved across a mat or flat surface to move the cursor on a computer screen.', 'mouse', '', '2023-08-06'),
-(5, 'Fridge', 'Fridge is short for refrigerator, that giant kitchen appliance that keeps food cold.', 'fridge', '', '2023-08-06'),
-(6, 'Washing Machine', 'A machine for washing clothes, sheets, and other things made of cloth.', 'washing', '', '2023-08-06'),
-(7, 'Smartphone', 'A mobile phone that performs many of the functions of a computer, typically having a touchscreen interface, internet access, and an operating system capable of running downloaded apps.', 'smartphone', '', '2023-08-06'),
-(8, 'Watch', 'A small timepiece worn typically on a strap on one\'s wrist.', 'watch', '', '2023-08-06');
+(1, 'Laptop', 'A portable microcomputer having its main components (such as processor, keyboard, and display screen) integrated into a single unit capable of battery-powered operation.', 'laptop', 'icon-1.png', '2023-08-06'),
+(2, 'Television', 'A system for converting visual images (with sound) into electrical signals, transmitting them by radio or other means, and displaying them electronically on a screen.', 'television', 'icon-2.png', '2023-08-06'),
+(3, 'Camera', 'A device for recording visual images in the form of photographs, film, or video signals.', 'camera', 'icon-3.png', '2023-08-06'),
+(4, 'Mouse', 'A small handheld device which is moved across a mat or flat surface to move the cursor on a computer screen.', 'mouse', 'icon-4.png', '2023-08-06'),
+(5, 'Fridge', 'Fridge is short for refrigerator, that giant kitchen appliance that keeps food cold.', 'fridge', 'icon-5.png', '2023-08-06'),
+(6, 'Washing Machine', 'A machine for washing clothes, sheets, and other things made of cloth.', 'washing', 'icon-6.png', '2023-08-06'),
+(7, 'Smartphone', 'A mobile phone that performs many of the functions of a computer, typically having a touchscreen interface, internet access, and an operating system capable of running downloaded apps.', 'smartphone', 'icon-7.png', '2023-08-06'),
+(8, 'Watch', 'A small timepiece worn typically on a strap on one\'s wrist.', 'watch', 'icon-8.png', '2023-08-06'),
+(9, 'Real Estate', 'Real estate is property consisting of land and the buildings on it, along with its natural resources such as growing crops (eg. timber), minerals or water, and wild animals; immovable property of this nature; an interest vested in this (also) an item of real property, (more generally) buildings or housing in general. In terms of law, real is in relation to land property and is different from personal property while estate means the \"interest\" a person has in that land property.', 'real_estate', 'icon-9.png', '2023-08-06');
 
 -- --------------------------------------------------------
 
@@ -158,7 +206,8 @@ CREATE TABLE `deliveries` (
 --
 
 INSERT INTO `deliveries` (`id`, `name`, `phone`, `email`, `password`, `status`, `created_at`) VALUES
-(1, 'deliveries', '1004039239', 'deliveries@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d', 0, '2023-08-16');
+(1, 'deliveries', '1004039239', 'deliveries@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d', 0, '2023-08-16'),
+(2, 'delivery', '0582350407', 'delivery@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d', 0, '2023-08-18');
 
 -- --------------------------------------------------------
 
@@ -196,6 +245,15 @@ CREATE TABLE `orders` (
   `payment_status` varchar(20) NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `oid`, `name`, `number`, `email`, `method`, `address`, `total_products`, `total_price`, `placed_on`, `payment_status`) VALUES
+(1, 3, 6358618133, 'user', '1004039239', 'user@gmail.com', 'cash on delivery', 'flat no. 4, Tokyo Ghoul, Tokyo, Hokkaido, Japan - 123456', 'MacBook Pro 14 (2666 x 1) -', 2666, '2023-08-16', 'pending'),
+(2, 3, 9167680172, 'user', '1234567890', 'user@gmail.com', 'cash on delivery', 'flat no. 4, Tokyo Ghoul, Tokyo, Hokkaido, Japan - 123456', 'MacBook Air 13 (1012 x 1) -iPad Pro 9.12 (2399 x 2) -Samsung Odyssey G5 (373 x 1) -', 6183, '2023-08-16', 'pending'),
+(3, 3, 6521511758, 'user', '1234567890', 'user@gmail.com', 'cash on delivery', 'flat no. 4, Tokyo Ghoul, Tokyo, Hokkaido, Japan - 123456', 'Samsung Galaxy Tab S8 Ultra (1120 x 1) -LG Ultra Gear 48\" (1279 x 1) -', 2399, '2023-08-16', 'pending');
+
 -- --------------------------------------------------------
 
 --
@@ -223,6 +281,18 @@ CREATE TABLE `order_store` (
   `delivery_by` int(11) NOT NULL DEFAULT 0,
   `delivery_price` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `order_store`
+--
+
+INSERT INTO `order_store` (`id`, `user_id`, `pid`, `oid`, `name`, `number`, `email`, `method`, `address`, `image`, `total_products`, `total_price`, `qty`, `placed_on`, `payment_status`, `store`, `sid`, `delivery_by`, `delivery_price`) VALUES
+(1, 3, 1, 6358618133, 'user', 1004039239, 'user@gmail.com', 'cash on delivery', 'flat no. 4, Tokyo Ghoul, Tokyo, Hokkaido, Japan - 123456', '571627.jpg', 'MacBook Pro 14', 2666, 1, '2023-08-16', 'pending', 'Khaled Zeid', 1, 0, 0),
+(2, 3, 2, 9167680172, 'user', 1234567890, 'user@gmail.com', 'cash on delivery', 'flat no. 4, Tokyo Ghoul, Tokyo, Hokkaido, Japan - 123456', '558437.jpg', 'MacBook Air 13', 1012, 1, '2023-08-16', 'pending', 'Khaled Zeid', 1, 0, 0),
+(3, 3, 6, 9167680172, 'user', 1234567890, 'user@gmail.com', 'cash on delivery', 'flat no. 4, Tokyo Ghoul, Tokyo, Hokkaido, Japan - 123456', 'c811e522446b6510fc1b4d2ea04963849bf59916_598802.jpg', 'iPad Pro 9.12', 2399, 2, '2023-08-16', 'pending', 'Khaled Zeid', 1, 0, 0),
+(4, 3, 10, 9167680172, 'user', 1234567890, 'user@gmail.com', 'cash on delivery', 'flat no. 4, Tokyo Ghoul, Tokyo, Hokkaido, Japan - 123456', 'c8d9ddc1decc353155b8883a50d239bea244d05f_585577.jpg', 'Samsung Odyssey G5', 373, 1, '2023-08-16', 'pending', 'Khaled Zeid', 2, 0, 0),
+(5, 3, 8, 6521511758, 'user', 1234567890, 'user@gmail.com', 'cash on delivery', 'flat no. 4, Tokyo Ghoul, Tokyo, Hokkaido, Japan - 123456', '8f450c19d12dd7d253489e29f19f305164359883_585573.jpg', 'Samsung Galaxy Tab S8 Ultra', 1120, 1, '2023-08-16', 'pending', 'Khaled Zeid', 1, 0, 0),
+(6, 3, 11, 6521511758, 'user', 1234567890, 'user@gmail.com', 'cash on delivery', 'flat no. 4, Tokyo Ghoul, Tokyo, Hokkaido, Japan - 123456', 'a325a8f67c9330123b71d646f569d8d155b19f99_598170.jpg', 'LG Ultra Gear 48\"', 1279, 1, '2023-08-16', 'pending', 'Khaled Zeid', 2, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -362,6 +432,12 @@ ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `bank_transfers`
+--
+ALTER TABLE `bank_transfers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `banner`
 --
 ALTER TABLE `banner`
@@ -450,34 +526,40 @@ ALTER TABLE `admins`
   MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `bank_transfers`
+--
+ALTER TABLE `bank_transfers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `banner`
 --
 ALTER TABLE `banner`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `brand`
 --
 ALTER TABLE `brand`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `deliveries`
 --
 ALTER TABLE `deliveries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -489,13 +571,13 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `order_store`
 --
 ALTER TABLE `order_store`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -525,7 +607,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

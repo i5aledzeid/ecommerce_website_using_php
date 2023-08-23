@@ -41,9 +41,9 @@ include 'components/wishlist_cart.php';
 
 <div class="home-bg">
 
-<section class="home">
+    <section class="home">
 
-   <div class="swiper home-slider">
+    <div class="swiper home-slider">
    
    <div class="swiper-wrapper">
 
@@ -237,6 +237,35 @@ include 'components/wishlist_cart.php';
    </div>
 
    <div class="swiper-pagination"></div>
+
+   </div>
+
+</section>
+
+<section class="category">
+
+   <h1 class="heading">shop by brand</h1>
+
+   <div class="swiper category-slider">
+
+        <div class="swiper-wrapper">
+           
+           <?php
+            $i = 1;
+            $select_products = $conn->prepare("SELECT * FROM `brand`");
+            $select_products->execute();
+            $number_of_brand = $select_products->rowCount();
+            if($select_products->rowCount() > 0) {
+                while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
+                <?php echo '<a href="brand.php?brand='.$fetch_accounts['link'].'" class="swiper-slide slide">'; ?>
+                <?php echo '<img src="images/brand/'.$fetch_accounts['image'].'" alt="category-logo">'; ?>
+                <h3><?= $fetch_accounts['title']; ?></h3>
+                </a>
+            <?php } } ?>
+            
+        </div>
+
+        <div class="swiper-pagination"></div>
 
    </div>
 

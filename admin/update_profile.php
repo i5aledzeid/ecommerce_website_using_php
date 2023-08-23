@@ -14,9 +14,11 @@ if(isset($_POST['submit'])){
 
    $name = $_POST['name'];
    $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $email = $_POST['email'];
+   $email = filter_var($email, FILTER_SANITIZE_STRING);
 
-   $update_profile_name = $conn->prepare("UPDATE `admins` SET name = ? WHERE id = ?");
-   $update_profile_name->execute([$name, $admin_id]);
+   $update_profile_name = $conn->prepare("UPDATE `admins` SET name = ?, email = ? WHERE id = ?");
+   $update_profile_name->execute([$name, $email, $admin_id]);
 
    $empty_pass = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
    $prev_pass = $_POST['prev_pass'];
@@ -35,8 +37,8 @@ if(isset($_POST['submit'])){
       $message[] = 'confirm password not matched!';
    }else{
       if($new_pass != $empty_pass){
-         $update_admin_pass = $conn->prepare("UPDATE `admins` SET password = ? WHERE id = ?");
-         $update_admin_pass->execute([$confirm_pass, $admin_id]);
+         $update_admin_pass = $conn->prepare("UPDATE `admins` SET password = ?, email = ? WHERE id = ?");
+         $update_admin_pass->execute([$confirm_pass, $email, $admin_id]);
          $message[] = 'password updated successfully!';
       }else{
          $message[] = 'please enter a new password!';
@@ -45,6 +47,9 @@ if(isset($_POST['submit'])){
    
 }
 
+    $select_system = $conn->prepare("SELECT * FROM `system`");
+    $select_system->execute();
+    $number_of_system = $select_system->rowCount();
 ?>
 
 <!DOCTYPE html>
@@ -59,6 +64,13 @@ if(isset($_POST['submit'])){
 
    <link rel="stylesheet" href="../css/admin_style.css">
 
+        <?php
+            if($select_system->rowCount() > 0){
+                while($fetch_product = $select_system->fetch(PDO::FETCH_ASSOC)){
+         ?>
+    <link rel="icon" type="image/x-icon" href="/images/admin/<?php echo $fetch_product['icon']; ?>">
+        <?php } } ?>
+
 </head>
 <body>
 
@@ -70,9 +82,11 @@ if(isset($_POST['submit'])){
       <h3>update profile</h3>
       <input type="hidden" name="prev_pass" value="<?= $fetch_profile['password']; ?>">
       <input type="text" name="name" value="<?= $fetch_profile['name']; ?>" required placeholder="enter your username" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="email" name="email" value="<?= $fetch_profile['email']; ?>" required placeholder="enter your email" maxlength="225"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="password" name="old_pass" placeholder="enter old password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="password" name="new_pass" placeholder="enter new password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="password" name="confirm_pass" placeholder="confirm new password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="text" name="created_at" placeholder="created_at" class="box" oninput="this.value = this.value.replace(/\s/g, '')" value="<?= $fetch_profile['created_at']; ?>" readonly disabled>
       <input type="submit" value="update now" class="btn" name="submit">
    </form>
 

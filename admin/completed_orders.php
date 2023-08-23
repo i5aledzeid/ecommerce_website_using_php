@@ -26,6 +26,9 @@ if(isset($_GET['delete'])){
    header('location:placed_orders.php');
 }
 
+    $select_system = $conn->prepare("SELECT * FROM `system`");
+    $select_system->execute();
+    $number_of_system = $select_system->rowCount();
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +42,13 @@ if(isset($_GET['delete'])){
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
    <link rel="stylesheet" href="../css/admin_style.css">
+
+        <?php
+            if($select_system->rowCount() > 0){
+                while($fetch_product = $select_system->fetch(PDO::FETCH_ASSOC)){
+         ?>
+    <link rel="icon" type="image/x-icon" href="/images/admin/<?php echo $fetch_product['icon']; ?>">
+        <?php } } ?>
 
 </head>
 <body>
