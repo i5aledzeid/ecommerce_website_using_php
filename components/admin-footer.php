@@ -66,6 +66,7 @@
       <div class="box">
          <h3>contact us</h3>
          <a href="tel:0582350407"><i class="fas fa-phone"></i> +966 058 2350 407</a>
+         <a href="tel:0582350407"><i class="fas fa-phone"></i> +1 (646) 555-3890</a>
          <!--<a href="mailto:i5aledzeid@gmail.com"><i class="fas fa-envelope"></i> i5aledzeid@gmail.com</a>
          <a href="https://goo.gl/maps/BwSUe1HP8eXjdpVq6"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan </a>-->
       </div>
@@ -73,11 +74,13 @@
       <div class="box">
          <h3>Email</h3>
          <a href="mailto:i5aledzeid@gmail.com"><i class="fas fa-envelope"></i> i5aledzeid@gmail.com</a>
+         <a href="mailto:i5aledzeid@gmail.com"><i class="fas fa-envelope"></i> developer@gmail.com</a>
       </div>
       
       <div class="box">
          <h3>Location</h3>
          <a href="https://goo.gl/maps/BwSUe1HP8eXjdpVq6"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan </a>
+         <a href="https://goo.gl/maps/KvadZn7sNZXHA4Bd7"><i class="fas fa-map-marker-alt"></i> New York, USA </a>
       </div>
 
       <div class="box">
@@ -87,11 +90,24 @@
             <i class="fab fa-twitter"></i>
             <i class="fab fa-instagram"></i>
             <i class="fab fa-linkedin"></i>
+            <i class="fab fa-twitch" aria-hidden="true"></i>
+            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+            <i class="fab fa-github" aria-hidden="true"></i>
+         </a>
+         <a href="#">
+            <i class="fab fa-tumblr"></i>
+            <i class="fab fa-vimeo"></i>
+            <i class="fab fa-soundcloud"></i>
+            <i class="fab fa-youtube" aria-hidden="true"></i>
+            <i class="fab fa-stack-overflow" aria-hidden="true"></i>
+            <i class="fab fa-snapchat" aria-hidden="true"></i>
+            <i class="fab fa-paypal" aria-hidden="true"></i>
          </a>
       </div>
 
    </section>
 
-   <div style="font-size: 12px;" class="credit">&copy; copyright @ 1996-<?= date('Y'); ?> by <span>i5aledzeid</span> | all rights reserved!</div>
+   <!--<div style="font-size: 12px;" class="credit">&copy; copyright @ 1996-<?= date('Y'); ?> by <span>i5aledzeid</span> | all rights reserved!</div>-->
+    <div style="font-size: 12px; direction: rtl;" class="credit">&copy; حقوق النشر @ 1996-<?= date('Y'); ?> بواسطة <span>i5aledzeid</span> | كل الحقوق محفوظة!</div>
 
 </footer>

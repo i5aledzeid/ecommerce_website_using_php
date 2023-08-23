@@ -41,7 +41,7 @@
             $total_cart_counts = $count_cart_items->rowCount();
          ?>
          <a href="search_page.php"><i class="fas fa-search"></i></a>
-         <a href="../delivery/dashboard.php?status=all"><i class="bi bi-app-indicator"></i><span>(<?= $total_wishlist_counts; ?>)</span></a>
+         <a href="../delivery/dashboard.php?status=pending"><i class="bi bi-app-indicator"></i><span>(<?= $total_wishlist_counts; ?>)</span></a>
          <a href="cart.php"><i class="bi bi-bell-fill"></i><span>(<?= $total_cart_counts; ?>)</span></a>
          <div id="user-btn" class="fas fa-user"></div>
         <div id="menu-btn" class="fas fa-bars"></div>

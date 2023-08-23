@@ -22,8 +22,11 @@
             <a href="about.php">about</a>
             <a href="orders.php">orders</a>
             <a href="shop.php">shop</a>
-            <a href="../admin/stores.php">
+            <!--<a href="../admin/stores.php">
                 <i class="fa fa-shopping-bag" aria-hidden="true"></i> stores
+            </a>-->
+            <a href="../delivery/">
+                <i class="bi bi-car-front-fill"></i> delivery
             </a>
             <a href="contact.php">contact</a>
       </nav>
@@ -58,6 +61,7 @@
              مرحباً بك
           </p>
          <a href="update_user.php" class="btn">تحديث الملف الشخصي</a>
+         <!--<a href="update_user.php" class="btn" style="height: 48px; font-size: 18px;">تحديث الملف الشخصي</a>-->
          <a href="store/index.php?user_id=<?php echo $user_id; ?>" class="option-btn">متجري</a>
          <!--<div class="flex-btn">
             <a href="user_register.php" class="option-btn">register</a>
