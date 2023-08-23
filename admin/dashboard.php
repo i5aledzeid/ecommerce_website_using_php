@@ -250,22 +250,32 @@ $number_of_system = $select_system->rowCount();
          <a href="ad.php" class="btn">رؤية الإعلانات <i class="fa fa-window-maximize" aria-hidden="true"></i></a>
       </div>
       
-      <div class="box">
-         <?php
-            $select_bank_transfers = $conn->prepare("SELECT * FROM `order_store`");
-            $select_bank_transfers->execute();
-            $number_of_bank_transfers = $select_bank_transfers->rowCount();
-            if($select_bank_transfers->rowCount() > 0){
-                //while($fetch_bank_transfers = $select_bank_transfers->fetch(PDO::FETCH_ASSOC)){
+      <?php
+        $select_bank_transfers = $conn->prepare("SELECT * FROM `order_store`");
+        $select_bank_transfers->execute();
+        $number_of_bank_transfers = $select_bank_transfers->rowCount();
+        if($select_bank_transfers->rowCount() > 0){
+            //while($fetch_bank_transfers = $select_bank_transfers->fetch(PDO::FETCH_ASSOC)){
          ?>
+      <div class="box">
          <h3><?= 'جدول الطلبات' ?></h3>
          <p>
              <?php echo '(' . $number_of_bank_transfers . ')'; ?>
              منتجات تم طلبها
          </p>
          <a href="delivery_dashboard.php?status=all" class="btn">قائمة الطلبات <i class="fa fa-bar-chart" aria-hidden="true"></i></a>
-         <?php } //} ?>
       </div>
+      <?php } //}
+      else { ?>
+      <div class="box">
+         <h3><?= 'جدول الطلبات' ?></h3>
+         <p>
+             <?php echo '(' . $number_of_bank_transfers . ')'; ?>
+             منتجات تم طلبها
+         </p>
+         <a href="delivery_dashboard.php?status=all" class="btn">قائمة الطلبات <i class="fa fa-bar-chart" aria-hidden="true"></i></a>
+      </div>
+      <?php } ?>
 
       <div class="box">
           <style>

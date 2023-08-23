@@ -116,13 +116,13 @@
                 $number_of_messages = $select_messages->rowCount();
                 if ($number_of_messages > 0) { ?>
              <div id="user-btn" class="fas bi bi-app">
-                 <a href="../admin/messages.php" id="count" class="count">
+                 <a href="../admin/bank_transfers.php" id="count" class="count">
                     <?= $number_of_messages; ?>
                  </a>
              </div>
              <?php } else { ?>
              <div id="user-btn" class="fas bi-app-indicator">
-                 <a href="../admin/messages.php" id="count" class="count">
+                 <a href="../admin/bank_transfers.php" id="count" class="count">
                     <?= $number_of_messages; ?>
                  </a>
              </div>
