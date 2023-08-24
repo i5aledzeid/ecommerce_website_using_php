@@ -40,8 +40,13 @@
             $count_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
             $count_cart_items->execute([$user_id]);
             $total_cart_counts = $count_cart_items->rowCount();
+            
+            $count_reservation_items = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ?");
+            $count_reservation_items->execute([$user_id]);
+            $total_reservation_counts = $count_reservation_items->rowCount();
          ?>
          <a href="search_page.php"><i class="fas fa-search"></i></a>
+         <a href="reservation.php"><i class="fa fa-database" aria-hidden="true"></i><span>(<?= $total_reservation_counts; ?>)</span></a>
          <a href="wishlist.php"><i class="fas fa-heart"></i><span>(<?= $total_wishlist_counts; ?>)</span></a>
          <a href="cart.php"><i class="fas fa-shopping-cart"></i><span>(<?= $total_cart_counts; ?>)</span></a>
          <div id="user-btn" class="fas fa-user"></div>
