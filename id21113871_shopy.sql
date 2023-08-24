@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 24, 2023 at 07:55 PM
+-- Generation Time: Aug 24, 2023 at 11:05 PM
 -- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.3.33
 
@@ -627,6 +627,33 @@ INSERT INTO `real_estates` (`id`, `name`, `details`, `price`, `image_01`, `image
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `reservation`
+--
+
+CREATE TABLE `reservation` (
+  `id` int(100) NOT NULL,
+  `user_id` int(100) NOT NULL,
+  `pid` int(100) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `price` int(10) NOT NULL,
+  `quantity` int(10) NOT NULL,
+  `image` varchar(100) NOT NULL,
+  `store` varchar(255) NOT NULL,
+  `sid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `reservation`
+--
+
+INSERT INTO `reservation` (`id`, `user_id`, `pid`, `name`, `price`, `quantity`, `image`, `store`, `sid`) VALUES
+(6, 3, 1, 'real estate 1', 76574, 1, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6),
+(7, 5, 1, 'real estate 1', 76574, 1, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6),
+(8, 4, 1, 'real estate 1', 76574, 1, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `store`
 --
 
@@ -684,6 +711,7 @@ CREATE TABLE `users` (
   `id` int(100) NOT NULL,
   `name` varchar(20) NOT NULL,
   `email` varchar(50) NOT NULL,
+  `phone` varchar(10) NOT NULL,
   `password` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -691,13 +719,14 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
-(1, 'i5aledzeid', 'i5aledzeid@gmail.com', '7239e5187ddaca70eb2b4b8c1b169d7ba43a1808'),
-(2, 'developer', 'developer@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
-(3, 'user', 'user@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
-(4, 'customer', 'customer@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
-(5, 'client', 'client@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d'),
-(6, 'realestate', 'realestate@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d');
+INSERT INTO `users` (`id`, `name`, `email`, `phone`, `password`) VALUES
+(1, 'i5aledzeid', 'i5aledzeid@gmail.com', '0582350407', '7239e5187ddaca70eb2b4b8c1b169d7ba43a1808'),
+(2, 'developer', 'developer@gmail.com', '1004039239', '7c222fb2927d828af22f592134e8932480637c0d'),
+(3, 'user', 'user@gmail.com', '1002029220', '7c222fb2927d828af22f592134e8932480637c0d'),
+(4, 'customer', 'customer@gmail.com', '1003029230', '7c222fb2927d828af22f592134e8932480637c0d'),
+(5, 'client', 'client@gmail.com', '1004029240', '7c222fb2927d828af22f592134e8932480637c0d'),
+(6, 'realestate', 'realestate@gmail.com', '1005029250', '7c222fb2927d828af22f592134e8932480637c0d'),
+(7, 'shop', 'shop@gmail.com', '1004060260', '7c222fb2927d828af22f592134e8932480637c0d');
 
 -- --------------------------------------------------------
 
@@ -805,6 +834,12 @@ ALTER TABLE `real_estates`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `store`
 --
 ALTER TABLE `store`
@@ -860,7 +895,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -917,6 +952,12 @@ ALTER TABLE `real_estates`
   MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `reservation`
+--
+ALTER TABLE `reservation`
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `store`
 --
 ALTER TABLE `store`
@@ -932,7 +973,7 @@ ALTER TABLE `system`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `wishlist`

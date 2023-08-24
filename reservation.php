@@ -68,7 +68,7 @@ if(isset($_POST['update_qty'])){
    ?>
    <form action="" method="post" class="box">
       <input type="hidden" name="cart_id" value="<?= $fetch_cart['id']; ?>">
-      <a href="quick_view.php?pid=<?= $fetch_cart['pid']; ?>" class="fas fa-eye"></a>
+      <a href="quick_view.php?realestate=<?= $fetch_cart['pid']; ?>" class="fas fa-eye"></a>
       <img src="uploaded_img/real_estate/<?= $fetch_cart['image']; ?>" alt="">
       <div class="name"><?= $fetch_cart['name']; ?></div>
       <div class="name"><?= $fetch_cart['store']; ?></div>

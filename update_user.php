@@ -16,9 +16,11 @@ if(isset($_POST['submit'])){
    $name = filter_var($name, FILTER_SANITIZE_STRING);
    $email = $_POST['email'];
    $email = filter_var($email, FILTER_SANITIZE_STRING);
+   $phone = $_POST['phone'];
+   $phone = filter_var($phone, FILTER_SANITIZE_STRING);
 
-   $update_profile = $conn->prepare("UPDATE `users` SET name = ?, email = ? WHERE id = ?");
-   $update_profile->execute([$name, $email, $user_id]);
+   $update_profile = $conn->prepare("UPDATE `users` SET name = ?, email = ?, phone = ? WHERE id = ?");
+   $update_profile->execute([$name, $email, $phone, $user_id]);
 
    $empty_pass = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
    $prev_pass = $_POST['prev_pass'];
@@ -75,6 +77,7 @@ if(isset($_POST['submit'])){
       <input type="hidden" name="prev_pass" value="<?= $fetch_profile["password"]; ?>">
       <input type="text" name="name" required placeholder="enter your username" maxlength="20"  class="box" value="<?= $fetch_profile["name"]; ?>">
       <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')" value="<?= $fetch_profile["email"]; ?>">
+      <input type="tel" name="phone" required placeholder="enter your phone" maxlength="10"  class="box" oninput="this.value = this.value.replace(/\s/g, '')" value="<?= $fetch_profile["phone"]; ?>">
       <input type="password" name="old_pass" placeholder="enter your old password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="password" name="new_pass" placeholder="enter your new password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="password" name="cpass" placeholder="confirm your new password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">

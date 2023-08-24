@@ -16,6 +16,8 @@ if(isset($_POST['submit'])){
    $email = filter_var($email, FILTER_SANITIZE_STRING);
    $pass = sha1($_POST['pass']);
    $pass = filter_var($pass, FILTER_SANITIZE_STRING);
+   //$phone = sha1($_POST['phone']);
+   //$phone = filter_var($phone, FILTER_SANITIZE_STRING);
 
    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ?");
    $select_user->execute([$email, $pass]);
@@ -27,6 +29,8 @@ if(isset($_POST['submit'])){
    }else{
       $message[] = 'incorrect username or password!';
    }
+   
+   //echo '<script>alert('.$phone.');</script>';
 
 }
 
@@ -56,6 +60,7 @@ if(isset($_POST['submit'])){
    <form action="" method="post">
       <h3>سجل دخولك الآن</h3>
       <input type="email" name="email" required placeholder="enter your email" maxlength="50" value="user@gmail.com" class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <!--<input type="tel" name="phone" required placeholder="enter your phone" maxlength="10" value="1006039260" class="box" oninput="this.value = this.value.replace(/\s/g, '')">-->
       <input type="password" value="12345678" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="submit" value="تسجيل دخول" class="btn" name="submit">
       <p>لا تملك حساباً؟</p>
