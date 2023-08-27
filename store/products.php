@@ -4,12 +4,12 @@ include '../components/connect.php';
 
 session_start();
 
-//$admin_id = $_SESSION['admin_id'];
+$admin_id = $_SESSION['admin_id'];
 $user_id = $_SESSION['user_id'];
 
-/*if(!isset($admin_id)){
-   header('location:admin_login.php');
-};*/
+if(!isset($admin_id) && !isset($user_id)){
+   header('location: index.php');
+};
 
 if(isset($_POST['add_product'])){
 
@@ -21,8 +21,6 @@ if(isset($_POST['add_product'])){
    $details = filter_var($details, FILTER_SANITIZE_STRING);
    $category = $_POST['category'];
    $brand = $_POST['brand'];
-   $store = $_POST['store'];
-   $sid = $_POST['sid'];
 
    $image_01 = $_FILES['image_01']['name'];
    $image_01 = filter_var($image_01, FILTER_SANITIZE_STRING);
@@ -49,8 +47,8 @@ if(isset($_POST['add_product'])){
       $message[] = 'product name already exist!';
    }else{
 
-      $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image_01, image_02, image_03, category, brand, created_by, sid) VALUES(?,?,?,?,?,?,?,?,?,?)");
-      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $category, $brand, $store, $sid]);
+      $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image_01, image_02, image_03, category, brand) VALUES(?,?,?,?,?,?,?,?)");
+      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03]);
 
       if($insert_products){
          if($image_size_01 > 2000000 OR $image_size_02 > 2000000 OR $image_size_03 > 2000000){
@@ -63,8 +61,6 @@ if(isset($_POST['add_product'])){
          }
 
       }
-      
-      include 'Location: ../index.php';
 
    }  
 
@@ -88,6 +84,9 @@ if(isset($_GET['delete'])){
    header('location:products.php');
 }
 
+    $select_system = $conn->prepare("SELECT * FROM `system`");
+    $select_system->execute();
+    $number_of_system = $select_system->rowCount();
 
 ?>
 
@@ -103,6 +102,14 @@ if(isset($_GET['delete'])){
 
    <link rel="stylesheet" href="../css/admin_style.css">
      <link rel="stylesheet" href="style.css">
+     
+
+        <?php
+            if($select_system->rowCount() > 0){
+                while($fetch_product = $select_system->fetch(PDO::FETCH_ASSOC)){
+         ?>
+    <link rel="icon" type="image/x-icon" href="/images/admin/<?php echo $fetch_product['icon']; ?>">
+        <?php } } ?>
 
 </head>
 <body>
@@ -111,118 +118,20 @@ if(isset($_GET['delete'])){
 
 <section class="add-products">
 
-   <h1 class="heading">add product | إضافة منتج</h1>
-
-   <form action="" method="post" enctype="multipart/form-data">
-      <div class="flex">
-         <div class="inputBox">
-            <span>إسم المنتج (مطلوب)</span>
-            <input type="text" class="box" required maxlength="100" placeholder="enter product name" name="name">
-         </div>
-         <div class="inputBox">
-            <span>سعر المنتج (مطلوب)</span>
-            <input type="number" min="0" class="box" required max="9999999999" placeholder="enter product price" onkeypress="if(this.value.length == 10) return false;" name="price">
-         </div>
-        <div class="inputBox">
-            <span>صور 1 المنتج (مطلوب)</span>
-            <input type="file" name="image_01" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
-        </div>
-        <div class="inputBox">
-            <span>صور 2 المنتج (مطلوب)</span>
-            <input type="file" name="image_02" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
-        </div>
-        <div class="inputBox">
-            <span>صور 3 المنتج (مطلوب)</span>
-            <input type="file" name="image_03" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
-        </div>
-         <div class="inputBox">
-            <span>تفاصيل المنتج (مطلوب)</span>
-            <textarea name="details" placeholder="enter product details" class="box" required maxlength="500" cols="30" rows="10"></textarea>
-         </div>
-         <div class="inputBox">
-            <span>صنف المنتج (مطلوب)</span>
-            <!--<input type="text" class="box" required maxlength="100" placeholder="enter product category" name="category">-->
-            <select class="box" name="category" id="category">
-                <?php
-                    $select_category = $conn->prepare("SELECT * FROM `category`");
-                    $select_category->execute();
-                    $number_of_category = $select_category->rowCount();
-                    if($select_category->rowCount() > 0) {
-                        while($fetch_category = $select_category->fetch(PDO::FETCH_ASSOC)) { ?>
-                            <option value="<?= $fetch_category['title']; ?>">
-                                <?php //echo $number_of_category; ?>
-                                <?= $fetch_category['title']; ?>
-                            </option>
-                <?php } } ?>
-            </select>
-         </div>
-         <div class="inputBox">
-            <span>العلامة التجارية للمنتج (مطلوب)</span>
-            <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
-            <select class="box" name="brand" id="brand">
-                <?php
-                    $select_products = $conn->prepare("SELECT * FROM `brand`");
-                    $select_products->execute();
-                    $number_of_brand = $select_products->rowCount();
-                    if($select_products->rowCount() > 0) {
-                        while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                            <option value="<?= $fetch_accounts['title']; ?>">
-                                <?= $fetch_accounts['title']; ?>
-                            </option>
-                <?php } } ?>
-            </select>
-         </div>
-         <div class="inputBox">
-            <span>إسم السوق (مطلوب)</span>
-            <?php
-                $select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$user_id'");
-                $select_products->execute();
-                $number_of_brand = $select_products->rowCount();
-                if($select_products->rowCount() > 0) {
-                    while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                        <input type="text" name="sid" value="<?php echo $fetch_accounts['id']; ?>" class="box" readonly required>
-            <?php } } ?>
-            <select class="box" name="store" id="store">
-                <?php
-                    $select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$user_id'");
-                    $select_products->execute();
-                    $number_of_brand = $select_products->rowCount();
-                    if($select_products->rowCount() > 0) {
-                        while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                            <option value="<?= $fetch_accounts['title']; ?>">
-                                <?= $fetch_accounts['title']; ?>
-                            </option>
-                <?php } } ?>
-            </select>
-         </div>
-      </div>
+    <h1 class="heading">add product | إضافة منتج</h1>
+  
+    <a href="product.php" class="btn" name="add_product">إضافة منتج</a>
       
-      <input type="submit" value="add product | إضافة المنتج" class="btn" name="add_product">
-   </form>
-
 </section>
 
-<!--<section>
-    <div class="wrapper">
-        <header>File Uploader JavaScript</header>
-        <form action="#">
-          <input class="file-input" type="file" name="file" hidden>
-          <i class="fas fa-cloud-upload-alt"></i>
-          <p>Browse File to Upload</p>
-        </form>
-        <section class="progress-area"></section>
-        <section class="uploaded-area"></section>
-    </div>
-</section>-->
-
-<!--<section class="show-products">
+<section class="show-products">
 
    <h1 class="heading">products added</h1>
 
    <div class="box-container">
 
    <?php
-      $select_products = $conn->prepare("SELECT * FROM `products`");
+      $select_products = $conn->prepare("SELECT * FROM `products` WHERE sid='$user_id'");
       $select_products->execute();
       if($select_products->rowCount() > 0){
          while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
@@ -250,7 +159,7 @@ if(isset($_GET['delete'])){
    
    </div>
 
-</section>-->
+</section>
 
 
 

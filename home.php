@@ -125,7 +125,7 @@ include 'components/wishlist_cart.php';
 
 <section class="category">
 
-   <h1 class="heading">shop by category</h1>
+   <h1 class="heading">تسوق أفضل مع التصنيفات</h1>
 
    <div class="swiper category-slider">
 
@@ -161,7 +161,7 @@ include 'components/wishlist_cart.php';
 
 <section class="home-products">
 
-   <h1 class="heading">latest products</h1>
+   <h1 class="heading">آخر المنتجات</h1>
 
    <div class="swiper products-slider">
 
@@ -251,7 +251,7 @@ include 'components/wishlist_cart.php';
 
 <section class="category">
 
-   <h1 class="heading">shop by brand</h1>
+   <h1 class="heading">تسوق مع العلامات التجارية</h1>
 
    <div class="swiper category-slider">
 
@@ -280,7 +280,7 @@ include 'components/wishlist_cart.php';
 
 <section class="home-products">
 
-   <h1 class="heading">apple products</h1>
+   <h1 class="heading">منتجات أبل</h1>
 
    <div class="swiper products-slider">
 
@@ -370,7 +370,7 @@ include 'components/wishlist_cart.php';
 
 <section class="home-products">
 
-   <h1 class="heading">real estates products</h1>
+   <h1 class="heading">سوق العقارات الآن متوفر</h1>
 
    <div class="swiper products-slider">
 
@@ -446,7 +446,16 @@ include 'components/wishlist_cart.php';
              </div>
           </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
-            <input type="submit" value="حجز العقار" class="btn" name="add_to_cart">
+        <?php
+            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND pid = ?");
+            $check_cart_numbers->execute([$user_id, $fetch_product['id']]);
+
+            if($check_cart_numbers->rowCount() > 0){
+                echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
+            }else{
+                echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
+            }
+        ?>
         <?php } else { ?>
             <input type="button" value="لا يمكن إضافة منتج من نفس السوق" class="btn" name="" style="background: white; color: black;">
         <?php } ?>
@@ -468,7 +477,7 @@ include 'components/wishlist_cart.php';
 
 <section class="home-products">
 
-   <h1 class="heading">samsung products</h1>
+   <h1 class="heading">منتجات سامسونج</h1>
 
    <div class="swiper products-slider">
 
@@ -559,7 +568,7 @@ include 'components/wishlist_cart.php';
 <section class="home-products">
 
     <h1 class="heading">
-       list stores
+       قائمة الأسواق
        <?php
          $select_stores = $conn->prepare("SELECT * FROM `store` LIMIT 6"); 
          $select_stores->execute();
@@ -613,6 +622,8 @@ include 'components/wishlist_cart.php';
                                     $("[rel=tooltip]").tooltip({ placement: 'right'});
                                 });
                             </script>
+                        <?php } else if ($status == 7) { ?>
+                            <i class="bi bi-buildings-fill" style="color: #198754;" rel="tooltip" title="سوق عقارات" id="blah"></i>
                         <?php } ?>
           </div>
           <div class="name"><?= '[' . $fetch_store['created_by'] . '] ' . $fetch_store['subtitle']; ?></div>
@@ -639,7 +650,7 @@ include 'components/wishlist_cart.php';
 
 <section class="home-products">
 
-   <h1 class="heading">recommanded products</h1>
+   <h1 class="heading">منتجات مقترحة</h1>
 
    <div class="swiper products-slider">
 
@@ -735,7 +746,7 @@ include 'components/wishlist_cart.php';
         $select_products = $conn->prepare("SELECT * FROM `products` LIMIT 10"); 
         $select_products->execute();
         if($select_products->rowCount() > 0){
-            echo 'top ' . $select_products->rowCount() . ' products';
+            echo 'المنتجات ' . $select_products->rowCount() . ' الأعلى مبيعاً';
         }
    ?>
    </h1>

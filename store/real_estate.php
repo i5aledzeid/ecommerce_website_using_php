@@ -23,52 +23,53 @@ if(isset($_POST['add_product'])){
    $brand = $_POST['brand'];
    $store = $_POST['store'];
    $sid = $_POST['sid'];
+   $map = $_POST['map'];
 
    $image_01 = $_FILES['image_01']['name'];
    $image_01 = filter_var($image_01, FILTER_SANITIZE_STRING);
    $image_size_01 = $_FILES['image_01']['size'];
    $image_tmp_name_01 = $_FILES['image_01']['tmp_name'];
-   $image_folder_01 = '../uploaded_img/'.$image_01;
+   $image_folder_01 = '../uploaded_img/real_estate/'.$image_01;
 
    $image_02 = $_FILES['image_02']['name'];
    $image_02 = filter_var($image_02, FILTER_SANITIZE_STRING);
    $image_size_02 = $_FILES['image_02']['size'];
    $image_tmp_name_02 = $_FILES['image_02']['tmp_name'];
-   $image_folder_02 = '../uploaded_img/'.$image_02;
+   $image_folder_02 = '../uploaded_img/real_estate/'.$image_02;
 
    $image_03 = $_FILES['image_03']['name'];
    $image_03 = filter_var($image_03, FILTER_SANITIZE_STRING);
    $image_size_03 = $_FILES['image_03']['size'];
    $image_tmp_name_03 = $_FILES['image_03']['tmp_name'];
-   $image_folder_03 = '../uploaded_img/'.$image_03;
+   $image_folder_03 = '../uploaded_img/real_estate/'.$image_03;
    
    $image_04 = $_FILES['image_04']['name'];
    $image_04 = filter_var($image_04, FILTER_SANITIZE_STRING);
    $image_size_04 = $_FILES['image_04']['size'];
    $image_tmp_name_04 = $_FILES['image_04']['tmp_name'];
-   $image_folder_04 = '../uploaded_img/'.$image_04;
+   $image_folder_04 = '../uploaded_img/real_estate/'.$image_04;
    
    $image_05 = $_FILES['image_05']['name'];
    $image_05 = filter_var($image_05, FILTER_SANITIZE_STRING);
    $image_size_05 = $_FILES['image_05']['size'];
    $image_tmp_name_05 = $_FILES['image_05']['tmp_name'];
-   $image_folder_05 = '../uploaded_img/'.$image_05;
+   $image_folder_05 = '../uploaded_img/real_estate/'.$image_05;
    
    $image_06 = $_FILES['image_06']['name'];
    $image_06 = filter_var($image_06, FILTER_SANITIZE_STRING);
    $image_size_06 = $_FILES['image_06']['size'];
    $image_tmp_name_06 = $_FILES['image_06']['tmp_name'];
-   $image_folder_06 = '../uploaded_img/'.$image_06;
+   $image_folder_06 = '../uploaded_img/real_estate/'.$image_06;
 
-   $select_products = $conn->prepare("SELECT * FROM `products` WHERE name = ?");
+   $select_products = $conn->prepare("SELECT * FROM `real_estates` WHERE name = ?");
    $select_products->execute([$name]);
 
    if($select_products->rowCount() > 0){
       $message[] = 'product name already exist!';
    }else{
 
-      $insert_products = $conn->prepare("INSERT INTO `real_estates`(name, details, price, image_01, image_02, image_03, image_04, image_05, image_06, category, brand, created_by, sid) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $image_04, $image_05, $image_06, $category, $brand, $store, $sid]);
+      $insert_products = $conn->prepare("INSERT INTO `real_estates`(name, details, price, image_01, image_02, image_03, image_04, image_05, image_06, map, category, brand, created_by, sid) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $image_04, $image_05, $image_06, $map, $category, $brand, $store, $sid]);
 
       if($insert_products){
          if($image_size_01 > 2000000 OR $image_size_02 > 2000000 OR $image_size_03 > 2000000 OR $image_size_04 > 2000000 OR $image_size_05 > 2000000 OR $image_size_06 > 2000000){
@@ -124,6 +125,8 @@ if(isset($_GET['delete'])){
 
    <link rel="stylesheet" href="../css/admin_style.css">
      <link rel="stylesheet" href="style.css">
+     
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -138,11 +141,11 @@ if(isset($_GET['delete'])){
       <div class="flex">
          <div class="inputBox">
             <span>إسم المنتج (مطلوب)</span>
-            <input type="text" class="box" required maxlength="100" placeholder="enter product name" name="name">
+            <input type="text" class="box" required maxlength="100" placeholder="enter real estate name" name="name">
          </div>
          <div class="inputBox">
             <span>سعر المنتج (مطلوب)</span>
-            <input type="number" min="0" class="box" required max="9999999999" placeholder="enter product price" onkeypress="if(this.value.length == 10) return false;" name="price">
+            <input type="number" min="0" class="box" required max="9999999999" placeholder="enter real estate price" onkeypress="if(this.value.length == 10) return false;" name="price">
          </div>
         <div class="inputBox">
             <span>صور 1 المنتج (مطلوب)</span>
@@ -173,7 +176,7 @@ if(isset($_GET['delete'])){
             <!--<input type="text" class="box" required maxlength="100" placeholder="enter product category" name="category">-->
             <select class="box" name="category" id="category">
                 <?php
-                    $select_category = $conn->prepare("SELECT * FROM `category`");
+                    $select_category = $conn->prepare("SELECT * FROM `category` WHERE id='9'");
                     $select_category->execute();
                     $number_of_category = $select_category->rowCount();
                     if($select_category->rowCount() > 0) {
@@ -186,7 +189,7 @@ if(isset($_GET['delete'])){
             </select>
          </div>
          <div class="inputBox">
-            <span>العلامة التجارية للمنتج (مطلوب)</span>
+            <span>الدولة للمنتج (مطلوب)</span>
             <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
             <select class="box" name="brand" id="brand">
                 <?php
@@ -202,7 +205,41 @@ if(isset($_GET['delete'])){
             </select>
          </div>
          <div class="inputBox">
-            <span>إسم السوق (مطلوب)</span>
+            <span>الدولة للمنتج (مطلوب)</span>
+            <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
+            <select class="box" name="country" id="country">
+                <?php
+                    $select_products = $conn->prepare("SELECT * FROM `countries`");
+                    $select_products->execute();
+                    $number_of_brand = $select_products->rowCount();
+                    if($select_products->rowCount() > 0) {
+                        while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
+                            <option value="<?= $fetch_accounts['id']; ?>">
+                                <?= $fetch_accounts['name']; ?>
+                            </option>
+                <?php } } ?>
+            </select>
+         </div>
+         <div class="inputBox">
+            <span>الولاية للمنتج (مطلوب)</span>
+            <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
+            <select class="box" name="state" id="state">
+                <option selected disabled>إختر الولاية/المحافظة</option>
+            </select>
+         </div>
+         <div class="inputBox">
+            <span>المدينة للمنتج (مطلوب)</span>
+            <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
+            <select class="box" name="city" id="city">
+                <option selected disabled>إختر المدينة</option>
+            </select>
+         </div>
+         <div class="inputBox">
+            <span>المكان (مطلوب)</span>
+            <input type="text" class="box" required maxlength="100" placeholder="enter real estate place" name="map">
+         </div>
+         <div class="inputBox">
+            <span>رقم السوق (مطلوب)</span>
             <?php
                 $select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$user_id'");
                 $select_products->execute();
@@ -211,6 +248,9 @@ if(isset($_GET['delete'])){
                     while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
                         <input type="text" name="sid" value="<?php echo $fetch_accounts['id']; ?>" class="box" readonly required>
             <?php } } ?>
+         </div>
+         <div class="inputBox">
+            <span>إسم السوق (مطلوب)</span>
             <select class="box" name="store" id="store">
                 <?php
                     $select_products = $conn->prepare("SELECT * FROM `store` WHERE id='$user_id'");
@@ -226,65 +266,18 @@ if(isset($_GET['delete'])){
          </div>
          <div class="inputBox">
             <span>تفاصيل المنتج (مطلوب)</span>
-            <textarea name="details" placeholder="enter product details" class="box" required maxlength="500" cols="30" rows="10"></textarea>
+            <textarea name="details" placeholder="enter real estate details&#10;(max: 500 letter)" class="box" required maxlength="500" cols="30" rows="10" style="height: 250px;"></textarea>
             <a>لا تتعدى 500 كلمة.</a>
          </div>
       </div>
       
-      <input type="submit" value="add product | إضافة المنتج" class="btn" name="add_product">
+      <input type="submit" value="add real estate | إضافة عقار" class="btn" name="add_product">
    </form>
 
 </section>
 
-<!--<section>
-    <div class="wrapper">
-        <header>File Uploader JavaScript</header>
-        <form action="#">
-          <input class="file-input" type="file" name="file" hidden>
-          <i class="fas fa-cloud-upload-alt"></i>
-          <p>Browse File to Upload</p>
-        </form>
-        <section class="progress-area"></section>
-        <section class="uploaded-area"></section>
-    </div>
-</section>-->
 
-<!--<section class="show-products">
 
-   <h1 class="heading">products added</h1>
-
-   <div class="box-container">
-
-   <?php
-      $select_products = $conn->prepare("SELECT * FROM `products`");
-      $select_products->execute();
-      if($select_products->rowCount() > 0){
-         while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
-   ?>
-   <div class="box">
-      <img src="../uploaded_img/<?= $fetch_products['image_01']; ?>" alt="">
-      <div class="name"><?= $fetch_products['name']; ?></div>
-      <div class="price">$<span><?= $fetch_products['price']; ?></span>/-</div>
-      <div class="details"><span><?= $fetch_products['details']; ?></span></div>
-      <div class="details">
-          <span><?= $fetch_products['category']; ?></span>
-          <span>(<?= $fetch_products['brand']; ?>)</span>
-      </div>
-      <div class="flex-btn">
-         <a href="update_product.php?update=<?= $fetch_products['id']; ?>" class="option-btn">update</a>
-         <a href="products.php?delete=<?= $fetch_products['id']; ?>" class="delete-btn" onclick="return confirm('delete this product?');">delete</a>
-      </div>
-   </div>
-   <?php
-         }
-      }else{
-         echo '<p class="empty">no products added yet!</p>';
-      }
-   ?>
-   
-   </div>
-
-</section>-->
 
 
 
@@ -295,6 +288,42 @@ if(isset($_GET['delete'])){
 
 <script src="../js/admin_script.js"></script>
   <script src="scripts.js"></script>
+  
+  <script>
+    // County State
+
+    $('#country').on('change', function() {
+        var country_id = this.value;
+        // console.log(country_id);
+        $.ajax({
+            url: '../functions/ajax/state.php',
+            type: "POST",
+            data: {
+                country_data: country_id
+            },
+            success: function(result) {
+                $('#state').html(result);
+                // console.log(result);
+            }
+        })
+    });
+    // state city
+    $('#state').on('change', function() {
+        var state_id = this.value;
+        // console.log(country_id);
+        $.ajax({
+            url: '../functions/ajax/city.php',
+            type: "POST",
+            data: {
+                state_data: state_id
+            },
+            success: function(data) {
+                $('#city').html(data);
+                // console.log(data);
+            }
+        })
+    });
+</script>
 
    
 </body>

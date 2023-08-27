@@ -105,6 +105,8 @@ else {
                                                 $("[rel=tooltip]").tooltip({ placement: 'right'});
                                             });
                                         </script>
+                                    <?php } else if ($status == 7) { ?>
+                                        <i class="bi bi-buildings-fill" style="color: #198754;" rel="tooltip" title="سوق عقارات" id="blah"></i>
                                     <?php } ?>
                             </span><br>
                             <h3 style="font-size: 12px;"><?= $fetch_products['subtitle']; ?></h3>

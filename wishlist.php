@@ -71,7 +71,17 @@ if(isset($_GET['delete_all'])){
       <input type="hidden" name="image" value="<?= $fetch_wishlist['image']; ?>">
       <input type="hidden" name="sid" value="<?= $fetch_wishlist['sid']; ?>">
       <a href="quick_view.php?pid=<?= $fetch_wishlist['pid']; ?>" class="fas fa-eye"></a>
-      <img src="uploaded_img/<?= $fetch_wishlist['image']; ?>" alt="">
+      <?php
+            $i = $fetch_wishlist['sid'];
+            $select_stores = $conn->prepare("SELECT * FROM `store` WHERE `id`='$i'"); 
+            $select_stores->execute();
+            if($select_stores->rowCount() > 0){
+                $fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC);
+                if ($fetch_store['status'] == 7) { ?>
+                    <img src="uploaded_img/real_estate/<?= $fetch_wishlist['image']; ?>" alt="">
+                <?php } else { ?>
+                    <img src="uploaded_img/<?= $fetch_wishlist['image']; ?>" alt="">
+      <?php } } ?>
       <div class="name" style="font-weight: bold;"><?= $fetch_wishlist['name']; ?></div>
       <div class="name">Category (Brand)</div>
       <div class="name" style="font-size: 16px; color: #198754;">
