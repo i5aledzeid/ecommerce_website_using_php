@@ -106,7 +106,7 @@ if(isset($_POST['add_to_reservation'])){
       $sid = $_POST['sid'];
       $sid = filter_var($sid, FILTER_SANITIZE_STRING);
 
-      $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ?");
+      $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND status != 0");
       $check_cart_numbers->execute([$user_id]);
 
       if($check_cart_numbers->rowCount() > 0){

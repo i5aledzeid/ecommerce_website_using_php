@@ -15,7 +15,7 @@
 
    <section class="flex">
 
-      <a href="home.php" class="logo">Shopie<span>.</span></a>
+      <a href="home.php" class="logo">Shopy<span>.space</span></a>
 
       <nav class="navbar">
             <a href="https://shopy101.000webhostapp.com/home.php">home</a>
@@ -27,6 +27,9 @@
             </a>-->
             <a href="../delivery/">
                 <i class="bi bi-car-front-fill"></i> delivery
+            </a>
+            <a href="../search_realestate.php">
+                <i class="bi bi-buildings-fill"></i> العقارات
             </a>
             <a href="contact.php">contact</a>
       </nav>

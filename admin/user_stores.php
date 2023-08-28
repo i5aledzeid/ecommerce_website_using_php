@@ -99,6 +99,8 @@ if(isset($_GET['delete'])){
                         $("[rel=tooltip]").tooltip({ placement: 'right'});
                     });
                 </script>
+            <?php } else if ($status == 7) { ?>
+                <i class="bi bi-buildings-fill" style="color: #198754;" rel="tooltip" title="سوق عقارات" id="blah"></i>
             <?php } ?>
         </p>
       <a href="users_accounts.php?delete=<?= $fetch_accounts['id']; ?>" onclick="return confirm('delete this account? the user related information will also be delete!')" class="delete-btn">delete</a>

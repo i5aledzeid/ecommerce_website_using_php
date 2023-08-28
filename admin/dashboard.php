@@ -313,14 +313,14 @@ $number_of_system = $select_system->rowCount();
             if($select_bank_transfers->rowCount() > 0){
                 //while($fetch_bank_transfers = $select_bank_transfers->fetch(PDO::FETCH_ASSOC)){
          ?>
-          <a href="#" id="notify"><?php
+          <!--<a href="#" id="notify"><?php
             if ($number_of_bank_transfers > 99) {
                 echo '+99';
             }
             else {
                 echo $number_of_bank_transfers;
             }
-          ?></a>
+          ?></a>-->
          <h3><?= 'التحويلات البنكية' ?></h3>
          <p style="font-size: 16px;">
              <?php echo '[' . date("Y-m-d h:i:s") . ']'; ?>
@@ -328,7 +328,7 @@ $number_of_system = $select_system->rowCount();
          <a href="bank_transfers.php" class="btn">التحويلات البنكية <i class="fa fa-university" aria-hidden="true"></i></a>
          <?php } //} 
          else { ?>
-             <a href="#" id="notify">
+            <!--<a href="#" id="notify">
              <?php
              if ($number_of_bank_transfers > 99) {
                 echo '+99';
@@ -336,7 +336,7 @@ $number_of_system = $select_system->rowCount();
             else {
                 echo $number_of_bank_transfers;
             } ?>
-            </a>
+            </a>-->
           <h3><?= 'التحويلات البنكية' ?></h3>
          <p style="font-size: 16px;">
              <?php echo '[' . date("Y-m-d h:i:s") . ']'; ?>
@@ -361,6 +361,20 @@ $number_of_system = $select_system->rowCount();
              من الموصلين
          </p>
          <a href="delivery_accounts.php" class="btn">قائمة الموصلين <i class="fa fa-car" aria-hidden="true"></i></a>
+         <?php } //} ?>
+      </div>
+      
+      <div class="box">
+         <?php
+            $select_system = $conn->prepare("SELECT * FROM `reservation`");
+            $select_system->execute();
+            $number_of_system = $select_system->rowCount();
+            if($select_system->rowCount() > 0){
+                //while($fetch_product = $select_system->fetch(PDO::FETCH_ASSOC)){
+         ?>
+         <h3><?= 'عدد ' . $number_of_system . ' حجوزات'; ?></h3>
+         <p>الحجوزات الخاصة بالعقارات</p>
+         <a href="systems.php" class="btn">هناك حجز <i class="bi bi-building-fill-add"></i></a>
          <?php } //} ?>
       </div>
       
