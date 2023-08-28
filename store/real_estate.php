@@ -24,6 +24,10 @@ if(isset($_POST['add_product'])){
    $store = $_POST['store'];
    $sid = $_POST['sid'];
    $map = $_POST['map'];
+   
+   $country = $_POST['country'];
+   $city = $_POST['city'];
+   $state = $_POST['state'];
 
    $image_01 = $_FILES['image_01']['name'];
    $image_01 = filter_var($image_01, FILTER_SANITIZE_STRING);
@@ -68,8 +72,8 @@ if(isset($_POST['add_product'])){
       $message[] = 'product name already exist!';
    }else{
 
-      $insert_products = $conn->prepare("INSERT INTO `real_estates`(name, details, price, image_01, image_02, image_03, image_04, image_05, image_06, map, category, brand, created_by, sid) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $image_04, $image_05, $image_06, $map, $category, $brand, $store, $sid]);
+      $insert_products = $conn->prepare("INSERT INTO `real_estates`(name, details, price, image_01, image_02, image_03, image_04, image_05, image_06, map, category, brand, country, city, state, created_by, sid) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $image_04, $image_05, $image_06, $map, $category, $brand, $country, $city, $state, $store, $sid]);
 
       if($insert_products){
          if($image_size_01 > 2000000 OR $image_size_02 > 2000000 OR $image_size_03 > 2000000 OR $image_size_04 > 2000000 OR $image_size_05 > 2000000 OR $image_size_06 > 2000000){

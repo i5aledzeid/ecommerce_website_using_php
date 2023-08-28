@@ -517,7 +517,7 @@ else {
         if($select_products->rowCount() > 0){
             while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
                 $name = $fetch_products['title'];
-                echo '<a style="color: #FE4445;">' . $name . '</a>\'s REAL ESTATE [<a style="color: #FE4445;">' . $number_of_store . '</a>] orders | <i style="color: blue;" class="bi bi-eye-fill"></i><a id="alink" style="color: blue;" href="placed_orders.php"> SEE MORE</a>';
+                echo '<a style="color: #FE4445;">' . $name . '</a>\'s REAL ESTATE [<a style="color: #FE4445;">' . $number_of_store . '</a>] orders | <i style="color: blue;" class="bi bi-eye-fill"></i><a id="alink" style="color: blue;" href="realestates.php"> SEE MORE</a>';
             }
         }
    ?>
@@ -605,20 +605,17 @@ else {
       </div>
       <div class="flex">
          <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
-         <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="<?= $fetch_product['quantity']; ?>">
+         <input type="text" name="qty" class="qty" min="1" max="9999999999" onkeypress="if(this.value.length == 2) return false;" value="<?= $fetch_product['quantity']; ?>" style="width: 120px;">
       </div>
       <div class="flex">
          <div class="name">
             <br>
-            <span class="price">from </span><?= $fetch_product['start_date']; ?>
-            <span class="price">,<br>to </span><?= $fetch_product['end_date']; ?>
+            <a style="font-size: 16px;"><?= $fetch_product['start_date']; ?><span class="price"> >>> </span><?= $fetch_product['end_date']; ?></a>
          </div>
       </div>
         <!--<div class="w3-light-grey">
           <div class="w3-container w3-green w3-center" style="width:75%; font-size: 15px; direction: ltr;">
               <?php
-                $ss = $fetch_product['start_date'];
-                $dd = $fetch_product['end_date'];
                 $bday = new DateTime(''.$ss.'');
                 $today = new DateTime(''.$dd.'');
                 $diff = $today->diff($bday);
@@ -641,7 +638,7 @@ else {
             $diff2 = $dateNow - $date3;
             $dayz = floor($diff2 / (60 * 60 * 24));
             $percentage = ($dayz / $days) * 100;
-            if ($percentage > 80) {
+            if ($percentage > 90) {
             ?>
           <div class="w3-container w3-red w3-center" style="width: <?= $percentage; ?>%; font-size: 15px; direction: ltr;">
               <?= number_format($percentage) . '%'; ?>

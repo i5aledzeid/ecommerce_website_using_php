@@ -437,7 +437,7 @@ include 'components/wishlist_cart.php';
         </div>
           <div class="flex">
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
-             <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
+             <input type="number" name="qty" class="qty" min="0" max="9999999999" onkeypress="if(this.value.length == 2) return false;" value="0">
           </div>
             <br><br>
           <div class="flex">
@@ -570,7 +570,7 @@ include 'components/wishlist_cart.php';
     <h1 class="heading">
        قائمة الأسواق
        <?php
-         $select_stores = $conn->prepare("SELECT * FROM `store` LIMIT 6"); 
+         $select_stores = $conn->prepare("SELECT * FROM `store` LIMIT 10"); 
          $select_stores->execute();
          if($select_stores->rowCount() > 0){
               echo '[' . $number_of_store = $select_stores->rowCount() . ']';
@@ -583,7 +583,7 @@ include 'components/wishlist_cart.php';
    <div class="swiper-wrapper">
 
        <?php
-         $select_stores = $conn->prepare("SELECT * FROM `store` LIMIT 6"); 
+         $select_stores = $conn->prepare("SELECT * FROM `store` LIMIT 10"); 
          $select_stores->execute();
          if($select_stores->rowCount() > 0){
           while($fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC)){

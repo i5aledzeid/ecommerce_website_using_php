@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 27, 2023 at 08:40 AM
+-- Generation Time: Aug 28, 2023 at 06:33 AM
 -- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.3.33
 
@@ -168,15 +168,15 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `title`, `subtitle`, `link`, `image`, `created_at`) VALUES
-(1, 'كمبيوتر محمول', 'A portable microcomputer having its main components (such as processor, keyboard, and display screen) integrated into a single unit capable of battery-powered operation.', 'laptop', 'icon-1.png', '2023-08-06'),
-(2, 'تلفاز', 'A system for converting visual images (with sound) into electrical signals, transmitting them by radio or other means, and displaying them electronically on a screen.', 'television', 'icon-2.png', '2023-08-06'),
-(3, 'كاميرا', 'A device for recording visual images in the form of photographs, film, or video signals.', 'camera', 'icon-3.png', '2023-08-06'),
-(4, 'فأرة', 'A small handheld device which is moved across a mat or flat surface to move the cursor on a computer screen.', 'mouse', 'icon-4.png', '2023-08-06'),
-(5, 'ثلاجة', 'Fridge is short for refrigerator, that giant kitchen appliance that keeps food cold.', 'fridge', 'icon-5.png', '2023-08-06'),
-(6, 'غسالة', 'A machine for washing clothes, sheets, and other things made of cloth.', 'washing', 'icon-6.png', '2023-08-06'),
-(7, 'هواتف ذكية', 'A mobile phone that performs many of the functions of a computer, typically having a touchscreen interface, internet access, and an operating system capable of running downloaded apps.', 'smartphone', 'icon-7.png', '2023-08-06'),
-(8, 'ساعات', 'A small timepiece worn typically on a strap on one\'s wrist.', 'watch', 'icon-8.png', '2023-08-06'),
-(9, 'عقارات', 'Real estate is property consisting of land and the buildings on it, along with its natural resources such as growing crops (eg. timber), minerals or water, and wild animals;', 'real_estate', 'icon-9.png', '2023-08-06');
+(1, 'Laptop', 'A portable microcomputer having its main components (such as processor, keyboard, and display screen) integrated into a single unit capable of battery-powered operation.', 'laptop', 'icon-1.png', '2023-08-06'),
+(2, 'Television', 'A system for converting visual images (with sound) into electrical signals, transmitting them by radio or other means, and displaying them electronically on a screen.', 'television', 'icon-2.png', '2023-08-06'),
+(3, 'Camera', 'A device for recording visual images in the form of photographs, film, or video signals.', 'camera', 'icon-3.png', '2023-08-06'),
+(4, 'Mouse', 'A small handheld device which is moved across a mat or flat surface to move the cursor on a computer screen.', 'mouse', 'icon-4.png', '2023-08-06'),
+(5, 'Fridge', 'Fridge is short for refrigerator, that giant kitchen appliance that keeps food cold.', 'fridge', 'icon-5.png', '2023-08-06'),
+(6, 'Washing Machine', 'A machine for washing clothes, sheets, and other things made of cloth.', 'washing', 'icon-6.png', '2023-08-06'),
+(7, 'Smartphone', 'A mobile phone that performs many of the functions of a computer, typically having a touchscreen interface, internet access, and an operating system capable of running downloaded apps.', 'smartphone', 'icon-7.png', '2023-08-06'),
+(8, 'Watch', 'A small timepiece worn typically on a strap on one\'s wrist.', 'watch', 'icon-8.png', '2023-08-06'),
+(9, 'Real Estate', 'Real estate is property consisting of land and the buildings on it, along with its natural resources such as growing crops (eg. timber), minerals or water, and wild animals;', 'real_estate', 'icon-9.png', '2023-08-06');
 
 -- --------------------------------------------------------
 
@@ -48778,7 +48778,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `oid`, `name`, `number`, `email`, `method`, `address`, `total_products`, `total_price`, `placed_on`, `payment_status`) VALUES
-(1, 3, 7638566464, 'user', '1002029220', 'user@gmail.com', 'cash on delivery', 'flat no. 4, street 1, Tokyo, Hokkaido, Japan - 123456', 'MacBook Pro 14 (2666 x 1) -Samsung Galaxy Tab S8 Ultra (1120 x 2) -Samsung Odyssey G7 (679 x 1) -', 5585, '2023-08-26', 'pending');
+(1, 3, 7638566464, 'user', '1002029220', 'user@gmail.com', 'cash on delivery', 'flat no. 4, street 1, Tokyo, Hokkaido, Japan - 123456', 'MacBook Pro 14 (2666 x 1) -Samsung Galaxy Tab S8 Ultra (1120 x 2) -Samsung Odyssey G7 (679 x 1) -', 5585, '2023-08-26', 'pending'),
+(2, 4, 3335471446, 'Sara Jay', '0525435423', 'fdvsfdt43@gmail.com', 'cash on delivery', 'flat no. Ohio, UK, UK, London, London, UK - 444444', 'MacBook Pro 14 (2666 x 1) -', 2666, '2023-08-28', 'pending');
 
 -- --------------------------------------------------------
 
@@ -48815,7 +48816,8 @@ CREATE TABLE `order_store` (
 INSERT INTO `order_store` (`id`, `user_id`, `pid`, `oid`, `name`, `number`, `email`, `method`, `address`, `image`, `total_products`, `total_price`, `qty`, `placed_on`, `payment_status`, `store`, `sid`, `delivery_by`, `delivery_price`) VALUES
 (1, 3, 1, 7638566464, 'user', 1002029220, 'user@gmail.com', 'cash on delivery', 'flat no. 4, street 1, Tokyo, Hokkaido, Japan - 123456', '552096.jpg', 'MacBook Pro 14', 2666, 1, '2023-08-26', 'pending', 'Khaled Zeid', 1, 0, 0),
 (2, 3, 8, 7638566464, 'user', 1002029220, 'user@gmail.com', 'cash on delivery', 'flat no. 4, street 1, Tokyo, Hokkaido, Japan - 123456', '552096.jpg', 'Samsung Galaxy Tab S8 Ultra', 1120, 2, '2023-08-26', 'pending', 'Khaled Zeid', 1, 0, 0),
-(3, 3, 9, 7638566464, 'user', 1002029220, 'user@gmail.com', 'cash on delivery', 'flat no. 4, street 1, Tokyo, Hokkaido, Japan - 123456', '552096.jpg', 'Samsung Odyssey G7', 679, 1, '2023-08-26', 'pending', 'Khaled Zeid', 2, 0, 0);
+(3, 3, 9, 7638566464, 'user', 1002029220, 'user@gmail.com', 'cash on delivery', 'flat no. 4, street 1, Tokyo, Hokkaido, Japan - 123456', '552096.jpg', 'Samsung Odyssey G7', 679, 1, '2023-08-26', 'pending', 'Khaled Zeid', 2, 0, 0),
+(4, 4, 1, 3335471446, 'Sara Jay', 525435423, 'fdvsfdt43@gmail.com', 'cash on delivery', 'flat no. Ohio, UK, UK, London, London, UK - 444444', '571627.jpg', 'MacBook Pro 14', 2666, 1, '2023-08-28', 'pending', 'Khaled Zeid', 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -48874,6 +48876,9 @@ CREATE TABLE `real_estates` (
   `map` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
   `brand` varchar(255) NOT NULL,
+  `country` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `state` varchar(255) NOT NULL,
   `created_by` varchar(255) NOT NULL,
   `sid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -48882,11 +48887,12 @@ CREATE TABLE `real_estates` (
 -- Dumping data for table `real_estates`
 --
 
-INSERT INTO `real_estates` (`id`, `name`, `details`, `price`, `image_01`, `image_02`, `image_03`, `image_04`, `image_05`, `image_06`, `map`, `category`, `brand`, `created_by`, `sid`) VALUES
-(1, 'real estate 1', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 76574, 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', 'realestate', 6),
-(2, 'real estate 2', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 5443, 'photo-1564013799919-ab600027ffc6.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'photo-1564013799919-ab600027ffc6.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', 'realestate', 6),
-(3, 'real estate 3', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 45435, 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'images (3).jpg', 'images (2).jpg', 'images (1).jpg', 'images (1).jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', 'realestate', 6),
-(4, 'real estate 4', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 9876, 'images (3).jpg', 'images (2).jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'images (1).jpg', 'images (2).jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Afghanistan', 'realestate', 6);
+INSERT INTO `real_estates` (`id`, `name`, `details`, `price`, `image_01`, `image_02`, `image_03`, `image_04`, `image_05`, `image_06`, `map`, `category`, `brand`, `country`, `city`, `state`, `created_by`, `sid`) VALUES
+(1, 'real estate 1', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 76574, 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', 'Saudi Arabia', 'ar-Riyad', 'al-Kharj', 'realestate', 6),
+(2, 'real estate 2', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 5443, 'photo-1564013799919-ab600027ffc6.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'photo-1564013799919-ab600027ffc6.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', 'Saudi Arabia', 'ar-Riyad', 'al-Kharj', 'realestate', 6),
+(3, 'real estate 3', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 45435, 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'images (3).jpg', 'images (2).jpg', 'images (1).jpg', 'images (1).jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', 'Saudi Arabia', 'ar-Riyad', 'al-Kharj', 'realestate', 6),
+(4, 'real estate 4', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 9876, 'images (3).jpg', 'images (2).jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'images (1).jpg', 'images (2).jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Afghanistan', 'Afghanistan', 'Jawzjan', 'Qarqin', 'realestate', 6),
+(5, 'فيلا للبيع في شارع ابن الفصيح', 'فيلا شبه متصلة دورين وملحق , درج داخلي - الطائف حي الرحاب ، مكونة من :\r\n- الدور الأرضي: 2 مجلس - مقلط - صالة - مطبخ - 2 دورات مياه .\r\n- الدور الأول: صالة - 2 غرفة - 2 غرفة ماستر - دورة مياه.\r\n- الملحق العلوي يتكون من: غرفة - دورة مياه.\r\n\r\nكما يتوفر : حوش - سطح - غرفة غسيل - غرفة خادمة - مدخل سيارة - غرفة تخزين - شرفة - تأسيس مصعد وقريب من الخدمات كما توجد جميع الضمانات.', 266524, '025482901_1693136286876.webp', '025482903_1693136424582.webp', '025482903_1693136426777.webp', '025482905_1693136388189.webp', '025482908_1693136376123.webp', '025482909_1693136294685.webp', 'https://goo.gl/maps/EYJs4AdeZMdrHwfR8', 'Real Estate', 'Saudi Arabia', '191', '37439', '3163', 'realestate', 6);
 
 -- --------------------------------------------------------
 
@@ -48917,9 +48923,15 @@ INSERT INTO `reservation` (`id`, `user_id`, `pid`, `name`, `price`, `quantity`, 
 (7, 5, 1, 'real estate 1', 76574, 0.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
 (8, 4, 1, 'real estate 1', 76574, 0.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
 (14, 7, 4, 'real estate 4', 9876, 0.00, 'images (3).jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
-(16, 3, 1, 'real estate 1', 76574, 76574.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 1, '2023-08-01', '2023-08-31'),
-(18, 3, 4, 'real estate 4', 9876, 0.00, 'images (3).jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
-(19, 3, 2, 'real estate 2', 5443, 0.00, 'photo-1564013799919-ab600027ffc6.jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27');
+(16, 3, 1, 'real estate 1', 76574, 76574.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
+(19, 3, 2, 'real estate 2', 5443, 0.00, 'photo-1564013799919-ab600027ffc6.jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
+(20, 3, 5, 'فيلا للبيع في شارع ابن الفصيح', 266524, 0.00, '025482901_1693136286876.webp', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
+(21, 3, 3, 'real estate 3', 45435, 0.00, 'iStock_185930591-scaled.jpg.optimal.jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
+(22, 3, 4, 'real estate 4', 9876, 0.00, 'images (3).jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
+(23, 7, 3, 'real estate 3', 45435, 0.00, 'iStock_185930591-scaled.jpg.optimal.jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
+(24, 7, 2, 'real estate 2', 5443, 0.00, 'photo-1564013799919-ab600027ffc6.jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
+(25, 7, 1, 'real estate 1', 76574, 0.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
+(26, 7, 5, 'فيلا للبيع في شارع ابن الفصيح', 266524, 0.00, '025482901_1693136286876.webp', 'realestate', 6, 0, '2023-08-28', '2023-08-28');
 
 -- --------------------------------------------------------
 
@@ -53056,10 +53068,11 @@ INSERT INTO `store` (`id`, `title`, `subtitle`, `status`, `image`, `background`,
 (1, 'Khaled Zeid', 'Software engineer by day tech YouTube by night.', 6, 'owner_avatar_male_man_icon.png', 'home-bg.png', 1, '2023-08-15 18:25:03'),
 (2, 'Developer', 'The website developer\'s marketplace is 24/7.', 3, 'avatar_geisha_japanese_woman_icon.png', 'home-bg-4.jpg', 2, '2023-08-15 19:02:32'),
 (3, 'User', 'The website user&#39;s marketplace is opened 24/7.', 0, 'avatar_male_man_portrait_icon.png', 'home-bg-3.jpg', 3, '2023-08-16 10:58:53'),
-(4, 'Customer', 'The website customer&#39;s marketplace is opened 24/7.', 0, 'avatar_male_man_portrait_icon.png', 'home-bg-1.png', 4, '2023-08-27 08:27:40'),
-(5, 'Client', 'The website client&#39;s marketplace is opened 24/7.', 0, 'avatar_male_man_portrait_icon.png', 'home-bg-1.png', 5, '2023-08-27 08:26:12'),
+(4, 'Customer', 'The website customer&#39;s marketplace is opened 24/7.', 1, 'avatar_man_muslim_icon.png', 'home-bg-1.jpg', 4, '2023-08-27 08:27:40'),
+(5, 'Client', 'The website client&#39;s marketplace is opened 24/7.', 2, 'avatar_hindi_indian_woman_icon.png', 'home-bg-1.png', 5, '2023-08-27 08:26:12'),
 (6, 'realestate', 'The website real estate\'s marketplace is 24/7.', 7, 'builder_helmet_worker_icon.png', 'home-bg-5.jpg', 6, '2023-08-23 14:58:19'),
-(7, 'Shop', 'The website shop&#39;s marketplace is 24/7.', 0, 'avatar_male_man_portrait_icon.png', 'home-bg-2.jpg', 7, '2023-08-26 09:14:07');
+(7, 'Shop', 'The website shop&#39;s marketplace is 24/7.', 4, 'afro_female_person_woman_icon.png', 'home-bg-2.jpg', 7, '2023-08-26 09:14:07'),
+(8, 'Info', 'The website info&#39;s marketplace is opened 24/7.', 5, 'actor_chaplin_comedy_man_icon.png', 'home-bg-1.png', 8, '2023-08-27 08:43:19');
 
 -- --------------------------------------------------------
 
@@ -53297,7 +53310,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -53345,13 +53358,13 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order_store`
 --
 ALTER TABLE `order_store`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -53363,13 +53376,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `real_estates`
 --
 ALTER TABLE `real_estates`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `states`
@@ -53381,7 +53394,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `store`
 --
 ALTER TABLE `store`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `system`

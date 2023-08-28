@@ -140,7 +140,7 @@ if(isset($_POST['updatedata'])) {
               <th scope="col">إسم الطالب</th>
               <th scope="col">إسم المنتج</th>
               <th scope="col">رقم الطلب</th>
-              <th scope="col">صورة المنتج</th>
+              <!--<th scope="col">صورة المنتج</th>-->
               <th scope="col">#</th>
             </tr>
         </thead>
@@ -187,7 +187,7 @@ if(isset($_POST['updatedata'])) {
                           <td>' .$fetch_store_orders['name']. '</td>
                           <td>' .$fetch_store_orders['total_products']. '</td>
                           <td><a id="id" style="color: #D49797; text-decoration: none;" href=""></a>' .$fetch_store_orders['oid']. '</td>
-                          <td>'.$fetch_store_orders['image'].'</td>
+                          <!--<td>'.$fetch_store_orders['image'].'</td>-->
                           <!--<td>'.$fetch_store_orders['image'].'<a href="#"><img src="../uploaded_img/'.$fetch_store_orders['image'].'" alt="logo" style="width: 64px;"></a></td>-->
                           <td>'. $i++ .'</td>
                         </tr>'; ?>
@@ -287,10 +287,10 @@ if(isset($_POST['updatedata'])) {
                             </div>-->
                             
                         </div>
-                        <div class="col">
+                        <!--<div class="col">
                             <label for="exampleFormControlInput1" class="form-label">صورة المنتج</label>
                             <input style="direction: ltr;" type="text" class="form-control" name="order-image" id="order-image" placeholder="حالة الدفع" readonly>
-                        </div>
+                        </div>-->
                         <!--<div class="form-group">
                             <label> First Name </label>
                             <input type="text" name="fname" id="fname" class="form-control"
@@ -431,7 +431,7 @@ if(isset($_POST['updatedata'])) {
 
                 console.log(data);
 
-                $('#order-image').val(data[9]);
+                //$('#order-image').val(data[9]);
                 $('#status').val(data[0]);
                 $('#qty').val(data[4]);
                 $('#price').val(data[5]);
