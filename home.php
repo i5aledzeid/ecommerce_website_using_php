@@ -13,6 +13,7 @@ if(isset($_SESSION['user_id'])){
 
 include 'components/wishlist_cart.php';
 
+
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +34,8 @@ include 'components/wishlist_cart.php';
    
    <!-- https://icons.getbootstrap.com -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+      <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 
 </head>
 <body>
@@ -47,7 +50,7 @@ include 'components/wishlist_cart.php';
    
    <div class="swiper-wrapper">
 
-      <div class="swiper-slide slide" style="height: 200px;">
+      <div class="swiper-slide slide" style="height: 250px;">
          <div class="image">
             <img src="images/home-img-1.png" alt="" style="height: 100px;">
          </div>
@@ -228,6 +231,35 @@ include 'components/wishlist_cart.php';
          <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
          <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
       </div>
+      <br>
+      <div class="flex" style="font-size: 16px;">
+          <?php
+            $i = $fetch_product['id'];
+            $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
+            $select_comments->execute();
+            $count = $select_comments->rowCount();
+            //if($select_comments->rowCount() > 0){
+                //while($fetch_comment = $select_comments->fetch(PDO::FETCH_ASSOC)){
+                    //echo $fetch_comment['pid'];
+                    if ($count > 999) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> 1K comments';
+                    }
+                    else if ($count > 99) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> +99 comments';
+                    }
+                    else if ($count > 0 && $count > 1) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comments';
+                    } else {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comment';
+                    }
+                //}
+            //}
+          ?>
+        <div class="name">
+            <i class="bi bi-hand-thumbs-up-fill" style="color: #198754;"></i> 22
+            <i class="bi bi-hand-thumbs-down-fill" style="color: #DC3545;"></i> 32
+        </div>
+      </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
         <?php } else { ?>
@@ -347,6 +379,30 @@ include 'components/wishlist_cart.php';
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
+                <div class="name">
+          <?php
+            $i = $fetch_product['id'];
+            $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
+            $select_comments->execute();
+            $count = $select_comments->rowCount();
+            //if($select_comments->rowCount() > 0){
+                //while($fetch_comment = $select_comments->fetch(PDO::FETCH_ASSOC)){
+                    //echo $fetch_comment['pid'];
+                    if ($count > 999) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> 1K comments';
+                    }
+                    else if ($count > 99) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> +99 comments';
+                    }
+                    else if ($count > 0 && $count > 1) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comments';
+                    } else {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comment';
+                    }
+                //}
+            //}
+          ?>
+      </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
         <?php } else { ?>
@@ -373,6 +429,35 @@ include 'components/wishlist_cart.php';
    <h1 class="heading">سوق العقارات الآن متوفر</h1>
 
    <div class="swiper products-slider">
+       
+          <div class="flex">
+             <button>Show maps </button>
+             <i class="bi bi-chevron-down" onclick="myFunction()" id="myDIV" style="font-size: 16px;"></i>
+          </div>
+          <style>
+            .myStyle {
+              background-color: coral;
+              padding: 16px;
+            }
+            .newStyle {
+              background-color: lightblue;
+              text-align: center;
+              font-size: 25px;
+              padding: 16px;
+            }
+            
+            .show {
+                display: none;
+                height: 250px;
+            }
+            
+            .none {
+                display: block;
+                height: 250px;
+            }
+            
+            </style>
+
 
    <div class="swiper-wrapper">
 
@@ -398,8 +483,14 @@ include 'components/wishlist_cart.php';
             <div class="name" style="font-size: 12px;">
                 <i class="bi bi-tags-fill"></i> <a href="category.php?real_estates=<?php echo $fetch_product['category']; ?>">
                     <?= $fetch_product['category']; ?>
-                    </a> <i class="bi bi-geo-alt-fill" style="color: green;"></i> <a style="color: green;"><?= $fetch_product['brand']; ?></a>
+                    </a>
             </div>
+          <div class="name" style="font-size: 12px;">
+                <a href="https://maps.google.com/maps?q=<?php echo $fetch_product['country']; ?>&output=embed" style="color: green;">
+                    <i class="bi bi-geo-alt-fill" style="color: green;"></i>
+                    <?= $fetch_product['country'] . ', ' . $fetch_product['city'] . ', ' . $fetch_product['state']; ?>
+                </a>
+          </div>
           <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -441,10 +532,25 @@ include 'components/wishlist_cart.php';
           </div>
             <br><br>
           <div class="flex">
-             <div class="map">
-                 <a href="<?php echo $fetch_product['map']; ?>" style="color: red;"><i class="bi bi-geo-alt-fill"></i><?php echo $fetch_product['map']; ?></a>
+             <div class="map" style="font-size: 8px;">
+                 <a href="<?php echo $fetch_product['map']; ?>" style="color: red;"> <i class="bi bi-geo-alt-fill"></i><?php echo ' ' . $fetch_product['map']; ?></a>
              </div>
           </div>
+            <div class="none">
+              <?php $address = $fetch_product['country'] . ', ' . $fetch_product['city'] . ', ' . $fetch_product['state']; ?>
+                <iframe width="100%" height="250" src="https://maps.google.com/maps?q=<?php echo $address; ?>&output=embed"></iframe>
+            </div>
+          <!--------------------------------------------- MAPS ---------------------------------------------->
+        <!--<?php if (isset($_POST["submit_address"])) {
+            $address = $_POST["address"];
+            $address = str_replace(" ", "+", $address); ?>
+            <iframe width="25%" height="500" src="https://maps.google.com/maps?q=<?php echo $address; ?>&output=embed"></iframe>
+        <?php } if (isset($_POST["submit_coordinates"])) {
+            $latitude = $_POST["latitude"];
+            $longitude = $_POST["longitude"]; ?>
+            <iframe width="25%" height="500" src="https://maps.google.com/maps?q=<?php echo $latitude; ?>,<?php echo $longitude; ?>&output=embed"></iframe>
+        <?php } ?>-->
+          <!--------------------------------------------- MAPS ---------------------------------------------->
         <?php if ($user_id != $fetch_product['sid']) { ?>
         <?php
             $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND pid = ?");
@@ -544,6 +650,30 @@ include 'components/wishlist_cart.php';
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
+                <div class="name">
+          <?php
+            $i = $fetch_product['id'];
+            $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
+            $select_comments->execute();
+            $count = $select_comments->rowCount();
+            //if($select_comments->rowCount() > 0){
+                //while($fetch_comment = $select_comments->fetch(PDO::FETCH_ASSOC)){
+                    //echo $fetch_comment['pid'];
+                    if ($count > 999) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> 1K comments';
+                    }
+                    else if ($count > 99) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> +99 comments';
+                    }
+                    else if ($count > 0 && $count > 1) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comments';
+                    } else {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comment';
+                    }
+                //}
+            //}
+          ?>
+      </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
         <?php } else { ?>
@@ -718,6 +848,30 @@ include 'components/wishlist_cart.php';
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
+                <div class="name">
+          <?php
+            $i = $fetch_product['id'];
+            $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
+            $select_comments->execute();
+            $count = $select_comments->rowCount();
+            //if($select_comments->rowCount() > 0){
+                //while($fetch_comment = $select_comments->fetch(PDO::FETCH_ASSOC)){
+                    //echo $fetch_comment['pid'];
+                    if ($count > 999) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> 1K comments';
+                    }
+                    else if ($count > 99) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> +99 comments';
+                    }
+                    else if ($count > 0 && $count > 1) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comments';
+                    } else {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comment';
+                    }
+                //}
+            //}
+          ?>
+      </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
         <?php } else { ?>
@@ -817,6 +971,30 @@ include 'components/wishlist_cart.php';
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
+        <div class="name">
+          <?php
+            $i = $fetch_product['id'];
+            $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
+            $select_comments->execute();
+            $count = $select_comments->rowCount();
+            //if($select_comments->rowCount() > 0){
+                //while($fetch_comment = $select_comments->fetch(PDO::FETCH_ASSOC)){
+                    //echo $fetch_comment['pid'];
+                    if ($count > 999) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> 1K comments';
+                    }
+                    else if ($count > 99) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> +99 comments';
+                    }
+                    else if ($count > 0 && $count > 1) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comments';
+                    } else {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comment';
+                    }
+                //}
+            //}
+          ?>
+      </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
         <?php } else { ?>
@@ -860,7 +1038,7 @@ var swiper = new Swiper(".home-slider", {
     },
 });
 
- var swiper = new Swiper(".category-slider", {
+var swiper = new Swiper(".category-slider", {
    loop:true,
    spaceBetween: 20,
    pagination: {
@@ -939,6 +1117,18 @@ var swiper = new Swiper(".top-slider", {
 });
 
 </script>
+
+<script>
+function myFunction() {
+    const element = document.getElementById("myDIV");
+    if (element.className == "bi bi-chevron-down") {
+        element.className = "bi bi-chevron-up";
+    } else {
+        element.className = "bi bi-chevron-down";
+    }
+}
+</script>
+
 
 </body>
 </html>

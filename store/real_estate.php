@@ -218,7 +218,7 @@ if(isset($_GET['delete'])){
                     $number_of_brand = $select_products->rowCount();
                     if($select_products->rowCount() > 0) {
                         while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                            <option value="<?= $fetch_accounts['id']; ?>">
+                            <option value="<?= $fetch_accounts['name']; ?>">
                                 <?= $fetch_accounts['name']; ?>
                             </option>
                 <?php } } ?>

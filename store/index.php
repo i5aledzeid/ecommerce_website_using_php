@@ -723,10 +723,15 @@ else {
       <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
       <input type="hidden" name="image" value="<?= $fetch_product['image_01']; ?>">
       <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
-      <a href="../quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
+      <a href="../quick_view.php?realestate=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
       <img src="../uploaded_img/real_estate/<?= $fetch_product['image_01']; ?>" alt="">
       <div class="name" style="font-weight: bold;"><?= $fetch_product['title']; ?></div>
-      <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
+      <div class="name">
+        <?= $fetch_product['name']; ?><?= '<a href="../category.php?real_estates='.$fetch_product['category'] .'" style="font-size: 12px;"> (' . $fetch_product['category'] . ')</a>'; ?>
+      </div>
+      <div class="name" style="font-weight: bold; font-size: 12px;">
+        <?= '<i class="bi bi-geo-alt-fill"></i> '.$fetch_product['country'] . ', ' .$fetch_product['city']. ', ' .$fetch_product['state']; ?>
+      </div>
       <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= $fetch_product['created_by']; ?>
             <?php

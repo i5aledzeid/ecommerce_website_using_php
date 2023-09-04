@@ -10,6 +10,6 @@ $state_qry = mysqli_query($conn, $state);
 // $output="";
 $output = '<option value="">إختر الولاية/المحافظة</option>';
 while ($state_row = mysqli_fetch_assoc($state_qry)) {
-    $output .= '<option value="' . $state_row['id'] . '">' . $state_row['name'] . '</option>';
+    $output .= '<option value="' . $state_row['name'] . '">' . $state_row['name'] . '</option>';
 }
 echo $output;

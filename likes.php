@@ -60,9 +60,9 @@ $delete = $_GET['delete'];
         color: yellow;
     }
 </style>
-<form action="" method="post" class="box">
+<!--<form action="" method="post" class="box">
     <input type="hidden" name="pid" value="<?= $fetch_product['id']; ?>">
-    <input type="text" name="idx" value="<?php echo 'Comment [' . $idx . ']'; ?>" style="width:98.5%;" readonly>
+    <input type="text" name="idx" value="<?php echo 'Likes [' . $idx . ']'; ?>" style="width:98.5%;" readonly>
     <a href="quick_view.php?pid=<?php echo $pid; ?>">
         <i class="bi bi-x-lg" style="color: black;"></i>
     </a><br><br>
@@ -76,21 +76,21 @@ $delete = $_GET['delete'];
         }
         ?>
         <img src="images/<?php echo $fetch_storez['image']; ?>" alt="logo" style="width: 32px; height: 32px;">
-        <textarea type="text" name="updated_comment_" style="width: 93%; padding: 8px; background: #EBEBEB;" row="9"><?php echo $fetch_comments['comment']; ?></textarea>
-        <button type="submit" name="update_comment" style="">
+        <textarea type="text" name="updated_likes_" style="width: 93%; padding: 8px; background: #EBEBEB;" row="9"><?php echo $fetch_comments['comment']; ?></textarea>
+        <button type="submit" name="update_likes" style="">
             <i class="bi bi-pencil-square" id="edit" style="color: black; background: white; cursor: pointer;"></i>
         </button>
         <?php if ($idx != '') { ?>
             <!--<button type="submit" name="update_comment" style="">
                 <i class="bi bi-trash-fill" style="color: #FF4546;"></i>
-            </button>-->
+            </button>--><!--
             <?php } else { ?>
             <a href="quick_view.php?pid=<?php echo $pid; ?>&cid=<?php echo $fetch_comments['id']; ?>">
                 <i class="bi bi-pencil-square" style="color: black;"></i>
             </a>
         <?php } ?>
     </div>
-</form> 
+</form> -->
 
 <?php } } else if ($delete != '') {
     $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE id='$delete'"); 
@@ -101,7 +101,7 @@ $delete = $_GET['delete'];
 
 <form action="" method="post" class="box">
     <input type="hidden" name="pid" value="<?= $fetch_product['id']; ?>">
-    <input type="text" name="idx" value="<?php echo 'Comment [' . $delete . ']'; ?>" style="width:98%;" readonly>
+    <input type="text" name="idx" value="<?php echo 'Likes [' . $delete . ']'; ?>" style="width:98%;" readonly>
     <a href="quick_view.php?pid=<?php echo $pid; ?>">
         <i class="bi bi-x-lg" style="color: black;"></i>
     </a><br><br>
@@ -115,12 +115,12 @@ $delete = $_GET['delete'];
         }
         ?>
         <img src="images/<?php echo $fetch_storez['image']; ?>" alt="logo" style="width: 32px; height: 32px;">
-        <textarea type="text" name="updated_comment_" style="width: 93%; padding: 8px; background: #EBEBEB;" row="9"><?php echo $fetch_comments['comment']; ?></textarea>
+        <textarea type="text" name="updated_like_" style="width: 93%; padding: 8px; background: #EBEBEB;" row="9"><?php echo $fetch_comments['comment']; ?></textarea>
         <!--<button type="submit" name="update_comment" style="">
             <i class="bi bi-pencil-square" style="color: black;"></i>
         </button>-->
         <?php if ($delete != '') { ?>
-            <button type="submit" name="update_comment" style="">
+            <button type="submit" name="update_likes" style="">
                 <i class="bi bi-trash-fill" id="delete" style="color: #FF4546; background: white; cursor: pointer;"></i>
             </button>
             <?php } else { ?>
@@ -138,16 +138,23 @@ $delete = $_GET['delete'];
     <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
     <input type="hidden" name="image" value="<?= $fetch_product['image_01']; ?>">
     <input type="hidden" name="image" value="<?= $fetch_product['image_01']; ?>">
+    <input type="hidden" name="like" value="1">
+    <input type="hidden" name="dislike" value="1">
     <?php
     $pid = $fetch_product['id'];
-    $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE pid='$pid'"); 
+    $select_comments = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND likes!=0 OR likes='' AND dislike!=0"); 
     $select_comments->execute();
     $c = $select_comments->rowCount();
     if($select_comments->rowCount() > 0){
         $fetch_comments = $select_comments->fetch(PDO::FETCH_ASSOC); ?>
-        <input type="text" name="idx" value="<?php echo 'Comment (' . $c . ')'; ?>" style="width:98%;" readonly>
-    <?php }
-    ?><br><br>
+        <input type="text" name="idx" value="<?php echo 'Likes (' . $c . ') '; ?>" style="width:98%;" readonly>
+        <button type="submit" name="delete_like" class="bi bi-x-lg" style="background: transparent; cursor: pointer;"></button>
+        <br><br>
+    <?php } else { ?>
+        <input type="text" name="idx" value="<?php echo 'Likes (0) '; ?>" style="width:98%;" readonly>
+        <button type="submit" name="delete_like" class="bi bi-x-lg" style="background: transparent; cursor: pointer;"></button>
+        <br><br>
+    <?php } ?>
     <div class="row">
         <?php
         $select_users = $conn->prepare("SELECT * FROM `users` WHERE id='$user_id'"); 
@@ -156,7 +163,7 @@ $delete = $_GET['delete'];
             $fetch_users = $select_users->fetch(PDO::FETCH_ASSOC);
         }
         
-        $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE pid='$pid'"); 
+        $select_comments = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND created_by='$user_id'"); 
         $select_comments->execute();
         if($select_comments->rowCount() > 0){
             while($fetch_comments = $select_comments->fetch(PDO::FETCH_ASSOC)){ ?>
@@ -216,38 +223,70 @@ $delete = $_GET['delete'];
                     <div><?php echo $fetch_user['email']; ?></div>
                     <div><?php echo $fetch_comments['created_at']; ?></div>
                 </div>
-                <textarea type="text" placeholder="Enter your comments" style="padding: 8px; background: #EBEBEB; width: 75%;" name="updated_comment" readonly><?php echo $fetch_comments['comment']; ?></textarea>
+                <?php
+                if ($fetch_comments['likes'] == 1) { ?>
+                <textarea type="text" placeholder="Enter your like" style="visibility: hidden; padding: 8px; background: #EBEBEB; width: 64%;" name="updated_like" readonly><?php echo $fetch_comments['likes']; ?></textarea>
+                <i class="bi bi-hand-thumbs-up-fill" style="color: #236E24;"></i>
+                <?php } else if ($fetch_comments['dislike'] == 1) { ?>
+                <textarea type="text" placeholder="Enter your like" style="visibility: hidden; padding: 8px; background: #EBEBEB; width: 64%;" name="updated_dislike" readonly><?php echo $fetch_comments['dislike']; ?></textarea>
+                <i class="bi bi-hand-thumbs-down-fill" style="color: #FF4546;"></i>
+                <?php }
+                ?>
                 <!--<input type="submit" placeholder="Enter your comments" value="تعديل" style="padding: 8px; background: #994409; width: 8%; color: white;" name="update_to_comment">-->
                 <button type="submit" name="update" style="">
                 <?php
-                if ($fetch_comments['created_by'] == $user_id) { ?>
-                <a href="quick_view.php?pid=<?php echo $pid; ?>&cxid=<?php echo $fetch_comments['id']; ?>" style="border-radius: 8px; padding: 8px; background: #EBEBEB; padding-right: 8px; padding-left: 8px;" id="edit-button">تعديل 
+                if ($fetch_comments['created_by'] == $user_id && $fetch_comments['likes'] == 1 || $fetch_comments['dislike'] == 1) { ?>
+                <button type="submit" name="add_to_likes" style="border-radius: 8px; padding: 8px; background: #EBEBEB; padding-right: 8px; padding-left: 8px;">
+                    <i class="bi bi-hand-thumbs-up-fill"></i>
+                    إعجبني 
                     <!--<i class="bi bi-pencil-square" style="color: black;"></i>-->
-                </a>&nbsp;
-                <a href="quick_view.php?pid=<?php echo $pid; ?>&delete=<?php echo $fetch_comments['id']; ?>" style="border-radius: 8px; padding: 8px; background: #EBEBEB; padding-right: 8px; padding-left: 8px; color: red;" id="delete-button">حذف 
+                </button>&nbsp;
+                <button type="submit" name="add_to_dislikes" style="border-radius: 8px; padding: 8px; background: #EBEBEB; padding-right: 8px; padding-left: 8px; color: red;">
+                    <i class="bi bi-hand-thumbs-down-fill"></i>
+                    لم يعجبني 
                     <!--<i class="bi bi-pencil-square" style="color: black;"></i>-->
-                </a>
+                </button>
+                <?php } else if ($fetch_comments['created_by'] == $user_id && $fetch_comments['likes'] == 0 && $fetch_comments['dislike'] == 0) { ?>
+                <div class="flex-btn">
+                    <button class="option-btn" type="submit" name="add_to_likes" style="background: #198754; width: 140px;">
+                        <i class="bi bi-hand-thumbs-up-fill"></i> Like
+                    </button>
+                    <button class="option-btn" type="submit" name="add_to_dislikes" style="background: #FF4546; width: 140px;">
+                        <i class="bi bi-hand-thumbs-down-fill"></i> Dislike
+                    </button>
+                </div>
                 <?php } else { ?>
-                <a href="" style="border-radius: 8px; padding: 8px; background: #EBEBEB; padding-right: 8px; padding-left: 8px; color: red;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </a>&nbsp;
-                <a href="" style="border-radius: 8px; padding: 8px; background: #EBEBEB; padding-right: 8px; padding-left: 8px;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </a>
+                <button type="submit" name="add_to_likes" style="border-radius: 8px; padding: 8px; background: #EBEBEB; padding-right: 8px; padding-left: 8px; color: #EBEBEB;">
+                    <i class="bi bi-hand-thumbs-up-fill"></i>
+                    إعجبني 
+                    <!--<i class="bi bi-pencil-square" style="color: black;"></i>-->
+                </button>&nbsp;
+                <button type="submit" name="add_to_dislikes" style="border-radius: 8px; padding: 8px; background: #EBEBEB; padding-right: 8px; padding-left: 8px; color: #EBEBEB;">
+                    <i class="bi bi-hand-thumbs-down-fill"></i>
+                    لم يعجبني 
+                    <!--<i class="bi bi-pencil-square" style="color: black;"></i>-->
+                </button>
                 <?php } ?>
                 </button>
         <?php
             }
         }
         else {
-            echo '<p>No comments, be first one.</p>';
+            //echo '<input type="text" name="idx" value="Likes (' . $c . ')" style="width:98%;" readonly><br><br>';
+            echo '<p style="font-size: 24px;">No likes, be first one.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>';
+            echo '
+            <div class="flex-btn">
+                <!-- #DC3545 -->
+                <button class="option-btn" type="submit" name="add_to_likes" style="background: #198754; width: 140px;">
+                    <i class="bi bi-hand-thumbs-up-fill"></i> Like
+                </button>
+                <button class="option-btn" type="submit" name="add_to_dislikes" style="background: #FF4546; width: 140px;">
+                    <i class="bi bi-hand-thumbs-down-fill"></i> Dislike
+                </button>
+            </div>
+            ';
         }
       ?>    
 
-    </div>
-    <br><br>
-    <div class="row">
-        <textarea type="text" placeholder="Enter your comments" style="padding: 8px; background: #EBEBEB; width: 100%;" name="comment" rows="6" required></textarea>
-        <input class="option-btn" type="submit" name="add_to_comment" style="background: #FF4546;" value="تعليق">
     </div>
 </form>

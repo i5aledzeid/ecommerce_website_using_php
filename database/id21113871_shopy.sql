@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 28, 2023 at 06:33 AM
+-- Generation Time: Sep 04, 2023 at 08:37 AM
 -- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.3.33
 
@@ -41,6 +41,36 @@ CREATE TABLE `admins` (
 
 INSERT INTO `admins` (`id`, `name`, `email`, `password`, `created_at`) VALUES
 (1, 'i5aledzeid', 'i5aledzeid@gmail.com', '7239e5187ddaca70eb2b4b8c1b169d7ba43a1808', '1996-06-09 16:49:55');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `advertisement`
+--
+
+CREATE TABLE `advertisement` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `subtitle` text NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `button` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `type` int(11) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `created_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `advertisement`
+--
+
+INSERT INTO `advertisement` (`id`, `title`, `subtitle`, `link`, `button`, `image`, `status`, `type`, `created_at`, `updated_at`, `created_by`) VALUES
+(1, 'كل ما عليك البحث بالمكان والسعر', 'الآن اصبح البحث عن عقار أسهل ، كل ما عليك هو البحث', 'search_realestate.php', 'تسوق الآن', 'building_home_house_real estate_icon.png', 0, 0, '2023-08-31 10:04:28', '2023-08-31 16:27:47', 1),
+(2, 'أعلن الآن بدولار لمدة شهر كامل', 'يسهل الإعلان في رفع مستوى مشاهدة المنتجات', 'send_bank_transfers.php', 'أعلن الآن', 'target_goal_marketing_advertising_icon.png', 0, 0, '2023-08-31 10:04:28', '2023-08-31 16:27:47', 1),
+(3, 'هل تريد العمل موصل للطلبات؟', 'إنضم الآن ، وانشئ حساباً وتصفح الطلبات وخذ عمولتك', 'delivery/delivery_register.php', 'إنضم الآن', 'delivery_food_meal_order_food delivery_icon.png', 0, 0, '2023-08-31 10:04:28', '2023-08-31 16:27:47', 1),
+(4, 'هل تريد إنشاء سوق والترويج لمنتجاتك؟', 'أنشئ سوقاً وانشر منتجاتك باشتراك سنوي 100 دولار', 'store/index.php', 'أنشئ سوق', 'home_house_shop_online_store_icon.png', 0, 0, '2023-08-31 10:04:28', '2023-08-31 16:27:47', 1);
 
 -- --------------------------------------------------------
 
@@ -147,6 +177,14 @@ CREATE TABLE `cart` (
   `store` varchar(255) NOT NULL,
   `sid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`id`, `user_id`, `pid`, `name`, `price`, `quantity`, `image`, `store`, `sid`) VALUES
+(7, 6, 3, 'MacBook Air 15 M2', 1852, 1, 'b8be1d7db630a9f134c72f3171603e07f3796af8_619142.jpg', 'Khaled Zeid', 1),
+(8, 6, 2, 'MacBook Air 13', 1012, 1, '558437.jpg', 'Khaled Zeid', 1);
 
 -- --------------------------------------------------------
 
@@ -48185,7 +48223,14 @@ INSERT INTO `comments` (`id`, `pid`, `comment`, `created_by`, `created_at`) VALU
 (4, 1, 'High quality as expected.', 4, '2023-08-24 15:24:33'),
 (5, 1, 'Apple products are great as always.', 5, '2023-08-24 15:25:34'),
 (6, 1, 'We are continuing to develop the feedback system.\r\nWe would also like to inform you that comments contribute to the development of the site and the services it provides.', 1, '2023-08-24 16:35:04'),
-(7, 1, 'This laptop is amazing as it is very fast.', 3, '2023-08-25 13:08:53');
+(7, 1, 'This laptop is amazing as it is very fast.', 3, '2023-08-25 13:08:53'),
+(8, 1, 'I tried the product and I was amazed by its speed.', 6, '2023-08-29 07:53:37'),
+(9, 2, 'First comment!', 3, '2023-08-29 19:01:53'),
+(10, 3, 'Very great product.', 3, '2023-08-29 19:06:30'),
+(11, 2, 'That is a good product.', 3, '2023-08-29 19:30:52'),
+(12, 1, 'LOL!', 7, '2023-08-30 06:27:07'),
+(13, 2, 'I see.', 6, '2023-08-30 19:52:15'),
+(14, 2, 'I like apple&#39;s products before I think to sell any products from stores.', 3, '2023-08-30 20:47:51');
 
 -- --------------------------------------------------------
 
@@ -48740,6 +48785,31 @@ INSERT INTO `deliveries` (`id`, `name`, `phone`, `email`, `password`, `status`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `likes`
+--
+
+CREATE TABLE `likes` (
+  `id` int(11) NOT NULL,
+  `pid` int(11) NOT NULL,
+  `likes` int(11) NOT NULL,
+  `dislike` int(11) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `likes`
+--
+
+INSERT INTO `likes` (`id`, `pid`, `likes`, `dislike`, `created_by`, `created_at`) VALUES
+(1, 1, 1, 0, 3, '2023-09-03 20:16:29'),
+(2, 2, 1, 0, 3, '2023-09-03 20:33:25'),
+(3, 1, 1, 0, 6, '2023-09-03 20:33:42'),
+(4, 3, 1, 0, 6, '2023-09-03 20:34:26');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `messages`
 --
 
@@ -48879,20 +48949,25 @@ CREATE TABLE `real_estates` (
   `country` varchar(255) NOT NULL,
   `city` varchar(255) NOT NULL,
   `state` varchar(255) NOT NULL,
+  `type` int(11) NOT NULL DEFAULT 0,
   `created_by` varchar(255) NOT NULL,
-  `sid` int(11) NOT NULL
+  `sid` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `real_estates`
 --
 
-INSERT INTO `real_estates` (`id`, `name`, `details`, `price`, `image_01`, `image_02`, `image_03`, `image_04`, `image_05`, `image_06`, `map`, `category`, `brand`, `country`, `city`, `state`, `created_by`, `sid`) VALUES
-(1, 'real estate 1', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 76574, 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', 'Saudi Arabia', 'ar-Riyad', 'al-Kharj', 'realestate', 6),
-(2, 'real estate 2', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 5443, 'photo-1564013799919-ab600027ffc6.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'photo-1564013799919-ab600027ffc6.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', 'Saudi Arabia', 'ar-Riyad', 'al-Kharj', 'realestate', 6),
-(3, 'real estate 3', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 45435, 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'images (3).jpg', 'images (2).jpg', 'images (1).jpg', 'images (1).jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', 'Saudi Arabia', 'ar-Riyad', 'al-Kharj', 'realestate', 6),
-(4, 'real estate 4', 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.', 9876, 'images (3).jpg', 'images (2).jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'images (1).jpg', 'images (2).jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Afghanistan', 'Afghanistan', 'Jawzjan', 'Qarqin', 'realestate', 6),
-(5, 'فيلا للبيع في شارع ابن الفصيح', 'فيلا شبه متصلة دورين وملحق , درج داخلي - الطائف حي الرحاب ، مكونة من :\r\n- الدور الأرضي: 2 مجلس - مقلط - صالة - مطبخ - 2 دورات مياه .\r\n- الدور الأول: صالة - 2 غرفة - 2 غرفة ماستر - دورة مياه.\r\n- الملحق العلوي يتكون من: غرفة - دورة مياه.\r\n\r\nكما يتوفر : حوش - سطح - غرفة غسيل - غرفة خادمة - مدخل سيارة - غرفة تخزين - شرفة - تأسيس مصعد وقريب من الخدمات كما توجد جميع الضمانات.', 266524, '025482901_1693136286876.webp', '025482903_1693136424582.webp', '025482903_1693136426777.webp', '025482905_1693136388189.webp', '025482908_1693136376123.webp', '025482909_1693136294685.webp', 'https://goo.gl/maps/EYJs4AdeZMdrHwfR8', 'Real Estate', 'Saudi Arabia', '191', '37439', '3163', 'realestate', 6);
+INSERT INTO `real_estates` (`id`, `name`, `details`, `price`, `image_01`, `image_02`, `image_03`, `image_04`, `image_05`, `image_06`, `map`, `category`, `brand`, `country`, `city`, `state`, `type`, `created_by`, `sid`, `status`) VALUES
+(1, 'فيلا للبيع في شارع ابن الأقرع', 'ن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار  النشوة وتمجيد الألم نشأت بالفعل، وسأعرض لك التفاصيل لتكتشف حقيقة وأساس تلك السعادة البشرية، فلا أحد يكره أو يتجنب الشعور بالسعادة، ولكن بفضل هؤلاء الأشخاص الذين لا يدركون بأن السعادة لا بد أن نستشعرها بصورة أكثر عقلانية ومنطقية فيعرضهم هذا لمواجهة الظروف الأليمة، ونيل المنال ويتلذذ بالآلام، الألم هو الألم ولكن نتيجة لظروف ما قد تكمن السعاده فيما نتحمله من كد وأسي.', 76574, 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', '191', '37443', '3146', 0, 'realestate', 6, 1),
+(2, 'فيلا للبيع في شارع ابن حنبل', 'ن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار  النشوة وتمجيد الألم نشأت بالفعل، وسأعرض لك التفاصيل لتكتشف حقيقة وأساس تلك السعادة البشرية، فلا أحد يكره أو يتجنب الشعور بالسعادة، ولكن بفضل هؤلاء الأشخاص الذين لا يدركون بأن السعادة لا بد أن نستشعرها بصورة أكثر عقلانية ومنطقية فيعرضهم هذا لمواجهة الظروف الأليمة، ونيل المنال ويتلذذ بالآلام، الألم هو الألم ولكن نتيجة لظروف ما قد تكمن السعاده فيما نتحمله من كد وأسي.', 5443, 'photo-1564013799919-ab600027ffc6.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'photo-1564013799919-ab600027ffc6.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', '191', '37439', '3163', 0, 'realestate', 6, 0),
+(3, 'فيلا للبيع في شارع ابن خلدون', 'ن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار  النشوة وتمجيد الألم نشأت بالفعل، وسأعرض لك التفاصيل لتكتشف حقيقة وأساس تلك السعادة البشرية، فلا أحد يكره أو يتجنب الشعور بالسعادة، ولكن بفضل هؤلاء الأشخاص الذين لا يدركون بأن السعادة لا بد أن نستشعرها بصورة أكثر عقلانية ومنطقية فيعرضهم هذا لمواجهة الظروف الأليمة، ونيل المنال ويتلذذ بالآلام، الألم هو الألم ولكن نتيجة لظروف ما قد تكمن السعاده فيما نتحمله من كد وأسي.', 45435, 'iStock_185930591-scaled.jpg.optimal.jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'images (3).jpg', 'images (2).jpg', 'images (1).jpg', 'images (1).jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Saudi Arabia', '191', '37444', '3163', 0, 'realestate', 6, 0),
+(4, 'فيلا للبيع في شارع ابن عثيمين', 'ن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار  النشوة وتمجيد الألم نشأت بالفعل، وسأعرض لك التفاصيل لتكتشف حقيقة وأساس تلك السعادة البشرية، فلا أحد يكره أو يتجنب الشعور بالسعادة، ولكن بفضل هؤلاء الأشخاص الذين لا يدركون بأن السعادة لا بد أن نستشعرها بصورة أكثر عقلانية ومنطقية فيعرضهم هذا لمواجهة الظروف الأليمة، ونيل المنال ويتلذذ بالآلام، الألم هو الألم ولكن نتيجة لظروف ما قد تكمن السعاده فيما نتحمله من كد وأسي.', 9876, 'images (3).jpg', 'images (2).jpg', 'bigsmall_Mirvac_house2_twgogv.jpg', 'iStock_185930591-scaled.jpg.optimal.jpg', 'images (1).jpg', 'images (2).jpg', 'https://goo.gl/maps/CBaBKAJmE3kie73K9', 'Real Estate', 'Japan', '109', '25082', '1959', 0, 'realestate', 6, 0),
+(5, 'فيلا للبيع في شارع ابن الفصيح', 'فيلا شبه متصلة دورين وملحق , درج داخلي - الطائف حي الرحاب ، مكونة من :\n- الدور الأرضي: 2 مجلس - مقلط - صالة - مطبخ - 2 دورات مياه .\n- الدور الأول: صالة - 2 غرفة - 2 غرفة ماستر - دورة مياه.\n- الملحق العلوي يتكون من: غرفة - دورة مياه.\n\nكما يتوفر : حوش - سطح - غرفة غسيل - غرفة خادمة - مدخل سيارة - غرفة تخزين - شرفة - تأسيس مصعد وقريب من الخدمات كما توجد جميع الضمانات.', 266524, '025482901_1693136286876.webp', '025482903_1693136424582.webp', '025482903_1693136426777.webp', '025482905_1693136388189.webp', '025482908_1693136376123.webp', '025482909_1693136294685.webp', 'https://goo.gl/maps/EYJs4AdeZMdrHwfR8', 'Real Estate', 'Saudi Arabia', '191', '37445', '3163', 0, 'realestate', 6, 0),
+(6, 'شقة جديده للايجار حي اليرموك', 'شقة جديده للايجار سنوي حي اليرموك \r\nالحي الخلفي لفندق بريرا طريق الامام محمد بن سعود \r\n\r\nثلاث غرف وصالة دورتين مياه \r\nبالدور الثالث \r\nمدخل مستقل \r\nوعداد كهرب مستقل \r\n\r\nالدفع 25 الف دفعه كامله غير شامله السعي\r\n            السعر :25000\r\n\r\n3 غرف\r\nصالة\r\nدورتين مياة\r\nالدور الثالث\r\nشارع سكني\r\nسكن عوائل\r\nرقم المعلن 1100203619\r\nإيجار سنوي\r\nصفة المعلن مكتب', 25000, 'webp (5).webp', 'webp (4).webp', 'webp (2).webp', 'webp (3).webp', 'webp (1).webp', 'webp.webp', 'https://goo.gl/maps/sJvFadgwJYSkJiua8', 'Real Estate', 'Saudi Arabia', '191', '37443', '3163', 0, 'realestates', 9, 0),
+(7, 'شقه قريبه من الدائرى الشمالى', 'شقه قريبه من جميع الخدمات ومكيفات راكبه\r\n            السعر :34000\r\n\r\n3 غرف\r\nصالة\r\nدورتين مياة\r\nعمر العقار 7 سنوات\r\nشارع سكني\r\nسكن عوائل\r\nإيجار سنوي\r\nصفة المعلن مكتب', 34000, 'webp_1.webp', 'webp_2.webp', 'webp_3.webp', 'webp_4.webp', 'webp_5.webp', 'webp_6.webp', 'https://goo.gl/maps/AarVtCHYJg6qmx439', 'Real Estate', 'Saudi Arabia', '191', '37443', '3163', 0, 'realestates', 9, 0),
+(8, 'شقه للايجار يومي وشهري بالشميسي', 'شقه للايجار يومي وشهري\r\nاليوم 250\r\nالشهري 5000\r\nحي النرجس\r\nالتواصل واتس 0580304330\r\n\r\nشارع سكني\r\nيتوفر مطبخ\r\nمفروشة\r\nمدخل خاص\r\nيتوفر مصعد\r\nإيجار يومي\r\nإيجار شهري', 5000, 'webp-11.webp', 'webp-12.webp', 'webp-13.webp', 'webp-14.webp', 'webp-15.webp', 'webp-16.webp', 'https://goo.gl/maps/sW1aN9JNwNgBpeqP9', 'Real Estate', 'Saudi Arabia', '191', '37443', '3163', 0, 'realestate', 6, 0);
 
 -- --------------------------------------------------------
 
@@ -48920,18 +48995,14 @@ CREATE TABLE `reservation` (
 --
 
 INSERT INTO `reservation` (`id`, `user_id`, `pid`, `name`, `price`, `quantity`, `image`, `store`, `sid`, `status`, `start_date`, `end_date`) VALUES
-(7, 5, 1, 'real estate 1', 76574, 0.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
-(8, 4, 1, 'real estate 1', 76574, 0.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
-(14, 7, 4, 'real estate 4', 9876, 0.00, 'images (3).jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
-(16, 3, 1, 'real estate 1', 76574, 76574.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
-(19, 3, 2, 'real estate 2', 5443, 0.00, 'photo-1564013799919-ab600027ffc6.jpg', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
-(20, 3, 5, 'فيلا للبيع في شارع ابن الفصيح', 266524, 0.00, '025482901_1693136286876.webp', 'realestate', 6, 0, '2023-08-27', '2023-08-27'),
-(21, 3, 3, 'real estate 3', 45435, 0.00, 'iStock_185930591-scaled.jpg.optimal.jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
-(22, 3, 4, 'real estate 4', 9876, 0.00, 'images (3).jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
-(23, 7, 3, 'real estate 3', 45435, 0.00, 'iStock_185930591-scaled.jpg.optimal.jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
-(24, 7, 2, 'real estate 2', 5443, 0.00, 'photo-1564013799919-ab600027ffc6.jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
-(25, 7, 1, 'real estate 1', 76574, 0.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 0, '2023-08-28', '2023-08-28'),
-(26, 7, 5, 'فيلا للبيع في شارع ابن الفصيح', 266524, 0.00, '025482901_1693136286876.webp', 'realestate', 6, 0, '2023-08-28', '2023-08-28');
+(9, 3, 1, 'فيلا للبيع في شارع ابن الأقرع', 76574, 0.00, 'bigsmall_Mirvac_house2_twgogv.jpg', 'realestate', 6, 0, '2023-09-03', '2023-09-03'),
+(10, 3, 2, 'فيلا للبيع في شارع ابن حنبل', 5443, 0.00, 'photo-1564013799919-ab600027ffc6.jpg', 'realestate', 6, 0, '2023-09-03', '2023-09-03'),
+(11, 3, 3, 'فيلا للبيع في شارع ابن خلدون', 45435, 0.00, 'iStock_185930591-scaled.jpg.optimal.jpg', 'realestate', 6, 0, '2023-09-03', '2023-09-03'),
+(12, 3, 4, 'فيلا للبيع في شارع ابن عثيمين', 9876, 0.00, 'images (3).jpg', 'realestate', 6, 1, '2023-07-01', '2023-09-30'),
+(13, 3, 5, 'فيلا للبيع في شارع ابن الفصيح', 266524, 0.00, '025482901_1693136286876.webp', 'realestate', 6, 0, '2023-09-03', '2023-09-03'),
+(14, 3, 6, 'شقة جديده للايجار حي اليرموك', 25000, 0.00, 'webp (5).webp', 'realestates', 9, 0, '2023-09-03', '2023-09-03'),
+(16, 3, 7, 'شقه قريبه من الدائرى الشمالى', 34000, 0.00, 'webp_1.webp', 'realestates', 9, 0, '2023-09-03', '2023-09-03'),
+(17, 3, 8, 'شقه للايجار يومي وشهري بالشميسي', 5000, 0.00, 'webp-11.webp', 'realestate', 6, 0, '2023-09-03', '2023-09-03');
 
 -- --------------------------------------------------------
 
@@ -53072,7 +53143,8 @@ INSERT INTO `store` (`id`, `title`, `subtitle`, `status`, `image`, `background`,
 (5, 'Client', 'The website client&#39;s marketplace is opened 24/7.', 2, 'avatar_hindi_indian_woman_icon.png', 'home-bg-1.png', 5, '2023-08-27 08:26:12'),
 (6, 'realestate', 'The website real estate\'s marketplace is 24/7.', 7, 'builder_helmet_worker_icon.png', 'home-bg-5.jpg', 6, '2023-08-23 14:58:19'),
 (7, 'Shop', 'The website shop&#39;s marketplace is 24/7.', 4, 'afro_female_person_woman_icon.png', 'home-bg-2.jpg', 7, '2023-08-26 09:14:07'),
-(8, 'Info', 'The website info&#39;s marketplace is opened 24/7.', 5, 'actor_chaplin_comedy_man_icon.png', 'home-bg-1.png', 8, '2023-08-27 08:43:19');
+(8, 'Info', 'The website info&#39;s marketplace is opened 24/7.', 5, 'actor_chaplin_comedy_man_icon.png', 'home-bg-1.png', 8, '2023-08-27 08:43:19'),
+(9, 'realestates', 'The website realestates&#39;s marketplace is opened 24/7.', 7, 'avatar_male_man_portrait_icon.png', 'home-bg-1.png', 9, '2023-08-30 20:01:39');
 
 -- --------------------------------------------------------
 
@@ -53123,7 +53195,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `phone`, `password`) VALUES
 (5, 'client', 'client@gmail.com', '1004029240', '7c222fb2927d828af22f592134e8932480637c0d'),
 (6, 'realestate', 'realestate@gmail.com', '1005029250', '7c222fb2927d828af22f592134e8932480637c0d'),
 (7, 'shop', 'shop@gmail.com', '1004060260', '7c222fb2927d828af22f592134e8932480637c0d'),
-(8, 'info', 'info@gmail.com', '1006029260', '7c222fb2927d828af22f592134e8932480637c0d');
+(8, 'info', 'info@gmail.com', '1006029260', '7c222fb2927d828af22f592134e8932480637c0d'),
+(9, 'realestates', 'realestates@gmail.com', '1009040240', '7c222fb2927d828af22f592134e8932480637c0d');
 
 -- --------------------------------------------------------
 
@@ -53143,6 +53216,24 @@ CREATE TABLE `wishlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `wishlist`
+--
+
+INSERT INTO `wishlist` (`id`, `user_id`, `pid`, `name`, `price`, `image`, `store`, `sid`) VALUES
+(4, 3, 1, 'MacBook Pro 14', 2666, '571627.jpg', 'Khaled Zeid', 1),
+(5, 3, 2, 'MacBook Air 13', 1012, '558437.jpg', 'Khaled Zeid', 1),
+(6, 3, 3, 'MacBook Air 15 M2', 1852, 'b8be1d7db630a9f134c72f3171603e07f3796af8_619142.jpg', 'Khaled Zeid', 1),
+(7, 3, 4, 'MacBook Air 13 M2', 1333, '409d2d1e40d7b4edfeb5b212c54ea44afaed8294_589170.jpg', 'Khaled Zeid', 1),
+(8, 3, 5, 'MacBook Pro 13 M2', 1600, '0f3bf30bcb9a5d97cd8e62a71ca58eb5401047df_589228.jpg', 'Khaled Zeid', 1),
+(9, 3, 6, 'iPad Pro 9.12', 2399, 'c811e522446b6510fc1b4d2ea04963849bf59916_598802.jpg', 'Khaled Zeid', 1),
+(10, 3, 7, 'iPad Pro 11', 2132, '03ac199e834440eb8dd192f4a1789ba07a0f6d24_598750.jpg', 'Khaled Zeid', 1),
+(11, 3, 9, 'Samsung Odyssey G7', 679, '552096.jpg', 'Developer', 2),
+(12, 3, 8, 'Samsung Galaxy Tab S8 Ultra', 1120, '8f450c19d12dd7d253489e29f19f305164359883_585573.jpg', 'Khaled Zeid', 1),
+(13, 3, 10, 'Samsung Odyssey G5', 373, 'c8d9ddc1decc353155b8883a50d239bea244d05f_585577.jpg', 'Developer', 2),
+(14, 3, 11, 'LG Ultra Gear 48&#34;', 1279, 'a325a8f67c9330123b71d646f569d8d155b19f99_598170.jpg', 'Developer', 2),
+(15, 6, 4, 'MacBook Air 13 M2', 1333, '409d2d1e40d7b4edfeb5b212c54ea44afaed8294_589170.jpg', 'Khaled Zeid', 1);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -53150,6 +53241,12 @@ CREATE TABLE `wishlist` (
 -- Indexes for table `admins`
 --
 ALTER TABLE `admins`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `advertisement`
+--
+ALTER TABLE `advertisement`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -53210,6 +53307,12 @@ ALTER TABLE `country`
 -- Indexes for table `deliveries`
 --
 ALTER TABLE `deliveries`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `likes`
+--
+ALTER TABLE `likes`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -53289,6 +53392,12 @@ ALTER TABLE `admins`
   MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `advertisement`
+--
+ALTER TABLE `advertisement`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `bank_transfers`
 --
 ALTER TABLE `bank_transfers`
@@ -53310,7 +53419,7 @@ ALTER TABLE `brand`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -53328,7 +53437,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `countries`
@@ -53347,6 +53456,12 @@ ALTER TABLE `country`
 --
 ALTER TABLE `deliveries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `likes`
+--
+ALTER TABLE `likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -53376,13 +53491,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `real_estates`
 --
 ALTER TABLE `real_estates`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `states`
@@ -53394,7 +53509,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `store`
 --
 ALTER TABLE `store`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `system`
@@ -53406,13 +53521,13 @@ ALTER TABLE `system`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

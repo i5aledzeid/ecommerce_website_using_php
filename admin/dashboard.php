@@ -375,7 +375,12 @@ $number_of_system = $select_system->rowCount();
          <h3><?= 'عدد ' . $number_of_system . ' حجوزات'; ?></h3>
          <p>الحجوزات الخاصة بالعقارات</p>
          <a href="systems.php" class="btn">هناك حجز <i class="bi bi-building-fill-add"></i></a>
-         <?php } //} ?>
+         <?php } //} 
+         else { ?>
+            <h3>عدد 0 جوازات</h3>
+            <p>الحجوزات الخاصة بالعقارات</p>
+            <a href="systems.php" class="btn">ليس هناك أي حجز <i class="bi bi-building-fill-add"></i></a>
+        <?php } ?>
       </div>
       
       <div class="box">
