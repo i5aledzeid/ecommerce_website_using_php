@@ -28,6 +28,7 @@ if(isset($_POST['add_product'])){
    $country = $_POST['country'];
    $city = $_POST['city'];
    $state = $_POST['state'];
+    $type = $_POST['type'];
 
    $image_01 = $_FILES['image_01']['name'];
    $image_01 = filter_var($image_01, FILTER_SANITIZE_STRING);
@@ -72,8 +73,8 @@ if(isset($_POST['add_product'])){
       $message[] = 'product name already exist!';
    }else{
 
-      $insert_products = $conn->prepare("INSERT INTO `real_estates`(name, details, price, image_01, image_02, image_03, image_04, image_05, image_06, map, category, brand, country, city, state, created_by, sid) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $image_04, $image_05, $image_06, $map, $category, $brand, $country, $city, $state, $store, $sid]);
+      $insert_products = $conn->prepare("INSERT INTO `real_estates`(name, details, price, image_01, image_02, image_03, image_04, image_05, image_06, map, category, brand, country, city, state, type, created_by, sid) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+      $insert_products->execute([$name, $details, $price, $image_01, $image_02, $image_03, $image_04, $image_05, $image_06, $map, $category, $brand, $country, $city, $state, $type, $store, $sid]);
 
       if($insert_products){
          if($image_size_01 > 2000000 OR $image_size_02 > 2000000 OR $image_size_03 > 2000000 OR $image_size_04 > 2000000 OR $image_size_05 > 2000000 OR $image_size_06 > 2000000){
@@ -144,39 +145,39 @@ if(isset($_GET['delete'])){
    <form action="" method="post" enctype="multipart/form-data">
       <div class="flex">
          <div class="inputBox">
-            <span>إسم المنتج (مطلوب)</span>
+            <span>إسم للعقار (مطلوب)</span>
             <input type="text" class="box" required maxlength="100" placeholder="enter real estate name" name="name">
          </div>
          <div class="inputBox">
-            <span>سعر المنتج (مطلوب)</span>
+            <span>سعر للعقار (مطلوب)</span>
             <input type="number" min="0" class="box" required max="9999999999" placeholder="enter real estate price" onkeypress="if(this.value.length == 10) return false;" name="price">
          </div>
         <div class="inputBox">
-            <span>صور 1 المنتج (مطلوب)</span>
+            <span>صور 1 للعقار (مطلوب)</span>
             <input type="file" name="image_01" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
         </div>
         <div class="inputBox">
-            <span>صور 2 المنتج (مطلوب)</span>
+            <span>صور 2 للعقار (مطلوب)</span>
             <input type="file" name="image_02" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
         </div>
         <div class="inputBox">
-            <span>صور 3 المنتج (مطلوب)</span>
+            <span>صور 3 للعقار (مطلوب)</span>
             <input type="file" name="image_03" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
         </div>
         <div class="inputBox">
-            <span>صور 4 المنتج (مطلوب)</span>
+            <span>صور 4 للعقار (مطلوب)</span>
             <input type="file" name="image_04" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
         </div>
         <div class="inputBox">
-            <span>صور 5 المنتج (مطلوب)</span>
+            <span>صور 5 للعقار (مطلوب)</span>
             <input type="file" name="image_05" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
         </div>
         <div class="inputBox">
-            <span>صور 6 المنتج (مطلوب)</span>
+            <span>صور 6 للعقار (مطلوب)</span>
             <input type="file" name="image_06" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
         </div>
          <div class="inputBox">
-            <span>صنف المنتج (مطلوب)</span>
+            <span>صنف للعقار (مطلوب)</span>
             <!--<input type="text" class="box" required maxlength="100" placeholder="enter product category" name="category">-->
             <select class="box" name="category" id="category">
                 <?php
@@ -192,8 +193,16 @@ if(isset($_GET['delete'])){
                 <?php } } ?>
             </select>
          </div>
+        <div class="inputBox">
+            <span>نوع العقار (مطلوب)</span>
+            <select class="form-select box" aria-label="Default select example" name="type">
+              <option selected>إختر نوع العقار</option>
+              <option value="0">إيجار</option>
+              <option value="1">تمليك</option>
+            </select>
+         </div>
          <div class="inputBox">
-            <span>الدولة للمنتج (مطلوب)</span>
+            <span>الدولة للعقار (مطلوب)</span>
             <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
             <select class="box" name="brand" id="brand">
                 <?php
@@ -209,7 +218,7 @@ if(isset($_GET['delete'])){
             </select>
          </div>
          <div class="inputBox">
-            <span>الدولة للمنتج (مطلوب)</span>
+            <span>الدولة للعقار (مطلوب)</span>
             <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
             <select class="box" name="country" id="country">
                 <?php
@@ -218,21 +227,21 @@ if(isset($_GET['delete'])){
                     $number_of_brand = $select_products->rowCount();
                     if($select_products->rowCount() > 0) {
                         while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                            <option value="<?= $fetch_accounts['name']; ?>">
+                            <option value="<?= $fetch_accounts['id']; ?>">
                                 <?= $fetch_accounts['name']; ?>
                             </option>
                 <?php } } ?>
             </select>
          </div>
          <div class="inputBox">
-            <span>الولاية للمنتج (مطلوب)</span>
+            <span>الولاية للعقار (مطلوب)</span>
             <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
             <select class="box" name="state" id="state">
                 <option selected disabled>إختر الولاية/المحافظة</option>
             </select>
          </div>
          <div class="inputBox">
-            <span>المدينة للمنتج (مطلوب)</span>
+            <span>المدينة للعقار (مطلوب)</span>
             <!--<input type="text" class="box" required maxlength="100" placeholder="enter product brand" name="brand">-->
             <select class="box" name="city" id="city">
                 <option selected disabled>إختر المدينة</option>
@@ -268,12 +277,13 @@ if(isset($_GET['delete'])){
                 <?php } } ?>
             </select>
          </div>
-         <div class="inputBox">
-            <span>تفاصيل المنتج (مطلوب)</span>
+         
+      </div><br>
+        <div class="inputBox">
+            <span>تفاصيل للعقار (مطلوب)</span>
             <textarea name="details" placeholder="enter real estate details&#10;(max: 500 letter)" class="box" required maxlength="500" cols="30" rows="10" style="height: 250px;"></textarea>
             <a>لا تتعدى 500 كلمة.</a>
-         </div>
-      </div>
+        </div>
       
       <input type="submit" value="add real estate | إضافة عقار" class="btn" name="add_product">
    </form>

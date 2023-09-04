@@ -33,14 +33,15 @@
 
       <div class="box">
          <h3>follow us</h3>
-         <a href="#"><i class="fab fa-facebook-f"></i>facebook</a>
-         <a href="#"><i class="fab fa-twitter"></i>twitter</a>
-         <a href="#"><i class="fab fa-instagram"></i>instagram</a>
-         <a href="#"><i class="fab fa-linkedin"></i>linkedin</a>
+         <a href="https://www.facebook.com/i5aledzeid"><i class="fab fa-facebook-f"></i>facebook</a>
+         <a href="https://www.twitter.com/i5aledzeid"><i class="fab fa-twitter"></i>twitter</a>
+         <a href="https://www.instagram.com/i5aledzeid"><i class="fab fa-instagram"></i>instagram</a>
+         <a href="https://www.linkedin.com/in/i5aledzeid"><i class="fab fa-linkedin"></i>linkedin</a>
       </div>
 
    </section>
 
-   <div style="font-size: 12px;" class="credit">&copy; copyright @ 1996-<?= date('Y'); ?> by <span>i5aledzeid</span> | all rights reserved!</div>
-
+   <!--<div style="font-size: 12px;" class="credit">&copy; copyright @ 1996-<?= date('Y'); ?> by <span>i5aledzeid</span> | all rights reserved!</div>-->
+    <div style="font-size: 12px; direction: rtl;" class="credit">&copy; حقوق النشر @ 1996-<?= date('Y'); ?> بواسطة <span>i5aledzeid</span> | كل الحقوق محفوظة!</div>
+    
 </footer>

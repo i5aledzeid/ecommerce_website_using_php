@@ -18,9 +18,9 @@
 
    <section class="flex">
 
-      <a href="../" class="logo">Shopie<span>.</span></a>
+      <a href="../" class="logo">Shopie<span>.delivery</span></a>
 
-      <nav class="navbar">
+      <!--<nav class="navbar">
             <a href="">home</a>
             <a href="">about</a>
             <a href="placed_orders.php">orders</a>
@@ -28,7 +28,38 @@
                 <i class="bi bi-car-front-fill"></i> delivery
             </a>
             <a href="../contact.php">contact</a>
-      </nav>
+      </nav>-->
+        <nav class="navbar" style="direction: rtl;">
+            <a href="index.php">
+                <i class="bi bi-house-fill"></i>
+                الرئيسية
+            </a>
+            <a href="../about.php">
+                <i class="bi bi-question-circle-fill"></i>
+                عنا
+            </a>
+            <a href="../delivery/dashboard.php?status=pending">
+                <i class="bi bi-bag-check-fill"></i>
+                الطلبات
+            </a>
+            <a href="../shop.php">
+                <i class="bi bi-shop"></i>
+                التسوق
+            </a>
+            <!--<a href="../admin/stores.php">
+                <i class="fa fa-shopping-bag" aria-hidden="true"></i> stores
+            </a>-->
+            <!--<a href="../delivery/">
+                <i class="bi bi-car-front-fill"></i> الموصلين
+            </a>
+            <a href="../search_realestate.php">
+                <i class="bi bi-buildings-fill"></i> العقارات
+            </a>-->
+            <a href="../contact.php">
+                <i class="bi bi-envelope-at-fill"></i>
+                تواصل معنا
+            </a>
+        </nav>
 
       <div class="icons">
          <?php

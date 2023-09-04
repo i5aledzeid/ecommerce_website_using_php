@@ -10,34 +10,47 @@ if(isset($_SESSION['user_id'])){
    $user_id = '';
 };
 
-
 include 'components/wishlist_cart.php';
-
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>home</title>
-
-   <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
-   
-   <!-- font awesome cdn link  -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
-   <!-- custom css file link  -->
-   <link rel="stylesheet" href="css/home-style.css">
-   
-   <!-- https://icons.getbootstrap.com -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <head>
+       <meta charset="UTF-8">
+       <meta http-equiv="X-UA-Compatible" content="IE=edge">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>home</title>
+    
+       <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+       
+       <!-- font awesome cdn link  -->
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+       <!-- custom css file link  -->
+       <link rel="stylesheet" href="css/home-style.css">
+        <link rel="stylesheet" href="css/realestates-style.css">
+              
+       <!-- https://icons.getbootstrap.com -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
       <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+      
+        <style>
+            @media only screen and (max-width: 500px) {
+                #title {
+                    font-size: 10px;
+                }
+                #subtitle {
+                    font-size: 8px;
+                }
+                .image {
+                    height: 64px;
+                }
+            }
+        </style>
 
-</head>
+    </head>
 <body>
    
 <?php include 'components/user_header.php'; ?>
@@ -46,11 +59,31 @@ include 'components/wishlist_cart.php';
 
     <section class="home">
 
-    <div class="swiper home-slider">
+    <div class="swiper home-slider" >
    
    <div class="swiper-wrapper">
+       
+       <?php
+       $select_products = $conn->prepare("SELECT * FROM `advertisement` WHERE type = 0");
+            $select_products->execute();
+            $number_of_brand = $select_products->rowCount();
+            if($select_products->rowCount() > 0) {
+                while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
+       
+       <div class="swiper-slide slide" style="height: 200px;">
+         <div class="image">
+            <img src="images/<?= $fetch_accounts['image']; ?>" alt="" style="height: 82px;">
+         </div>
+         <div class="content">
+            <span id="title"><?= $fetch_accounts['title']; ?></span>
+            <h3 style="font-size: 10px;"><?= $fetch_accounts['subtitle']; ?></h3>
+            <a href="<?= $fetch_accounts['link']; ?>" class="btn"><?= $fetch_accounts['button']; ?></a>
+         </div>
+      </div>
+      
+      <?php } } ?>
 
-      <div class="swiper-slide slide" style="height: 250px;">
+      <!--<div class="swiper-slide slide" style="height: 250px;">
          <div class="image">
             <img src="images/home-img-1.png" alt="" style="height: 100px;">
          </div>
@@ -83,7 +116,7 @@ include 'components/wishlist_cart.php';
          </div>
       </div>
       
-      <!--<div class="swiper-slide slide" style="height: 200px;">
+      <div class="swiper-slide slide" style="height: 200px;">
          <div class="image">
             <img src="images/home-img-1.png" alt="" style="height: 100px;">
          </div>
@@ -166,7 +199,7 @@ include 'components/wishlist_cart.php';
 
    <h1 class="heading">آخر المنتجات</h1>
 
-   <div class="swiper products-slider">
+   <div class="swiper realestates-slider">
 
    <div class="swiper-wrapper">
 
@@ -255,10 +288,43 @@ include 'components/wishlist_cart.php';
                 //}
             //}
           ?>
-        <div class="name">
+          <br>
+            <a id="like-button" name="like">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND likes='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+            ?>
+            </a>
+            <a id="dislike-button" name="dislike">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND dislike='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+            ?>
+            </a>
+        <!--<div class="name">
             <i class="bi bi-hand-thumbs-up-fill" style="color: #198754;"></i> 22
             <i class="bi bi-hand-thumbs-down-fill" style="color: #DC3545;"></i> 32
-        </div>
+        </div>-->
       </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
@@ -379,7 +445,32 @@ include 'components/wishlist_cart.php';
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
-                <div class="name">
+          <div class="name">
+          <?php
+            /*$i = $fetch_product['id'];
+            $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
+            $select_comments->execute();
+            $count = $select_comments->rowCount();*/
+            //if($select_comments->rowCount() > 0){
+                //while($fetch_comment = $select_comments->fetch(PDO::FETCH_ASSOC)){
+                    //echo $fetch_comment['pid'];
+                    /*if ($count > 999) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> 1K comments';
+                    }
+                    else if ($count > 99) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> +99 comments';
+                    }
+                    else if ($count > 0 && $count > 1) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comments';
+                    } else {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comment';
+                    }*/
+                //}
+            //}
+          ?>
+      </div>
+      <br>
+        <div class="flex" style="font-size: 16px;">
           <?php
             $i = $fetch_product['id'];
             $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
@@ -402,6 +493,43 @@ include 'components/wishlist_cart.php';
                 //}
             //}
           ?>
+          <br>
+            <a id="like-button" name="like">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND likes='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+            ?>
+            </a>
+            <a id="dislike-button" name="dislike">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND dislike='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+            ?>
+            </a>
+        <!--<div class="name">
+            <i class="bi bi-hand-thumbs-up-fill" style="color: #198754;"></i> 22
+            <i class="bi bi-hand-thumbs-down-fill" style="color: #DC3545;"></i> 32
+        </div>-->
       </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
@@ -424,17 +552,26 @@ include 'components/wishlist_cart.php';
 
 </section>
 
-<section class="home-products">
+<section class="realestates-products" >
 
-   <h1 class="heading">سوق العقارات الآن متوفر</h1>
+   <h1 class="heading">
+       سوق العقارات الآن متوفر
+       <?php
+        $select_products = $conn->prepare("SELECT * FROM `real_estates` WHERE category='Real Estate' LIMIT 12"); 
+         $select_products->execute();
+         $count = $select_products->rowCount();
+         if($count > 0){
+            echo '(' . $count . ')';
+         } ?>
+    </h1>
 
-   <div class="swiper products-slider">
+   <div class="swiper realestates-slider">
        
-          <div class="flex">
-             <button>Show maps </button>
-             <i class="bi bi-chevron-down" onclick="myFunction()" id="myDIV" style="font-size: 16px;"></i>
-          </div>
-          <style>
+        <div class="flex">
+            <button>Show maps </button>
+            <i class="bi bi-chevron-down" onclick="myFunction()" id="myDIV" style="font-size: 16px;"></i>
+        </div>
+        <style>
             .myStyle {
               background-color: coral;
               padding: 16px;
@@ -456,18 +593,18 @@ include 'components/wishlist_cart.php';
                 height: 250px;
             }
             
-            </style>
-
+        </style>
 
    <div class="swiper-wrapper">
 
        <?php
-         $select_products = $conn->prepare("SELECT * FROM `real_estates` WHERE category='Real Estate' LIMIT 6"); 
+        //$select_products = $conn->prepare("SELECT * FROM `real_estates` WHERE category='Real Estate' AND status != 1 LIMIT 6"); 
+         $select_products = $conn->prepare("SELECT * FROM `real_estates` WHERE category='Real Estate' LIMIT 12"); 
          $select_products->execute();
          if($select_products->rowCount() > 0){
           while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
        ?>
-       <form action="" method="post" class="swiper-slide slide">
+       <form action="" method="post" class="swiper-slide slide open" id="realestate-form">
           <input type="hidden" name="pid" value="<?= $fetch_product['id']; ?>">
           <input type="hidden" name="name" value="<?= $fetch_product['name']; ?>">
           <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
@@ -488,7 +625,30 @@ include 'components/wishlist_cart.php';
           <div class="name" style="font-size: 12px;">
                 <a href="https://maps.google.com/maps?q=<?php echo $fetch_product['country']; ?>&output=embed" style="color: green;">
                     <i class="bi bi-geo-alt-fill" style="color: green;"></i>
-                    <?= $fetch_product['country'] . ', ' . $fetch_product['city'] . ', ' . $fetch_product['state']; ?>
+                    <?php
+                    $country = $fetch_product['country'];
+                    $city = $fetch_product['city'];
+                    $state = $fetch_product['state'];
+                    $select_country = $conn->prepare("SELECT * FROM `countries` WHERE `id`='$country'"); 
+                    $select_country->execute();
+                    if($select_country->rowCount() > 0){
+                        $fetch_country = $select_country->fetch(PDO::FETCH_ASSOC);
+                        $this_country = $fetch_country['name'];
+                    }
+                    $select_city = $conn->prepare("SELECT * FROM `cities` WHERE `id`='$city'"); 
+                    $select_city->execute();
+                    if($select_city->rowCount() > 0){
+                        $fetch_city = $select_city->fetch(PDO::FETCH_ASSOC);
+                        $this_city = $fetch_city['name'];
+                    }
+                    $select_state = $conn->prepare("SELECT * FROM `states` WHERE `id`='$state'"); 
+                    $select_state->execute();
+                    if($select_state->rowCount() > 0){
+                        $fetch_state = $select_state->fetch(PDO::FETCH_ASSOC);
+                        $this_state = $fetch_state['name'];
+                    }
+                    ?>
+                    <?= $this_country . ', ' . $this_state . ', ' . $this_city; ?>
                 </a>
           </div>
           <div class="name" style="font-size: 16px; color: #198754;">
@@ -536,10 +696,6 @@ include 'components/wishlist_cart.php';
                  <a href="<?php echo $fetch_product['map']; ?>" style="color: red;"> <i class="bi bi-geo-alt-fill"></i><?php echo ' ' . $fetch_product['map']; ?></a>
              </div>
           </div>
-            <div class="none">
-              <?php $address = $fetch_product['country'] . ', ' . $fetch_product['city'] . ', ' . $fetch_product['state']; ?>
-                <iframe width="100%" height="250" src="https://maps.google.com/maps?q=<?php echo $address; ?>&output=embed"></iframe>
-            </div>
           <!--------------------------------------------- MAPS ---------------------------------------------->
         <!--<?php if (isset($_POST["submit_address"])) {
             $address = $_POST["address"];
@@ -553,11 +709,25 @@ include 'components/wishlist_cart.php';
           <!--------------------------------------------- MAPS ---------------------------------------------->
         <?php if ($user_id != $fetch_product['sid']) { ?>
         <?php
-            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND pid = ?");
+            /*$check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND pid = ?");
             $check_cart_numbers->execute([$user_id, $fetch_product['id']]);
+            
+            $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND pid = ? AND status = ?");
+            $check_cart_status->execute([$user_id, $fetch_product['id'], 1]);*/
+            
+            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND user_id = ?");
+            $check_cart_numbers->execute([$fetch_product['id'], $user_id]);
+            
+            $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
+            $check_cart_status->execute([$fetch_product['id'], 1]);
 
-            if($check_cart_numbers->rowCount() > 0){
-                echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
+            if($check_cart_numbers->rowCount() > 0) {
+                if($check_cart_status->rowCount() > 0) {
+                    echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
+                }
+                else {
+                    echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
+                }
             }else{
                 echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
             }
@@ -565,6 +735,36 @@ include 'components/wishlist_cart.php';
         <?php } else { ?>
             <input type="button" value="لا يمكن إضافة منتج من نفس السوق" class="btn" name="" style="background: white; color: black;">
         <?php } ?>
+        <!------------------------------------------------ MAP last update -------------------------------------------------->
+        <br><br>
+            <div class="none" id="map-views">
+                <?php
+                    $country = $fetch_product['country'];
+                    $city = $fetch_product['city'];
+                    $state = $fetch_product['state'];
+                    $select_country = $conn->prepare("SELECT * FROM `countries` WHERE `id`='$country'"); 
+                    $select_country->execute();
+                    if($select_country->rowCount() > 0){
+                        $fetch_country = $select_country->fetch(PDO::FETCH_ASSOC);
+                        $this_country = $fetch_country['name'];
+                    }
+                    $select_city = $conn->prepare("SELECT * FROM `cities` WHERE `id`='$city'"); 
+                    $select_city->execute();
+                    if($select_city->rowCount() > 0){
+                        $fetch_city = $select_city->fetch(PDO::FETCH_ASSOC);
+                        $this_city = $fetch_city['name'];
+                    }
+                    $select_state = $conn->prepare("SELECT * FROM `states` WHERE `id`='$state'"); 
+                    $select_state->execute();
+                    if($select_state->rowCount() > 0){
+                        $fetch_state = $select_state->fetch(PDO::FETCH_ASSOC);
+                        $this_state = $fetch_state['name'];
+                    }
+                    $address = $this_country . ', ' . $this_city . ', ' . $this_state;
+                //$address = $fetch_product['country'] . ', ' . $fetch_product['city'] . ', ' . $fetch_product['state']; ?>
+                <iframe width="100%" height="250" src="https://maps.google.com/maps?q=<?php echo $address; ?>&output=embed" id="mapsView"></iframe>
+            </div>
+        <!------------------------------------------------ MAP last update -------------------------------------------------->
        </form>
        <?php
           }
@@ -650,7 +850,8 @@ include 'components/wishlist_cart.php';
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
-                <div class="name">
+<br>
+        <div class="flex" style="font-size: 16px;">
           <?php
             $i = $fetch_product['id'];
             $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
@@ -673,6 +874,43 @@ include 'components/wishlist_cart.php';
                 //}
             //}
           ?>
+          <br>
+            <a id="like-button" name="like">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND likes='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+            ?>
+            </a>
+            <a id="dislike-button" name="dislike">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND dislike='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+            ?>
+            </a>
+        <!--<div class="name">
+            <i class="bi bi-hand-thumbs-up-fill" style="color: #198754;"></i> 22
+            <i class="bi bi-hand-thumbs-down-fill" style="color: #DC3545;"></i> 32
+        </div>-->
       </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
@@ -848,7 +1086,8 @@ include 'components/wishlist_cart.php';
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
-                <div class="name">
+        <br>
+        <div class="flex" style="font-size: 16px;">
           <?php
             $i = $fetch_product['id'];
             $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
@@ -871,6 +1110,39 @@ include 'components/wishlist_cart.php';
                 //}
             //}
           ?>
+          <br>
+            <a id="like-button" name="like">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND likes='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+            ?>
+            </a>
+            <a id="dislike-button" name="dislike">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND dislike='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+            ?>
+            </a>
       </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
@@ -971,7 +1243,8 @@ include 'components/wishlist_cart.php';
              <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
              <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
           </div>
-        <div class="name">
+<br>
+        <div class="flex" style="font-size: 16px;">
           <?php
             $i = $fetch_product['id'];
             $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
@@ -994,6 +1267,39 @@ include 'components/wishlist_cart.php';
                 //}
             //}
           ?>
+          <br>
+            <a id="like-button" name="like">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND likes='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+            ?>
+            </a>
+            <a id="dislike-button" name="dislike">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND dislike='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+            ?>
+            </a>
       </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
             <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
@@ -1116,19 +1422,48 @@ var swiper = new Swiper(".top-slider", {
    },
 });
 
+var swiper = new Swiper(".realestates-slider", {
+   loop:true,
+   spaceBetween: 20,
+   pagination: {
+      el: ".swiper-pagination",
+      clickable:true,
+   },
+   breakpoints: {
+      550: {
+        slidesPerView: 2,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 3,
+      },
+      // ADDED NEW 08-08-2023
+      1400: {
+        slidesPerView: 4,
+      },
+      // ADDED NEW 08-08-2023
+   },
+});
+
 </script>
 
 <script>
 function myFunction() {
     const element = document.getElementById("myDIV");
+    const mapView = document.getElementById("realestate-form");
     if (element.className == "bi bi-chevron-down") {
         element.className = "bi bi-chevron-up";
+        //alert(mapView.className);
+        mapView.className = "swiper-slide open";
     } else {
         element.className = "bi bi-chevron-down";
+        //alert(mapView.className);
+        mapView.className = "swiper-slide close";
     }
 }
 </script>
-
 
 </body>
 </html>

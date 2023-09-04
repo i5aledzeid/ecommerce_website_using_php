@@ -257,7 +257,28 @@ include 'components/wishlist_cart.php';
                    <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
                    <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2)   return false;" value="1">
                 </div>
-                <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+                <?php if ($user_id != $fetch_product['sid']) { ?>
+                <?php
+                    $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND user_id = ?");
+                    $check_cart_numbers->execute([$fetch_product['id'], $user_id]);
+                    
+                    $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
+                    $check_cart_status->execute([$fetch_product['id'], 1]);
+        
+                    if($check_cart_numbers->rowCount() > 0) {
+                        if($check_cart_status->rowCount() > 0) {
+                            echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
+                        }
+                        else {
+                            echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
+                        }
+                    }else{
+                        echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
+                    }
+                ?>
+                <?php } else { ?>
+                    <input type="button" value="لا يمكن إضافة منتج من نفس السوق" class="btn" name="" style="background: white; color: black;">
+                <?php } ?>
             </form>
    <?php    }
         }
@@ -284,7 +305,7 @@ include 'components/wishlist_cart.php';
 
 <script src="js/script.js"></script>
 
-  <script>
+<script>
     // County State
 
     $('#country').on('change', function() {

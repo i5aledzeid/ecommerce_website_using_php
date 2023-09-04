@@ -157,6 +157,19 @@ section{
    text-transform: capitalize;
 }
 
+.empty-reservation {
+    padding:1.5rem;
+    width: 100%;
+    background-color: var(--white);
+    border: var(--border);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    color:var(--red);
+    border-radius: .5rem;
+    font-size: 2rem;
+    text-transform: capitalize;
+}
+
 .disabled{
    pointer-events: none;
    user-select: none;

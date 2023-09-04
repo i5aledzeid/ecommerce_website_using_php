@@ -85,11 +85,11 @@ if(!isset($admin_id) && !isset($user_id)){
          while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
    ?>
    <div class="box">
-       <?php if ($fetch_product['status'] == 0) {
+       <?php if ($fetch_products['status'] == 0) {
             echo '<a id="status" href="#" style="background: #6C757D;">' . 'محجوز فقط' . '</a>';
-        } else if ($fetch_product['status'] == 1) {
+        } else if ($fetch_products['status'] == 1) {
             echo '<a id="status" href="#" style="background: #198754;">' . 'تم السكن' . '</a>';
-        } else if ($fetch_product['status'] == 2) {
+        } else if ($fetch_products['status'] == 2) {
             echo '<a id="status" href="#" style="background: #DC3545;">' . 'باقي سبعة أيام' . '</a>';
         } ?>
       <img src="../uploaded_img/real_estate/<?= $fetch_products['image']; ?>" alt="">
@@ -116,8 +116,8 @@ if(!isset($admin_id) && !isset($user_id)){
         </div><br>-->
         <div class="w3-light-grey">
             <?php
-            $ss = $fetch_product['start_date'];
-            $dd = $fetch_product['end_date'];
+            $ss = $fetch_products['start_date'];
+            $dd = $fetch_products['end_date'];
             $date1 = strtotime($ss);
             $date2 = strtotime($dd);
             $diff = $date2 - $date1;

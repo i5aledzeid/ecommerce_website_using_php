@@ -158,12 +158,18 @@ if(isset($_POST['update_qty'])){
       <input type="hidden" name="cart_id" value="<?= $fetch_cart['id']; ?>">
       <a href="quick_view.php?realestate=<?= $fetch_cart['pid']; ?>" class="fas fa-eye"></a>
       <img src="uploaded_img/real_estate/<?= $fetch_cart['image']; ?>" alt="">
-      <div class="name"><?= $fetch_cart['name']; ?> <i class="bi bi-shop-window" style="color: #FF4546;"></i> <?= $fetch_cart['store']; ?></div>
-      <div class="price" style="font-size: 24px; font-weight: bold;">$<?= number_format($fetch_cart['price'], 2); ?>/-</div><br>
+      <div class="name"><?= $fetch_cart['name']; ?> <br>
+        <i class="bi bi-shop-window" style="color: #FF4546;"></i> السوق: <?= $fetch_cart['store']; ?>
+      </div>
+      <div class="price" style="font-size: 24px; font-weight: bold;">-/<?= '$' . number_format($fetch_cart['price'], 2); ?></div><br>
+      <?php if ($fetch_cart['status'] == 0) { ?>
       <div class="flex">
-         <input type="text" name="qty" class="qty" min="0" max="999999999" onkeypress="if(this.value.length == 2) return false;" value="<?= $fetch_cart['quantity']; ?>" style="width: 180px;">
+         <input type="text" name="qty" class="qty" min="0" max="999999999" onkeypress="if(this.value.length == 10) return false;" value="<?= $fetch_cart['quantity']; ?>" style="width: 180px;">
          <button type="submit" class="fas fa-edit" name="update_qty"></button>
       </div>
+      <?php } else { ?>
+      <div class="flex"><br><br><br></div>
+      <?php } ?>
       <div class="sub-total">
           <?php if ($fetch_cart['price'] == $fetch_cart['quantity']) { ?>
           <span style="color: #994409;">$<?php echo $fetch_cart['quantity']; ?>/-</span> 
@@ -222,6 +228,8 @@ if(isset($_POST['update_qty'])){
         </div><br>
         <?php if ($fetch_cart['status'] == 0) { ?>
             <input type="submit" value="حذف الحجز" onclick="return confirm('delete this from cart?');" class="delete-btn" name="delete">
+        <?php } else { ?>
+            <input type="submit" value="تحديث الحجز" onclick="return confirm('update this from cart?');" class="option-btn">
         <?php } ?>
    </form>
    <?php

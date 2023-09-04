@@ -55,7 +55,7 @@ else {
     $select_products->execute();
     if($select_products->rowCount() > 0){
         while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ ?>
-
+                
             <div class="home-bg" style="background: url(../images/<?= $fetch_products['background']; ?>) no-repeat;">
     
 <?php   }
@@ -164,8 +164,13 @@ else {
                             $select_products->execute();
                             $number_of_brand = $select_products->rowCount();
                             if($select_products->rowCount() > 0) {
-                                while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                                    <?php echo '<a href="../category.php?category='.$fetch_accounts['link'].'" class="swiper-slide slide">'; ?>
+                                while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { 
+                                    $cat = $fetch_accounts['title'];
+                                    if ($cat != 'Real Estate') {?>
+                                        <?php echo '<a href="../category.php?category='.$fetch_accounts['link'].'" class="swiper-slide slide">'; ?>
+                                    <?php } else { ?>
+                                        <?php echo '<a href="../category.php?real_estates='.$fetch_accounts['link'].'" class="swiper-slide slide">'; ?>
+                                    <?php } ?>
                                         <?php echo '<img src="../images/icon-'.$i++.'.png" alt="">'; ?>
                                         <h3><?= $fetch_accounts['title']; ?></h3>
                                    </a>
@@ -221,7 +226,8 @@ else {
       <a href="../quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
       <img src="../uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
       <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div>
-      <div class="name"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
+      <div class="name">
+          <?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
       <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= $fetch_product['created_by']; ?>
             <?php
@@ -283,6 +289,169 @@ else {
             </div>
 
         </section>
+        
+<!------------------------------------------------------ REAL ESTATE ---------------------------------------------------->
+<section class="home-products">
+
+    <h1 class="heading">
+    <?php
+        $select_stores = $conn->prepare("SELECT * FROM `real_estates` WHERE sid='$user_id'"); 
+        $select_stores->execute();
+        if($select_stores->rowCount() > 0){
+            $number_of_store = $select_stores->rowCount();
+        }
+
+        $select_products = $conn->prepare("SELECT * FROM `store` WHERE created_by='$user_id'");
+        $select_products->execute();
+        if($select_products->rowCount() > 0){
+            while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
+                $name = $fetch_products['title'];
+                echo '<a style="color: #FE4445;">' . $name . '</a>\'s real estate [' . $number_of_store . ']';
+            }
+        }
+   ?>
+   </h1>
+
+   <div class="swiper products-slider">
+
+   <div class="swiper-wrapper">
+
+   <?php
+     $select_products = $conn->prepare("SELECT * FROM `real_estates` WHERE sid='$user_id' LIMIT 6"); 
+     $select_products->execute();
+     if($select_products->rowCount() > 0){
+      while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
+   ?>
+   <form action="" method="post" class="swiper-slide slide">
+      <input type="hidden" name="pid" value="<?= $fetch_product['id']; ?>">
+      <input type="hidden" name="name" value="<?= $fetch_product['title']; ?>">
+      <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
+      <input type="hidden" name="image" value="<?= $fetch_product['image_01']; ?>">
+      <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
+      <a href="../quick_view.php?realestate=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
+      <img src="../uploaded_img/real_estate/<?= $fetch_product['image_01']; ?>" alt="">
+      <div class="name" style="font-weight: bold;"><?= $fetch_product['title']; ?></div>
+      <div class="name">
+        <!--<?= $fetch_product['name']; ?><?= '<a href="../category.php?real_estates='.$fetch_product['category'] .'" style="font-size: 12px;"> (' . $fetch_product['category'] . ')</a>'; ?>-->
+        <?= $fetch_product['name']; ?><br></i><i class="bi bi-pin-map-fill"></i> <?= $fetch_product['brand'] . '<a href="../category.php?real_estates='.$fetch_product['category'] .'" style="font-size: 12px;"> <i class="bi bi-tag-fill"></i>(' . $fetch_product['category'] . ')</a>'; ?>
+      </div>
+      <div class="name" style="font-weight: bold; font-size: 12px;">
+        <!--<?= '<i class="bi bi-geo-alt-fill"></i> '.$fetch_product['country'] . ', ' .$fetch_product['city']. ', ' .$fetch_product['state']; ?>-->
+        <?php
+        $country = $fetch_product['country'];
+        $city = $fetch_product['city'];
+        $state = $fetch_product['state'];
+        $select_country = $conn->prepare("SELECT * FROM `countries` WHERE `id`='$country'"); 
+        $select_country->execute();
+        if($select_country->rowCount() > 0){
+            $fetch_country = $select_country->fetch(PDO::FETCH_ASSOC);
+            $this_country = $fetch_country['name'];
+        }
+        $select_city = $conn->prepare("SELECT * FROM `cities` WHERE `id`='$city'"); 
+        $select_city->execute();
+        if($select_city->rowCount() > 0){
+            $fetch_city = $select_city->fetch(PDO::FETCH_ASSOC);
+            $this_city = $fetch_city['name'];
+        }
+        $select_state = $conn->prepare("SELECT * FROM `states` WHERE `id`='$state'"); 
+        $select_state->execute();
+        if($select_state->rowCount() > 0){
+            $fetch_state = $select_state->fetch(PDO::FETCH_ASSOC);
+            $this_state = $fetch_state['name'];
+        }
+        ?>
+        <?= '<i class="bi bi-geo-alt-fill"></i> ' . $this_country . ', ' . $this_state . ', ' . $this_city; ?>
+      </div>
+      <div class="name" style="font-size: 16px; color: #198754;">
+            <i class="bi bi-shop"></i> <?= $fetch_product['created_by']; ?>
+            <?php
+            $by = $fetch_product['created_by'];
+            $select_stores = $conn->prepare("SELECT * FROM `store` WHERE `title`='$by'"); 
+            $select_stores->execute();
+            if($select_stores->rowCount() > 0){
+                while($fetch_store = $select_stores->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php
+                        $status = $fetch_store['status'];
+                        if ($status == 0) {
+                            echo '<i class="fa fa-info-circle" style="color: #0D6EFD;" aria-hidden="true" rel="tooltip" title="جديد" id="blah"></i>';
+                        } else if ($status == 1) {
+                            echo '<i class="bi bi-exclamation-triangle" style="color: #F58F3C;" rel="tooltip" title="حظر مؤقت" id="blah"></i>';
+                        } else if ($status == 2) {
+                            echo '<i class="bi bi-exclamation-circle" style="color: #6C757D;" rel="tooltip" title="بإنتظار التوثيق" id="blah"></i>';
+                        } else if ($status == 3) {
+                            echo '<i class="fa fa-check" style="color: #198754;" aria-hidden="true" rel="tooltip" title="تم التوثيق" id="blah"></i>';
+                        } else if ($status == 4) {
+                            echo '<i class="bi bi-sign-stop-fill" style="color: #DC3545;" rel="tooltip" title="حظر تام" id="blah"></i>';
+                        } else if ($status == 5) {
+                            echo '<i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>';
+                        } else if ($status == 6) {
+                            echo '<i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>';
+                        } else if ($status == 7) {
+                            echo '<i class="bi bi-buildings-fill" style="color: #198754;" rel="tooltip" title="سوق عقارات" id="blah"></i>';
+                        }
+                    
+                }
+            }
+            ?>
+            <script>
+                $(document).ready(function() {
+                    $("[rel=tooltip]").tooltip({ placement: 'right'});
+                });
+            </script>
+      </div>
+      <div class="flex">
+         <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
+         <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
+      </div>
+        <!--<?php
+            if ($user_id != $id) { ?>
+                <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+        <?php } else { ?>
+                <input type="button" value="" class="btn" name="" style="background: white;">
+        <?php } ?>-->
+        <input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">
+        <!--<?php if ($user_id != $fetch_product['sid']) { ?>
+        <?php
+            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND user_id = ?");
+            $check_cart_numbers->execute([$fetch_product['id'], $user_id]);
+            
+            $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
+            $check_cart_status->execute([$fetch_product['id'], 1]);
+
+            if($check_cart_numbers->rowCount() > 0) {
+                if($check_cart_status->rowCount() > 0) {
+                    echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
+                }
+                else {
+                    echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
+                }
+            }else{
+                echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
+            }
+        ?>
+        <?php } else { ?>
+            <input type="button" value="لا يمكن إضافة منتج من نفس السوق" class="btn" name="" style="background: white; color: black;">
+        <?php } ?>-->
+   </form>
+   <?php
+      }
+   }else{
+        echo '<p class="empty">no real estate added yet!</p>&nbsp;';
+        if ($check_stores == 0) {
+            echo '<p class="empty"><a href="create_store.php">!أنشئ متجر الآن</a></p>';
+        }
+   }
+   ?>
+
+   </div>
+
+   <div class="swiper-pagination"></div>
+
+</div>
+
+</section>
+<!------------------------------------------------------ REAL ESTATE ---------------------------------------------------->
+
 
 <!--<section class="home-products">
 
@@ -397,7 +566,7 @@ var swiper = new Swiper(".home-slider", {
     },
 });
 
- var swiper = new Swiper(".category-slider", {
+var swiper = new Swiper(".category-slider", {
    loop:true,
    spaceBetween: 20,
    pagination: {

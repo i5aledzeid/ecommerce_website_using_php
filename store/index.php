@@ -76,6 +76,20 @@ else {
             color: red;
         }
         
+        
+        .empty-reservation {
+            padding:1.5rem;
+            width: 100%;
+            background-color: var(--white);
+            border: var(--border);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            color:var(--red);
+            border-radius: .5rem;
+            font-size: 2rem;
+            text-transform: capitalize;
+        }
+        
     </style>
 
 </head>
@@ -88,6 +102,7 @@ else {
     $select_products->execute();
     if($select_products->rowCount() > 0){
         while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
+            $store_status = $fetch_products['status'];
 ?>
 
 <div class="home-bg" style="background: url(../images/<?= $fetch_products['background']; ?>) no-repeat;">
@@ -229,7 +244,7 @@ else {
 
 <section class="category">
 
-   <h1 class="heading">shop by category</h1>
+   <h1 class="heading">خدمتنا</h1>
 
    <div class="swiper category-slider">
 
@@ -241,11 +256,16 @@ else {
                 $select_products->execute();
                 $number_of_brand = $select_products->rowCount();
                 if($select_products->rowCount() > 0) {
-                    while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
-                        <?php echo '<a href="../../category.php?real_estates='.$fetch_accounts['link'].'" class="swiper-slide slide">'; ?>
-                            <?php echo '<img src="../images/icon-'.$i++.'.png" alt="">'; ?>
-                            <h3><?= $fetch_accounts['title']; ?></h3>
-                       </a>
+                    while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) {
+                        $cat = $fetch_accounts['title'];
+                        if ($cat != 'Real Estate') {?>
+                            <?php echo '<a href="../../category.php?category='.$fetch_accounts['link'].'" class="swiper-slide slide">'; ?>
+                        <?php } else { ?>
+                            <?php echo '<a href="../../category.php?real_estates='.$fetch_accounts['link'].'" class="swiper-slide slide">'; ?>
+                        <?php } ?>
+                        <?php echo '<img src="../images/icon-'.$i++.'.png" alt="">'; ?>
+                        <h3><?= $fetch_accounts['title']; ?></h3>
+                    </a>
             <?php } } ?>
             
         </div>
@@ -255,6 +275,8 @@ else {
    </div>
 
 </section>
+
+<?php if ($store_status != 7) { ?>
 
 <section class="home-products">
 
@@ -478,6 +500,8 @@ else {
 
 </section>
 
+<?php } else { ?>
+
 <section class="home-products">
 
 <style>
@@ -550,7 +574,7 @@ else {
       <img src="../uploaded_img/real_estate/<?= $fetch_product['image']; ?>" alt="real estates logo">
       <div class="name" style="font-weight: bold;"><?= $fetch_product['total_products']; ?></div>
       <div class="name">
-        <?= '<i class="bi bi-building-fill"></i> ' . $fetch_product['name']; ?> <a style="font-size: 12px;">(<?= $fetch_product['payment_status']; ?>)</a>
+        <?= '<i class="bi bi-building-fill"></i> ' . $fetch_product['name']; ?>
       </div>
       <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[SID:' . $fetch_product['sid'] . '] ' . $fetch_product['store']; ?>
@@ -668,7 +692,7 @@ else {
    <?php
       }
    }else{
-        echo '<p class="empty">no orders added yet!</p>&nbsp;';
+        echo '<p class="empty-reservation" style="direction: rtl;">لا توجد حجوزات تم حجزها حتى الآن!</p>&nbsp;';
         if ($check_stores == 0) {
             //echo '<p class="empty"><a href="create_store.php">!أنشئ متجر الآن</a></p>';
         }
@@ -727,10 +751,34 @@ else {
       <img src="../uploaded_img/real_estate/<?= $fetch_product['image_01']; ?>" alt="">
       <div class="name" style="font-weight: bold;"><?= $fetch_product['title']; ?></div>
       <div class="name">
-        <?= $fetch_product['name']; ?><?= '<a href="../category.php?real_estates='.$fetch_product['category'] .'" style="font-size: 12px;"> (' . $fetch_product['category'] . ')</a>'; ?>
+        <?= $fetch_product['name']; ?><br></i><i class="bi bi-pin-map-fill"></i> <?= $fetch_product['brand'] . '<a href="../category.php?real_estates='.$fetch_product['category'] .'" style="font-size: 12px;"> <i class="bi bi-tag-fill"></i>(' . $fetch_product['category'] . ')</a>'; ?>
       </div>
       <div class="name" style="font-weight: bold; font-size: 12px;">
-        <?= '<i class="bi bi-geo-alt-fill"></i> '.$fetch_product['country'] . ', ' .$fetch_product['city']. ', ' .$fetch_product['state']; ?>
+        <!--<?= '<i class="bi bi-geo-alt-fill"></i> '.$fetch_product['country'] . ', ' .$fetch_product['city']. ', ' .$fetch_product['state']; ?>-->
+        <?php
+        $country = $fetch_product['country'];
+        $city = $fetch_product['city'];
+        $state = $fetch_product['state'];
+        $select_country = $conn->prepare("SELECT * FROM `countries` WHERE `id`='$country'"); 
+        $select_country->execute();
+        if($select_country->rowCount() > 0){
+            $fetch_country = $select_country->fetch(PDO::FETCH_ASSOC);
+            $this_country = $fetch_country['name'];
+        }
+        $select_city = $conn->prepare("SELECT * FROM `cities` WHERE `id`='$city'"); 
+        $select_city->execute();
+        if($select_city->rowCount() > 0){
+            $fetch_city = $select_city->fetch(PDO::FETCH_ASSOC);
+            $this_city = $fetch_city['name'];
+        }
+        $select_state = $conn->prepare("SELECT * FROM `states` WHERE `id`='$state'"); 
+        $select_state->execute();
+        if($select_state->rowCount() > 0){
+            $fetch_state = $select_state->fetch(PDO::FETCH_ASSOC);
+            $this_state = $fetch_state['name'];
+        }
+        ?>
+        <?= '<i class="bi bi-geo-alt-fill"></i> ' . $this_country . ', ' . $this_state . ', ' . $this_city; ?>
       </div>
       <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= $fetch_product['created_by']; ?>
@@ -888,7 +936,7 @@ else {
 
 </section>-->
 
-
+<?php } ?>
 
 
 

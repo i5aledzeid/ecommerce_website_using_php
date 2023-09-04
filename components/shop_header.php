@@ -11,6 +11,76 @@
    }
 ?>
 
+<style>
+    .realestate-counter {
+        background: red;
+        color: white;
+        font-size: 12px;
+        position: absolute;
+        top: 30px;
+        right: 140px;
+        border-radius: 50%;
+        padding: 3px 6px 3px 6px;
+    }
+    
+    .wishlist-counter {
+        background: red;
+        color: white;
+        font-size: 12px;
+        position: absolute;
+        top: 30px;
+        right: 95px;
+        border-radius: 50%;
+        padding: 3px 6px 3px 6px;
+    }
+    
+    .cart-counter {
+        background: red;
+        color: white;
+        font-size: 12px;
+        position: absolute;
+        top: 30px;
+        right: 55px;
+        border-radius: 50%;
+        padding: 3px 6px 3px 6px;
+    }
+    
+    @media only screen and (max-width: 600px) {
+        .realestate-counter {
+            background: red;
+            color: white;
+            font-size: 8px;
+            position: absolute;
+            top: 28px;
+            right: 140px;
+            border-radius: 50%;
+            padding: 3px 6px 3px 6px;
+        }
+        
+        .wishlist-counter {
+            background: red;
+            color: white;
+            font-size: 8px;
+            position: absolute;
+            top: 28px;
+            right: 105px;
+            border-radius: 50%;
+            padding: 3px 6px 3px 6px;
+        }
+        
+        .cart-counter {
+            background: red;
+            color: white;
+            font-size: 8px;
+            position: absolute;
+            top: 28px;
+            right: 70px;
+            border-radius: 50%;
+            padding: 3px 6px 3px 6px;
+        }
+    }
+</style>
+
 <header class="header">
 
    <section class="flex">
@@ -39,10 +109,41 @@
             $count_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
             $count_cart_items->execute([$user_id]);
             $total_cart_counts = $count_cart_items->rowCount();
+            
+            $count_reservation_items = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ?");
+            $count_reservation_items->execute([$user_id]);
+            $total_reservation_counts = $count_reservation_items->rowCount();
          ?>
          <a href="search_page.php"><i class="fas fa-search"></i></a>
-         <a href="wishlist.php"><i class="fas fa-heart"></i><span>(<?= $total_wishlist_counts; ?>)</span></a>
-         <a href="cart.php"><i class="fas fa-shopping-cart"></i><span>(<?= $total_cart_counts; ?>)</span></a>
+         <a href="reservation.php">
+            <i class="bi bi-building-fill-check"></i>
+            <div class="realestate-counter"><?= $total_reservation_counts; ?></div>
+         </a>
+         <a href="wishlist.php">
+            <i class="fas fa-heart"></i>
+            <div class="wishlist-counter">
+            <?php
+            if ($total_wishlist_counts < 10) {
+                echo $total_wishlist_counts;
+            }
+            else {
+                echo '+9';
+            }
+            ?></div>
+         </a>
+         <a href="cart.php">
+            <i class="fas fa-shopping-cart"></i>
+            <div class="cart-counter">
+            <?php
+            if ($total_cart_counts < 10) {
+                echo $total_cart_counts;
+            }
+            else {
+                echo '+9';
+            }
+            ?></div>
+         </a>
+         <!--<a href="cart.php"><i class="fas fa-shopping-cart"></i><span>(<?= $total_cart_counts; ?>)</span></a>-->
          <div id="user-btn" class="fas fa-user"></div>
         <div id="menu-btn" class="fas fa-bars"></div>
       </div>

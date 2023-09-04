@@ -450,8 +450,8 @@ if(isset($_POST['delete_like'])) {
             <div class="flex-btn">
             <?php if ($user_id != $fetch_product['sid']) { ?>
                 <?php
-                $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ?");
-                $check_cart_numbers->execute([$fetch_product['id']]);
+                $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND user_id = ?");
+                $check_cart_numbers->execute([$fetch_product['id'] , $user_id]);
                 
                 $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
                 $check_cart_status->execute([$fetch_product['id'], 1]);

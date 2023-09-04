@@ -27,9 +27,21 @@ if(isset($_POST['update'])){
    $start = filter_var($start, FILTER_SANITIZE_STRING);
    $end = $_POST['end_date'];
    $end = filter_var($end, FILTER_SANITIZE_STRING);
+   $t = 1;
+   $f = 0;
+   
+   if ($status == 0) {
+       $update_product = $conn->prepare("UPDATE `real_estates` SET status = ? WHERE id = ?");
+       $update_product->execute([$f, $pid]);
+   }
+   else {
+       $update_product = $conn->prepare("UPDATE `real_estates` SET status = ? WHERE id = ?");
+       $update_product->execute([$t, $pid]);
+   }
+   
 
-   $update_product = $conn->prepare("UPDATE `reservation` SET status = ?, start_date = ?, end_date = ? WHERE id = ?");
-   $update_product->execute([$status, $start, $end, $pid]);
+   $update_order = $conn->prepare("UPDATE `reservation` SET status = ?, start_date = ?, end_date = ? WHERE id = ?");
+   $update_order->execute([$status, $start, $end, $pid]);
 
    $message[] = 'product updated successfully!';
    header ('Location: index.php?user_id='.$user_id.'');
@@ -114,7 +126,7 @@ if(isset($_POST['update'])){
 
 <section class="update-product">
 
-   <h1 class="heading">update reservation</h1>
+   <h1 class="heading">تحديث بيانات الحجز</h1>
 
    <?php
       $update_id = $_GET['update'];
@@ -123,7 +135,7 @@ if(isset($_POST['update'])){
       if($select_products->rowCount() > 0){
          while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
    ?>
-   <form action="" method="post" enctype="multipart/form-data">
+   <form action="" method="post" enctype="multipart/form-data" style="direction: rtl;">
       <input type="hidden" name="pid" value="<?= $fetch_products['id']; ?>">
       <input type="hidden" name="old_image_01" value="<?= $fetch_products['image_01']; ?>">
       <input type="hidden" name="old_image_02" value="<?= $fetch_products['image_02']; ?>">
@@ -132,15 +144,25 @@ if(isset($_POST['update'])){
          <div class="main-image">
             <img src="../uploaded_img/real_estate/<?= $fetch_products['image']; ?>" alt="">
          </div>
+         <?php
+          $select_real_estate = $conn->prepare("SELECT * FROM `real_estates` WHERE id = ?");
+        $select_real_estate->execute([$update_id]);
+        if($select_real_estate->rowCount() > 0){
+         while($fetch_real_estate = $select_real_estate->fetch(PDO::FETCH_ASSOC)){ 
+         ?>
          <div class="sub-image">
-            <img src="../uploaded_img/real_estate/<?= $fetch_products['image']; ?>" alt="">
-            <img src="../uploaded_img/real_estate/<?= $fetch_products['image']; ?>" alt="">
-            <img src="../uploaded_img/real_estate/<?= $fetch_products['image']; ?>" alt="">
+            <img src="../uploaded_img/real_estate/<?= $fetch_real_estate['image_01']; ?>" alt="">
+            <img src="../uploaded_img/real_estate/<?= $fetch_real_estate['image_02']; ?>" alt="">
+            <img src="../uploaded_img/real_estate/<?= $fetch_real_estate['image_03']; ?>" alt="">
+            <img src="../uploaded_img/real_estate/<?= $fetch_real_estate['image_04']; ?>" alt="">
+            <img src="../uploaded_img/real_estate/<?= $fetch_real_estate['image_05']; ?>" alt="">
+            <img src="../uploaded_img/real_estate/<?= $fetch_real_estate['image_06']; ?>" alt="">
          </div>
+         <?php } } ?>
       </div>
-      <span>update name</span>
+      <span>إسم العقار</span>
       <input type="text" name="name" required class="box" maxlength="100" placeholder="enter product name" value="<?= $fetch_products['name']; ?>">
-      <span>update status (<?= $fetch_products['status']; ?>)</span>
+      <span>الحالة (<?= $fetch_products['status']; ?>)</span>
       <br>
         <select class="form-select box" aria-label="Default select example" name="status" required>
           <option selected disabled>إختر حالة العقار</option>
@@ -149,7 +171,7 @@ if(isset($_POST['update'])){
           <option value="2">قاربت على الإنتهاء</option>
         </select>
       <br>
-      <span>update price</span>
+      <span>سعر العقار</span>
       <input type="number" name="price" required class="box" min="0" max="9999999999" placeholder="enter product price" onkeypress="if(this.value.length == 10) return false;" value="<?= $fetch_products['price']; ?>">
       <!--<span>update details</span>
       <textarea name="details" class="box" required cols="30" rows="10"><?= $fetch_products['details']; ?></textarea>
@@ -161,21 +183,21 @@ if(isset($_POST['update'])){
       <input type="file" name="image_03" accept="image/jpg, image/jpeg, image/png, image/webp" class="box">-->
       <div class="flex-btn">
           <div>
-            <span>start date</span>
+            <span>بداية الحجز</span>
             <!--<input type="date" id="start_date" name="start_date" value="<?php echo $date = date('Y-m-d'); ?>" min="1996-06-09" max="2060-12-31" required class="box"/>-->
             <?php $date = $fetch_products['start_date'];
             $end_date = $fetch_products['end_date']; ?>
             <input type="date" id="start_date" name="start_date" value="<?php echo $date; ?>" min="1996-06-09" max="2060-12-31" class="box"/>
           </div>
           <div>
-            <span>end date</span>
+            <span>نهاية الحجز</span>
             <!--<input type="date" id="end_date" name="end_date" placeholder="<?php echo date('Y-m-d', strtotime($date. ' + 30 days')); ?>" min="1996-06-09" max="2060-12-31" class="box"/>-->
             <input type="date" id="end_date" name="end_date" value="<?php echo $end_date; ?>" min="1996-06-09" max="2060-12-31" class="box"/>
           </div>
       </div>
       <div class="flex-btn">
-         <input type="submit" name="update" class="btn" value="update">
-         <a href="index.php?user_id=<?= $user_id; ?>" class="option-btn">go back</a>
+         <input type="submit" name="update" class="btn" value="تحديث">
+         <a href="index.php?user_id=<?= $user_id; ?>" class="option-btn">العودة للخلف</a>
       </div>
    </form>
    

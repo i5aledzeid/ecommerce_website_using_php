@@ -55,9 +55,12 @@ $number_of_system = $select_system->rowCount();
    <div class="box-container" style="direction: rtl;">
 
       <div class="box">
-         <h3>!مرحباً بك</h3>
+         <h3>مرحباً بك!</h3>
          <p style="direction: ltr;"><?= '@' . $fetch_profile['name']; ?></p>
-         <a href="update_profile.php" class="btn">تحديث الملف الشخصي <i class="fa fa-database" aria-hidden="true"></i></a>
+         <a href="update_profile.php" class="btn">
+            <i class="fa fa-database" aria-hidden="true">
+             تحديث الملف الشخصي
+         </i></a>
       </div>
       
       <div class="box">
@@ -78,7 +81,10 @@ $number_of_system = $select_system->rowCount();
          </p>
          <!--<p>orders placed</p>-->
          <!--<a href="placed_orders.php" class="btn">رؤية الطلبات <i class="fa fa-list" aria-hidden="true"></i></a>-->
-         <a href="orders.php" class="btn">رؤية الطلبات <i class="fa fa-list" aria-hidden="true"></i></a>
+         <a href="orders.php" class="btn">
+            <i class="fa fa-list" aria-hidden="true"></i>
+            رؤية الطلبات
+          </a>
       </div>
 
       <div class="box">
@@ -95,7 +101,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3 style="direction: ltr;"><span>$</span><?= number_format($total_pendings, 2); ?><span>/-</span></h3>
          <p><?= '(' . $count . ')'; ?> total pendings</p>
-         <a href="pending_orders.php" class="btn">رؤية الطلبات المعلقة <i class="fa fa-table" aria-hidden="true"></i></a>
+         <a href="pending_orders.php" class="btn">
+            <i class="fa fa-table" aria-hidden="true"></i>
+            رؤية الطلبات المعلقة
+         </a>
       </div>
 
       <div class="box">
@@ -112,7 +121,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3 style="direction: ltr;"><span>$</span><?= number_format($total_completes, 2); ?><span>/-</span></h3>
          <p><?= '(' . $count . ')'; ?> completed orders</p>
-         <a href="completed_orders.php" class="btn">رؤية الطلبات المكتملة <i class="fa fa-bookmark" aria-hidden="true"></i></a>
+         <a href="completed_orders.php" class="btn">
+            <i class="fa fa-bookmark" aria-hidden="true"></i>
+             رؤية الطلبات المكتملة 
+          </a>
       </div>
       
       <div class="box">
@@ -123,7 +135,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= $number_of_products; ?></h3>
          <p>products added</p>
-         <a href="products.php" class="btn">رؤية المنتجات <i class="fa fa-square" aria-hidden="true"></i></a>
+         <a href="products.php" class="btn">
+            <i class="fa fa-square" aria-hidden="true"></i>
+            رؤية المنتجات
+         </a>
       </div>
 
       <div class="box">
@@ -134,7 +149,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= $number_of_users; ?></h3>
          <p>normal users</p>
-         <a href="users_accounts.php" class="btn">روية المستخدمين <i class="fa fa-user" aria-hidden="true"></i></a>
+         <a href="users_accounts.php" class="btn">
+            <i class="fa fa-user" aria-hidden="true"></i>
+             روية المستخدمين
+         </a>
       </div>
 
       <div class="box">
@@ -145,7 +163,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= $number_of_admins; ?></h3>
          <p>admin users</p>
-         <a href="admin_accounts.php" class="btn">رؤية المسؤولين <i class="fa fa-star" aria-hidden="true"></i></a>
+         <a href="admin_accounts.php" class="btn">
+            <i class="fa fa-star" aria-hidden="true"></i>
+            رؤية المسؤولين
+         </a>
       </div>
 
       <div class="box">
@@ -156,7 +177,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= $number_of_messages; ?></h3>
          <p>new messages</p>
-         <a href="messages.php" class="btn">رؤية الرسائل <i class="fa fa-comments" aria-hidden="true"></i></a>
+         <a href="messages.php" class="btn">
+             <i class="fa fa-comments" aria-hidden="true"></i>
+             رؤية الرسائل
+         </a>
       </div>
       
       <div class="box">
@@ -167,7 +191,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= $number_of_messages; ?></h3>
          <p>new wishlist</p>
-         <a href="messagess.php" class="btn">رؤية الإعجابات <i class="fa fa-heart" aria-hidden="true"></i></a>
+         <a href="messagess.php" class="btn">
+             <i class="fa fa-heart" aria-hidden="true"></i>
+             رؤية الإعجابات 
+         </a>
       </div>
       
       <div class="box">
@@ -178,7 +205,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= $number_of_messages; ?></h3>
          <p>new cart</p>
-         <a href="carts.php" class="btn">رؤية السلة <i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+         <a href="carts.php" class="btn">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+             رؤية السلة
+         </a>
       </div>
       
       <div class="box">
@@ -189,7 +219,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3 style="direction: ltr;"><?= $number_of_messages; ?></h3>
          <p>new category</p>
-         <a href="category.php" class="btn"> التصنيفات <i class="fa fa-hashtag" aria-hidden="true"></i></a>
+         <a href="category.php" class="btn">
+             <i class="fa fa-hashtag" aria-hidden="true"></i>
+             التصنيفات
+         </a>
       </div>
       
       <div class="box">
@@ -200,7 +233,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3 style="direction: ltr;"><?= $number_of_brand; ?></h3>
          <p>new brand</p>
-         <a href="brand.php" class="btn"> العلامات التجارية <i class="fa fa-hashtag" aria-hidden="true"></i></a>
+         <a href="brand.php" class="btn">
+             <i class="fa fa-hashtag" aria-hidden="true"></i>
+             العلامات التجارية
+         </a>
       </div>
       
       <div class="box">
@@ -211,7 +247,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= $number_of_messages; ?></h3>
          <p>new store</p>
-         <a href="user_stores.php" class="btn">رؤية المتاجر <i class="fa fa-shopping-bag" aria-hidden="true"></i></a>
+         <a href="user_stores.php" class="btn">
+             <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+            رؤية المتاجر
+         </a>
       </div>
       
       <div class="box">
@@ -229,12 +268,15 @@ $number_of_system = $select_system->rowCount();
              echo $number_of_products . ' banner lists';
          }
           ?></p>
-         <a href="banners.php" class="btn">رؤية البنرات <i class="fa fa-credit-card" aria-hidden="true"></i></a>
+         <a href="banners.php" class="btn">
+             <i class="fa fa-credit-card" aria-hidden="true"></i>
+             رؤية البنرات
+         </a>
       </div>
       
       <div class="box">
          <?php
-            $select_products = $conn->prepare("SELECT * FROM `ad`");
+            $select_products = $conn->prepare("SELECT * FROM `advertisement`");
             $select_products->execute();
             $number_of_products = $select_products->rowCount()
          ?>
@@ -247,7 +289,10 @@ $number_of_system = $select_system->rowCount();
              echo $number_of_products . ' ad lists';
          }
           ?></p>
-         <a href="ad.php" class="btn">رؤية الإعلانات <i class="fa fa-window-maximize" aria-hidden="true"></i></a>
+         <a href="ads.php" class="btn">
+             <i class="fa fa-window-maximize" aria-hidden="true"></i>
+             رؤية الإعلانات 
+         </a>
       </div>
       
       <?php
@@ -263,7 +308,10 @@ $number_of_system = $select_system->rowCount();
              <?php echo '(' . $number_of_bank_transfers . ')'; ?>
              منتجات تم طلبها
          </p>
-         <a href="delivery_dashboard.php?status=all" class="btn">قائمة الطلبات <i class="fa fa-bar-chart" aria-hidden="true"></i></a>
+         <a href="delivery_dashboard.php?status=all" class="btn">
+             <i class="fa fa-bar-chart" aria-hidden="true"></i>
+             قائمة الطلبات
+         </a>
       </div>
       <?php } //}
       else { ?>
@@ -273,7 +321,10 @@ $number_of_system = $select_system->rowCount();
              <?php echo '(' . $number_of_bank_transfers . ')'; ?>
              منتجات تم طلبها
          </p>
-         <a href="delivery_dashboard.php?status=all" class="btn">قائمة الطلبات <i class="fa fa-bar-chart" aria-hidden="true"></i></a>
+         <a href="delivery_dashboard.php?status=all" class="btn">
+            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+            قائمة الطلبات
+         </a>
       </div>
       <?php } ?>
 
@@ -325,7 +376,10 @@ $number_of_system = $select_system->rowCount();
          <p style="font-size: 16px;">
              <?php echo '[' . date("Y-m-d h:i:s") . ']'; ?>
          </p>
-         <a href="bank_transfers.php" class="btn">التحويلات البنكية <i class="fa fa-university" aria-hidden="true"></i></a>
+         <a href="bank_transfers.php" class="btn">
+             <i class="fa fa-university" aria-hidden="true"></i>
+             التحويلات البنكية
+         </a>
          <?php } //} 
          else { ?>
             <!--<a href="#" id="notify">
@@ -341,7 +395,10 @@ $number_of_system = $select_system->rowCount();
          <p style="font-size: 16px;">
              <?php echo '[' . date("Y-m-d h:i:s") . ']'; ?>
          </p>
-         <a href="bank_transfers.php" class="btn">التحويلات البنكية <i class="fa fa-university" aria-hidden="true"></i></a>
+         <a href="bank_transfers.php" class="btn">
+            <i class="fa fa-university" aria-hidden="true"></i>
+            التحويلات البنكية
+         </a>
          <?php }
          ?>
       </div>
@@ -360,7 +417,10 @@ $number_of_system = $select_system->rowCount();
              <?php echo '<a style="color: #FE4445;" href=""> ' . $number_of_bank_transfers . '</a>'; ?>
              من الموصلين
          </p>
-         <a href="delivery_accounts.php" class="btn">قائمة الموصلين <i class="fa fa-car" aria-hidden="true"></i></a>
+         <a href="delivery_accounts.php" class="btn">
+             <i class="fa fa-car" aria-hidden="true"></i>
+            قائمة الموصلين
+         </a>
          <?php } //} ?>
       </div>
       
@@ -374,12 +434,18 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= 'عدد ' . $number_of_system . ' حجوزات'; ?></h3>
          <p>الحجوزات الخاصة بالعقارات</p>
-         <a href="systems.php" class="btn">هناك حجز <i class="bi bi-building-fill-add"></i></a>
+         <a href="systems.php" class="btn">
+             <i class="bi bi-building-fill-add"></i>
+             هناك حجز 
+         </a>
          <?php } //} 
          else { ?>
             <h3>عدد 0 جوازات</h3>
             <p>الحجوزات الخاصة بالعقارات</p>
-            <a href="systems.php" class="btn">ليس هناك أي حجز <i class="bi bi-building-fill-add"></i></a>
+            <a href="systems.php" class="btn">
+                <i class="bi bi-building-fill-add"></i>
+                ليس هناك أي حجز 
+            </a>
         <?php } ?>
       </div>
       
@@ -393,7 +459,10 @@ $number_of_system = $select_system->rowCount();
          ?>
          <h3><?= $number_of_system; ?></h3>
          <p><?php echo $fetch_product['title']; ?></p>
-         <a href="systems.php" class="btn"><?php echo $fetch_product['subtitle']; ?> <i class="fa fa-microchip" aria-hidden="true"></i></a>
+         <a href="systems.php" class="btn">
+             <i class="fa fa-microchip" aria-hidden="true"></i>
+             <?php echo $fetch_product['subtitle']; ?>
+         </a>
          <?php } } ?>
       </div>
 
