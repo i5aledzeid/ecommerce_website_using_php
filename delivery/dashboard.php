@@ -27,6 +27,9 @@ if (isset($_GET['status']) == 'pending') {
 else if (isset($_GET['status']) == 'reservation') {
     $status = $_GET['status'];
 }
+else if (isset($_GET['status']) == 'shipped') {
+    $status = $_GET['status'];
+}
 else if (isset($_GET['status']) == 'completed') {
     $status = $_GET['status'];
 }
@@ -202,7 +205,7 @@ $number_of_system = $select_system->rowCount();
 <section class="dashboard">
 
     <?php
-    $select_order_store = $conn->prepare("SELECT * FROM `order_store` WHERE payment_status='$status'");
+    $select_order_store = $conn->prepare("SELECT * FROM `order_store` WHERE payment_status='$status' ORDER BY `order_store`.`oid`");
     $select_order_store->execute();
     $number_of_order_store = $select_order_store->rowCount();
     $fetch_order_store = $select_order_store->fetch(PDO::FETCH_ASSOC);
@@ -221,6 +224,8 @@ $number_of_system = $select_system->rowCount();
         |
         <a href="dashboard.php?status=reservation" style="text-decoration: none; color: black;">المحجوزة</a>
         |
+        <a href="dashboard.php?status=shipped" style="text-decoration: none; color: black;">موافقة شحنها</a>
+        |
         <a href="dashboard.php?status=completed" style="text-decoration: none; color: black;">المكتملة</a>
         <?php } else if ($status == 'reservation') {?>
         <?php if(!isset($delivery_id)){ ?>
@@ -234,6 +239,8 @@ $number_of_system = $select_system->rowCount();
             <?php echo '(' .$number_of_order_store. ')'; ?>
         </a>
         |
+        <a href="dashboard.php?status=shipped" style="text-decoration: none; color: black;">موافقة شحنها</a>
+        |
         <a href="dashboard.php?status=completed" style="text-decoration: none; color: black;">المكتملة</a>
         <?php } else if ($status == 'completed') {?>
         <?php if(!isset($delivery_id)){ ?>
@@ -244,9 +251,27 @@ $number_of_system = $select_system->rowCount();
         |
         <a href="dashboard.php?status=reservation" style="text-decoration: none; color: black;">المحجوزة</a>
         |
+        <a href="dashboard.php?status=shipped" style="text-decoration: none; color: black;">موافقة شحنها</a>
+        |
         <a href="dashboard.php?status=completed" style="background: red; padding: 8px; border-radius: 16px; color: white; text-decoration: underline;">
             المكتملة
             <?php echo '(' .$number_of_order_store. ')'; ?>
+        </a>
+        <?php } else if ($status == 'shipped') {?>
+        <?php if(!isset($delivery_id)){ ?>
+        <a href="dashboard.php?status=all" style="text-decoration: none; color: black;">الكل</a>
+        <?php } ?>
+        |
+        <a href="dashboard.php?status=pending" style="text-decoration: none; color: black;">المتاحة</a>
+        |
+        <a href="dashboard.php?status=reservation" style="text-decoration: none; color: black;">المحجوزة</a>
+        |
+        <a href="dashboard.php?status=shipped" style="background: red; padding: 8px; border-radius: 16px; color: white; text-decoration: underline;">موافقة شحنها
+            <?php echo '(' .$number_of_order_store. ')'; ?>
+        </a>
+        |
+        <a href="dashboard.php?status=completed" style="text-decoration: none; color: black;">
+            المكتملة
         </a>
         <?php } else {
         $select_order_store = $conn->prepare("SELECT * FROM `order_store`");
@@ -264,6 +289,8 @@ $number_of_system = $select_system->rowCount();
         <a href="dashboard.php?status=pending" style="text-decoration: none; color: black;">المتاحة</a>
         |
         <a href="dashboard.php?status=reservation" style="text-decoration: none; color: black;">المحجوزة</a>
+        |
+        <a href="dashboard.php?status=shipped" style="text-decoration: none; color: black;">موافقة شحنها</a>
         |
         <a href="dashboard.php?status=completed" style="text-decoration: none; color: black;">المكتملة</a>
         <?php } ?>
@@ -287,17 +314,17 @@ $number_of_system = $select_system->rowCount();
         $i = 1;
         if ($status == 'all') {
             if(!isset($delivery_id)){
-                $select_store_orders = $conn->prepare("SELECT * FROM `order_store`"); 
+                $select_store_orders = $conn->prepare("SELECT * FROM `order_store` ORDER BY `order_store`.`oid`"); 
             }
         }
         else if ($status == 'reservation') {
-            $select_store_orders = $conn->prepare("SELECT * FROM `order_store` WHERE payment_status='$status' AND delivery_by='$delivery_id'"); 
+            $select_store_orders = $conn->prepare("SELECT * FROM `order_store` WHERE payment_status='$status' AND delivery_by='$delivery_id' ORDER BY `order_store`.`oid`"); 
         }
         else if ($status == 'pending') {
-            $select_store_orders = $conn->prepare("SELECT * FROM `order_store` WHERE payment_status='$status'"); 
+            $select_store_orders = $conn->prepare("SELECT * FROM `order_store` WHERE payment_status='$status' ORDER BY `order_store`.`oid`"); 
         }
         else {
-            $select_store_orders = $conn->prepare("SELECT * FROM `order_store` WHERE payment_status='$status' OR payment_status='$status'"); 
+            $select_store_orders = $conn->prepare("SELECT * FROM `order_store` WHERE payment_status='$status' OR payment_status='$status' ORDER BY `order_store`.`oid`"); 
         }
         $select_store_orders->execute();
         $count = $select_store_orders->rowCount();
@@ -315,8 +342,17 @@ $number_of_system = $select_system->rowCount();
                 }*/
                 
                 //for ($x = 1; $x < $count; $x++) { ?>
-                    <div class="box" style="background: <?php //echo('#' . $rand); ?>;">
-                        <h3 id="number"><?php echo '' . $i++ . '#'; ?></h3>
+                    <?php
+                        $myStr = $fetch_store_orders['oid'];
+                        /*$result1 = substr($myStr, 0, 3);
+                        $result2 = substr($myStr, 3, 3);
+                        $result3 = substr($myStr, 6, 3);
+                        echo $color = $result1 . ', ' . $result2 . ', ' . $result3;*/
+                        $color = substr($myStr, 0, 8);
+                    ?>
+                    <div class="box" style="border-style: solid; border-color: #<?php echo $color; ?>; background: #<?php echo $color; ?>; color: <?php //echo('#' . $rand); ?>; ">
+                        <h3 id="number"><?php echo '' . $i++ . '#'; ?>
+                        </h3>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['payment_status']; ?></p>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['total_price']; ?></p>
                         <p style="font-size: 12px; display:none;"><?= $fetch_store_orders['qty']; ?></p>
@@ -386,7 +422,11 @@ $number_of_system = $select_system->rowCount();
                         </div>
                         <div class="row">
                             <div class="col">
-                                <p style="font-size: 12px; padding: 0;"><?= $fetch_store_orders['address'] . ' '; ?><i class="bi bi-geo-alt-fill"></i></p>
+                                <p style="font-size: 12px; padding: 0;">
+                                    <i class="bi bi-geo-alt-fill"></i><?= $fetch_store_orders['address'] . ', <br>&nbsp;&nbsp;
+                                    <a href="tel:'.$fetch_store_orders['number'].'"> ' . $fetch_store_orders['number'] . '</a>
+                                    <i class="fa fa-phone" aria-hidden="true"></i>'; ?>
+                                </p>
                             </div>
                         </div>
                         <div class="row">
@@ -421,14 +461,14 @@ $number_of_system = $select_system->rowCount();
                                 </div>
                             </div>-->
                             <?php if(isset($delivery_id)){ ?>
-                            <button type="button" class="btn btn-success editbtn1"> تحديث الحجز </button>
-                            <button type="button" class="btn btn-success editbtn0"> إلغاء حجز الطلب </button>
+                            <button type="button" class="btn btn-warning editbtn1"> تحديث الحجز </button>
+                            <button type="button" class="btn btn-danger editbtn0"> إلغاء حجز الطلب </button>
                             <?php } else { ?>
-                            <button type="button" class="btn btn-success"> تحديث الحجز </button>
-                            <button type="button" class="btn btn-success"> إلغاء حجز الطلب </button>
+                            <button type="button" class="btn btn-warning"> تحديث الحجز </button>
+                            <button type="button" class="btn btn-danger"> إلغاء حجز الطلب </button>
                             <?php } ?>
                         <?php } else { ?>
-                                <button type="button" class="btn btn-success editbtn0"> إلغاء حجز الطلب </button>
+                                <button type="button" class="btn btn-danger editbtn0"> إلغاء حجز الطلب </button>
                         <?php }
                         ?>
                         </form>
@@ -507,7 +547,20 @@ $number_of_system = $select_system->rowCount();
                   <div class="p-3"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
                 </div>
 
-                <form action="dashboard.php?status=reservation" method="POST">
+                <script>
+                function validateForm() {
+                  var address = document.getElementById("delivery_price");
+                  var x = document.forms["myForm"]["delivery_price"].value;
+                  if (x == "" || x == null || x==0) {
+                      address.style.backgroundColor = 'pink';
+                    alert("أدخل سعر التوصيل لإكمال الحجز");
+                    return false;
+                  }
+                }
+                
+                </script>
+                
+                <form action="dashboard.php?status=reservation" method="POST" onsubmit="return validateForm()" name="myForm">
 
                     <div class="modal-body">
 
@@ -580,7 +633,7 @@ $number_of_system = $select_system->rowCount();
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="exampleFormControlInput1" class="form-label">delivery_price</label>
-                                <input type="text" class="form-control" name="delivery_price" id="delivery_price" placeholder="توصيل بوسطة" min="10" max="1000" required>
+                                <input type="number" class="form-control" name="delivery_price" id="delivery_price" placeholder="توصيل بوسطة" min="0" max="1000" required>
                             </div>
                             <div class="col">
                                 <label for="exampleFormControlInput1" class="form-label">delivery_by</label>
@@ -809,7 +862,7 @@ $number_of_system = $select_system->rowCount();
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" name="updatedata1" class="btn btn-primary">إلغاء الحجز</button>
+                        <button type="submit" name="updatedata1" class="btn btn-warning">تحديث الحجز</button>
                     </div>
                 </form>
 

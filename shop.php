@@ -43,6 +43,8 @@ else if ($_POST['submit'] == '') {
 }
 /*************************** SORT ***************************/
 
+include 'functions/count_time_ago.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -59,6 +61,9 @@ else if ($_POST['submit'] == '') {
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/home-style.css">
    
+    <!-- https://icons.getbootstrap.com -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
     <!-- https://icons.getbootstrap.com -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
@@ -139,9 +144,14 @@ else if ($_POST['submit'] == '') {
                         echo '<option selected>'.$brand.'</option>';
                     }
                 ?>
-                <option value="apple">Apple</option>
-                <option value="samsung">Samsung</option>
-                <option value="lg">LG</option>
+                <?php
+                $select_brand = $conn->prepare("SELECT * FROM `brand`"); 
+                $select_brand->execute();
+                if($select_brand->rowCount() > 0){
+                    while($fetch_brand = $select_brand->fetch(PDO::FETCH_ASSOC)) {
+                        echo '<option value="'.$fetch_brand['title'].'">'.$fetch_brand['title'].'</option>';
+                    }
+                } ?>
             </select>
             <select class="form-select" aria-label="Default select example" name="myvalue" id="myvalue">
                 <?php
@@ -156,14 +166,16 @@ else if ($_POST['submit'] == '') {
                         echo '<option selected>'.$lang.'</option>';
                     }
                 ?>
-                <option value="laptop">Laptop</option>
-                <option value="television">Television</option>
-                <option value="camera">Camera</option>
-                <option value="mouse">Mouse</option>
-                <option value="fridge">Fridge</option>
-                <option value="washing">Washing Machine</option>
-                <option value="smartphone">Smartphone</option>
-                <option value="watch">Watch</option>
+                <?php
+                $select_category = $conn->prepare("SELECT * FROM `category`"); 
+                $select_category->execute();
+                if($select_category->rowCount() > 0){
+                    while($fetch_category = $select_category->fetch(PDO::FETCH_ASSOC)) {
+                        if ($fetch_category['title'] != 'real estate') {
+                            echo '<option value="'.$fetch_category['title'].'">'.$fetch_category['title'].'</option>';
+                        }
+                    }
+                } ?>
             </select>
             <button type="submit" name="submit" style="padding: 8px 16px 8px 16px; border-radius: 16px; background: #FE4445; color: white; cursor: pointer;">بحث متقدم</button>
         </form>
@@ -189,8 +201,11 @@ else if ($_POST['submit'] == '') {
      else if ($price == 'ASC') {
         $select_products = $conn->prepare("SELECT * FROM `products` WHERE sid!='$user_id' AND category='$lang' OR brand='$brand' ORDER BY `price` $price"); 
      }*/
-     if ($lang == $lang && $lang != 'By category' && $lang != '') {
+     if ($lang == $lang && $lang != 'By category' && $lang != '' && $lang != 'Real Estate') {
         $select_products = $conn->prepare("SELECT * FROM `products` WHERE sid!='$user_id' AND category='$lang'"); 
+     }
+     else if ($lang == 'Real Estate') {
+        $select_products = $conn->prepare("SELECT * FROM `real_estates` WHERE sid!='$user_id'"); 
      }
      else if ($brand == $brand && $brand != 'By brand' && $brand != '') {
         $select_products = $conn->prepare("SELECT * FROM `products` WHERE sid!='$user_id' AND brand='$brand'"); 
@@ -224,7 +239,11 @@ else if ($_POST['submit'] == '') {
       <input type="hidden" name="sid" value="<?= $fetch_product['sid']; ?>">
       <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
       <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
-      <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
+      <?php if ($fetch_product['category'] != "Real Estate") { ?>
+        <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
+      <?php } else { ?>
+        <img src="uploaded_img/real_estate/<?= $fetch_product['image_01']; ?>" alt="">
+      <?php } ?>
       <div class="name"><?= $fetch_product['name']; ?></div>
       <div class="name">
           <?= $fetch_product['category']; ?>
@@ -265,11 +284,94 @@ else if ($_POST['submit'] == '') {
                 });
             </script>
       </div>
+        <div class="name" style="font-size: 12px; direction: ltr;"><?php
+            $created_at = $fetch_product['created_at'];
+            echo time_elapsed_string($created_at, true);
+        ?></div>
+        <br><br>
       <div class="flex">
          <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
          <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
       </div>
-      <input type="submit" value="add to cart" class="btn" name="add_to_cart">
+      <?php if ($lang != 'Real Estate') { ?>
+      <br>
+      <div class="flex" style="font-size: 16px;">
+          <?php
+            $i = $fetch_product['id'];
+            $select_comments = $conn->prepare("SELECT * FROM `comments` WHERE `pid`='$i'"); 
+            $select_comments->execute();
+            $count = $select_comments->rowCount();
+            //if($select_comments->rowCount() > 0){
+                //while($fetch_comment = $select_comments->fetch(PDO::FETCH_ASSOC)){
+                    //echo $fetch_comment['pid'];
+                    if ($count > 999) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> 1K comments';
+                    }
+                    else if ($count > 99) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> +99 comments';
+                    }
+                    else if ($count > 0 && $count > 1) {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comments';
+                    } else {
+                        echo '<i class="bi bi-chat-left-fill" style="font-size: 16px;"></i> ' . $count . ' comment';
+                    }
+                //}
+            //}
+          ?>
+          <br>
+            <a id="like-button" name="like">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND likes='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-up-fill" name="like" style="color: #198754;"></i>';
+                }
+            ?>
+            </a>
+            <a id="dislike-button" name="dislike">
+            <?php
+                $pid = $fetch_product['id'];
+                $like = 1;
+                $dislike = 1;
+                $select_likes = $conn->prepare("SELECT * FROM `likes` WHERE pid='$pid' AND dislike='1'");
+                $select_likes->execute();
+                $number_of_likes = $select_likes->rowCount();
+                if ($number_of_likes > 0) {
+                    echo $number_of_likes . ' <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+                else {
+                    echo '0 <i class="bi bi-hand-thumbs-down-fill" name="dislike" style="color: #DC3545;"></i>';
+                }
+            ?>
+            </a>
+      </div>
+      <?php } ?>
+      <?php if ($fetch_product['category'] != "Real Estate") { ?>
+        <input type="submit" value="أضف للسلة" class="btn" name="add_to_cart">
+      <?php } else { ?>
+        <?php
+            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
+            $check_cart_numbers->execute([$fetch_product['id'], 1]);
+            if($check_cart_numbers->rowCount() > 0) {
+                echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
+            }else{
+                $check_cart_number = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ? AND user_id = ?");
+                $check_cart_number->execute([$fetch_product['id'], 0, $user_id]);
+                if($check_cart_number->rowCount() > 0) {
+                    echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
+                }else{
+                    echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
+                }
+            }
+        ?>
+      <?php } ?>
    </form>
    <?php
       }

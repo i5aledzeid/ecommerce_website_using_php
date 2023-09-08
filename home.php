@@ -12,6 +12,8 @@ if(isset($_SESSION['user_id'])){
 
 include 'components/wishlist_cart.php';
 
+include 'functions/count_time_ago.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -225,6 +227,10 @@ include 'components/wishlist_cart.php';
               <?= $fetch_product['category']; ?>
           </a> (<?= $fetch_product['brand']; ?>)
       </div>
+      <div class="name" style="font-size: 12px;"><?php
+        $created_at = $fetch_product['created_at'];
+        echo time_elapsed_string($created_at, true);
+      ?></div>
       <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -406,6 +412,10 @@ include 'components/wishlist_cart.php';
                     <?= $fetch_product['category']; ?>
                     </a> (<?= $fetch_product['brand']; ?>)
             </div>
+            <div class="name" style="font-size: 12px;"><?php
+                $created_at = $fetch_product['created_at'];
+                echo time_elapsed_string($created_at, true);
+            ?></div>
           <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -622,6 +632,10 @@ include 'components/wishlist_cart.php';
                     <?= $fetch_product['category']; ?>
                     </a>
             </div>
+            <div class="name" style="font-size: 12px;"><?php
+                $created_at = $fetch_product['created_at'];
+                echo time_elapsed_string($created_at, true);
+            ?></div>
           <div class="name" style="font-size: 12px;">
                 <a href="https://maps.google.com/maps?q=<?php echo $fetch_product['country']; ?>&output=embed" style="color: green;">
                     <i class="bi bi-geo-alt-fill" style="color: green;"></i>
@@ -675,6 +689,8 @@ include 'components/wishlist_cart.php';
                             echo '<i class="bi bi-coin" style="color: #198754;" rel="tooltip" title="سوق محترف" id="blah"></i>';
                         } else if ($status == 6) {
                             echo '<i class="bi bi-patch-check-fill" style="color: #1D9BF0; font-size: 18px;" rel="tooltip" title="المالك" id="blah"></i>';
+                        } else if ($status == 7) {
+                            echo '<i class="bi bi-buildings-fill" style="color: #198754;" rel="tooltip" title="سوق عقارات" id="blah"></i>';
                         }
                     
                 }
@@ -709,27 +725,18 @@ include 'components/wishlist_cart.php';
           <!--------------------------------------------- MAPS ---------------------------------------------->
         <?php if ($user_id != $fetch_product['sid']) { ?>
         <?php
-            /*$check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND pid = ?");
-            $check_cart_numbers->execute([$user_id, $fetch_product['id']]);
-            
-            $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND pid = ? AND status = ?");
-            $check_cart_status->execute([$user_id, $fetch_product['id'], 1]);*/
-            
-            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND user_id = ?");
-            $check_cart_numbers->execute([$fetch_product['id'], $user_id]);
-            
-            $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
-            $check_cart_status->execute([$fetch_product['id'], 1]);
-
+            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
+            $check_cart_numbers->execute([$fetch_product['id'], 1]);
             if($check_cart_numbers->rowCount() > 0) {
-                if($check_cart_status->rowCount() > 0) {
-                    echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
-                }
-                else {
-                    echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
-                }
+                echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
             }else{
-                echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
+                $check_cart_number = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ? AND user_id = ?");
+                $check_cart_number->execute([$fetch_product['id'], 0, $user_id]);
+                if($check_cart_number->rowCount() > 0) {
+                    echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
+                }else{
+                    echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
+                }
             }
         ?>
         <?php } else { ?>
@@ -811,6 +818,10 @@ include 'components/wishlist_cart.php';
                     <?= $fetch_product['category']; ?>
                     </a> (<?= $fetch_product['brand']; ?>)
             </div>
+            <div class="name" style="font-size: 12px;"><?php
+                $created_at = $fetch_product['created_at'];
+                echo time_elapsed_string($created_at, true);
+            ?></div>
           <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -941,9 +952,10 @@ include 'components/wishlist_cart.php';
          $select_stores = $conn->prepare("SELECT * FROM `store` LIMIT 10"); 
          $select_stores->execute();
          if($select_stores->rowCount() > 0){
-              echo '[' . $number_of_store = $select_stores->rowCount() . ']';
+            echo '[' . $number_of_store = $select_stores->rowCount() . ']';
          }
        ?>
+        <a href="admin/stores.php">رؤية المزيد</a>
     </h1>
 
    <div class="swiper products-slider">
@@ -1047,6 +1059,10 @@ include 'components/wishlist_cart.php';
                     <?= $fetch_product['category']; ?>
                 </a> (<?= $fetch_product['brand']; ?>)
            </div>
+           <div class="name" style="font-size: 12px;"><?php
+                $created_at = $fetch_product['created_at'];
+                echo time_elapsed_string($created_at, true);
+            ?></div>  
            <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -1165,6 +1181,49 @@ include 'components/wishlist_cart.php';
 
 </section>
 
+<!--<div class="home-bg" style="direction: rtl;">
+
+<section class="home" style="height: 400px;">
+
+    <div class="swiper ad-slider" >
+   
+   <div class="swiper-wrapper">
+       
+       <?php
+       $select_products = $conn->prepare("SELECT * FROM `users` LIMIT 1");
+            $select_products->execute();
+            $number_of_brand = $select_products->rowCount();
+            if($select_products->rowCount() > 0) {
+                while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
+       
+       <div class="swiper-slide slide" style="height: 400px;">
+         <div class="content">
+            <span id="title"><?= $fetch_accounts['title']; ?></span>
+            <h3>إشترك الآن</h3>
+            <div class="flex">
+            <div class="flex" style="padding-bottom: 16px;">
+            <input type="name" name="name" placeholder="إدخل إسمك بالكامل" required="" maxlength="50" class="box" style="background: #f7f5f5; width: 31.8%; padding: 16px; border-radius: 16px; margin-left: 16px;">
+            <input type="name" name="number" placeholder="إدخل رقم هاتفك " required="" maxlength="10" class="box" style="background: #f7f5f5; width: 31.8%; padding: 16px; border-radius: 16px; margin-left: 16px;">
+            <input type="email" name="email" placeholder="إدخل بريدك الإلكتروني" required="" maxlength="50" class="box" style="background: #f7f5f5; width: 31.8%; padding: 16px; border-radius: 16px; margin-left: 16px;">
+            </div>
+            <textarea name="msg" class="box" placeholder="إكتب ما تريد سواء اقتراح أو طلب&#13;&#10;كما يمكنك طلب الخدمة التي تريد الإشتراك بها؟" cols="30" rows="3" style="background: #f7f5f5; width: 100%; padding: 16px; border-radius: 16px;"></textarea>
+            </div>
+            <input type="submit" value="إشترك الآن" name="send" class="btn" style="border-radius: 16px;">
+         </div>
+      </div>
+      
+      <?php } } ?>
+
+   </div>
+
+      <div class="swiper-pagination" style="bottom: -4px;"></div>
+
+   </div>
+
+</section>
+
+</div>-->
+
 <section class="home-products">
 
    <h1 class="heading">
@@ -1204,6 +1263,10 @@ include 'components/wishlist_cart.php';
                     <?= $fetch_product['category']; ?>
                 </a> (<?= $fetch_product['brand']; ?>)
             </div>
+            <div class="name" style="font-size: 12px;"><?php
+                $created_at = $fetch_product['created_at'];
+                echo time_elapsed_string($created_at, true);
+            ?></div>
             <div class="name" style="font-size: 16px; color: #198754;">
             <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] . '] ' . $fetch_product['created_by']; ?>
             <?php
@@ -1342,6 +1405,16 @@ var swiper = new Swiper(".home-slider", {
       el: ".swiper-pagination",
       clickable:true,
     },
+    loopedSlides:1,
+    autoplay: {
+        delay: 3000,
+        disableOnInteraction: false
+        //reverseDirection: false,
+    },
+    /*navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },*/
 });
 
 var swiper = new Swiper(".category-slider", {
@@ -1351,6 +1424,10 @@ var swiper = new Swiper(".category-slider", {
       el: ".swiper-pagination",
       clickable:true,
    },
+   /*pagination: {
+        el: '.swiper-pagination',
+        type: 'fraction',
+    },*/
    breakpoints: {
       0: {
          slidesPerView: 2,
@@ -1365,11 +1442,30 @@ var swiper = new Swiper(".category-slider", {
         slidesPerView: 5,
       },
       // ADDED NEW 08-08-2023
-      1400: {
+      /*1400: {
+         slidesPerView: 6,
+       },*/
+       // ADDED NEW 08-08-2023
+       
+       // ADDED NEW 08-08-2023
+      1280: {
          slidesPerView: 6,
        },
        // ADDED NEW 08-08-2023
+       1536: {
+         slidesPerView: 7,
+       },
+       1792: {
+         slidesPerView: 8,
+       },
+       
    },
+    /*loopedSlides:1,*/
+    autoplay: {
+        delay: 1000,
+        disableOnInteraction: true,
+        reverseDirection: false,
+    },
 });
 
 var swiper = new Swiper(".products-slider", {
@@ -1444,6 +1540,19 @@ var swiper = new Swiper(".realestates-slider", {
         slidesPerView: 4,
       },
       // ADDED NEW 08-08-2023
+   },
+   autoplay: {
+        delay: 1000,
+        disableOnInteraction: true,
+        reverseDirection: false,
+    },
+});
+
+var swiper = new Swiper(".ad-slider", {
+   spaceBetween: 20,
+   pagination: {
+      el: ".swiper-pagination",
+      clickable:true,
    },
 });
 

@@ -180,6 +180,8 @@ if(isset($_POST['delete_like'])) {
     //$message[] = 'delete likes/dislikes now!';
 }
 
+include 'functions/count_time_ago.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -318,7 +320,56 @@ if(isset($_POST['delete_like'])) {
                 });
             </script>
         </div>
-            <div class="details"><?= $fetch_product['details']; ?></div>
+            <style>
+                .details p {
+                    /*white-space: nowrap;*/
+                    height: 100px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    transition: height 1s;
+                }
+                .details.active p {
+                    height: 250px;
+                    white-space: normal;
+                    overflow: visible;
+                }
+                .details .less {
+                    display: none;
+                }
+                .details.active .less {
+                    display: inline;
+                }
+                .details.active .more {
+                    display: none;
+                }
+                /*.quick-view form .row .image-container .main-image img {
+                    width: 100%;
+                }*/
+                .quick-view form .row .image-container .main-image img #main-image {
+                    width: 100%;
+                }
+                @media only screen and (max-width: 600px) {
+                    /*.quick-view form .row .image-container .main-image img {
+                        width: 78%;
+                    }*/
+                    .quick-view form .row .image-container .main-image img #main-image {
+                        width: 78%;
+                    }
+                }
+            </style>
+            <div class="name" style="font-size: 12px; direction: ltr;"><?php
+                $created_at = $fetch_product['created_at'];
+                echo time_elapsed_string($created_at, true);
+            ?></div>
+            <div class="details">
+                <p><?= $fetch_product['details']; ?></p>
+                <a class="purple-head hover-black" onclick="changeIcon(this)" id="myBtn">
+                    <i class="bi bi-chevron-bar-down more"></i>
+                    <span class="more">إقرأ المزيد</span>
+                    <i class="bi bi-chevron-bar-up less"></i>
+                    <span class="less">إخفاء التفاصيل</span>
+                </a>
+            </div>
             <br>
             <a id="like-button" name="like">
             <?php
@@ -399,7 +450,12 @@ if(isset($_POST['delete_like'])) {
           <div class="row">
              <div class="content">
                 <div class="name" style="font-weight: bold;"><?= $fetch_product['name']; ?></div><br>
-                <div class="details"><?= $fetch_product['details']; ?></div><br><br>
+                <div class="details"><?= $fetch_product['details']; ?></div>
+                <div class="name" style="font-size: 12px; direction: ltr;"><?php
+                    $created_at = $fetch_product['created_at'];
+                    echo time_elapsed_string($created_at, true);
+                ?></div>
+                <br><br>
                 <div class="details"><?= $fetch_product['category']; ?> (<?= $fetch_product['brand']; ?>)</div>
                 <div class="name" style="font-size: 16px; color: #198754;">
                 <i class="bi bi-shop"></i> <?= '[' . $fetch_product['sid'] .'] '. $fetch_product['created_by']; ?>
@@ -449,24 +505,21 @@ if(isset($_POST['delete_like'])) {
             </div>
             <div class="flex-btn">
             <?php if ($user_id != $fetch_product['sid']) { ?>
-                <?php
-                $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND user_id = ?");
-                $check_cart_numbers->execute([$fetch_product['id'] , $user_id]);
-                
-                $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
-                $check_cart_status->execute([$fetch_product['id'], 1]);
-    
-                if($check_cart_numbers->rowCount() > 0) {
-                    if($check_cart_status->rowCount() > 0) {
-                        echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
-                    }
-                    else {
-                        echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
-                    }
+            <?php
+            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
+            $check_cart_numbers->execute([$fetch_product['id'], 1]);
+            if($check_cart_numbers->rowCount() > 0) {
+                echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
+            }else{
+                $check_cart_number = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ? AND user_id = ?");
+                $check_cart_number->execute([$fetch_product['id'], 0, $user_id]);
+                if($check_cart_number->rowCount() > 0) {
+                    echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
                 }else{
                     echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
                 }
-                ?>
+            }
+            ?>
             <?php } else { ?>
                 <input type="button" value="لا يمكن إضافة منتج من نفس السوق" class="btn" name="" style="background: white; color: black;">
             <?php } ?>
@@ -479,7 +532,7 @@ if(isset($_POST['delete_like'])) {
          </div>
          <div class="image-container">
             <div class="main-image">
-               <img src="uploaded_img/real_estate/<?= $fetch_product['image_01']; ?>" alt="">
+               <img src="uploaded_img/real_estate/<?= $fetch_product['image_01']; ?>" alt="" id="main-image">
             </div>
             <div class="sub-image">
                <img src="uploaded_img/real_estate/<?= $fetch_product['image_01']; ?>" alt="">
@@ -504,7 +557,7 @@ if(isset($_POST['delete_like'])) {
 
 <section class="quick-view">
     
-    <div class="flex">
+    <div class="flex" onClick="showMap()">
         <i class="bi bi-map-fill"></i>
         Map view
     </div>
@@ -538,7 +591,7 @@ if(isset($_POST['delete_like'])) {
      if($select_products->rowCount() > 0){
       while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
    ?>
-    <form action="" method="post" class="box" style="direction: rtl;">
+    <form action="" method="post" class="box map" style="direction: rtl;" id="map-view">
         <div class="row">
             <div class="flex">
                 <?php
@@ -606,6 +659,16 @@ if(isset($_POST['delete_like'])) {
 <?php include 'components/footer.php'; ?>
 
 <script src="js/script.js"></script>
+
+<script>
+    function changeIcon(anchor) {
+        anchor.closest('.details').classList.toggle('active');
+    }
+    
+    function showMap() {
+        
+    }
+</script>
 
 </body>
 </html>

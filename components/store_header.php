@@ -17,7 +17,7 @@
 
    <section class="flex">
 
-      <a href="home.php" class="logo">Shopie<span>.</span></a>
+      <a href="home.php" class="logo">Shopie<span>.store</span></a>
 
       <nav class="navbar">
             <a href="https://shopy101.000webhostapp.com/home.php">home</a>
@@ -62,8 +62,8 @@
              <?= $fetch_profile["name"] . ' - '; ?>
              مرحباً بك
           </p>
-         <a href="update_user.php" class="btn">تحديث الملف الشخصي</a>
-         <a href="index.php?user_id=<?php echo $user_id; ?>" class="option-btn">متجري</a>
+         <a href="../update_user.php" class="btn">تحديث الملف الشخصي</a>
+         <a href="update_store.php" class="option-btn">تحديث بيانات متجري</a>
          <!--<div class="flex-btn">
             <a href="user_register.php" class="option-btn">register</a>
             <a href="user_login.php" class="option-btn">login</a>

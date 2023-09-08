@@ -10,6 +10,6 @@ $city_qry = mysqli_query($conn, $city);
 
 $output = '<option value="">إختر المدينة</option>';
 while ($city_row = mysqli_fetch_assoc($city_qry)) {
-    $output .= '<option value="' . $city_row['name'] . '">' . $city_row['name'] . '</option>';
+    $output .= '<option value="' . $city_row['id'] . '">' . $city_row['name'] . '</option>';
 }
 echo $output;

@@ -1,0 +1,13 @@
+<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <rect stroke="null" id="svg_3" height="32.867646" width="32.499998" y="0.007353" x="-0.249998" fill-opacity="null" stroke-opacity="null" stroke-width="null" fill="#FFC10A"/>
+  <text stroke="null" transform="matrix(0.8714231848716736,0,0,0.9433093070983887,0.04348929667506596,0.4024421996164165) " font-weight="bold" xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="10" id="svg_5" y="15.292632" x="0.861273" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#000000">SHOPY</text>
+  <text stroke="null" transform="matrix(0.8823671936988831,0,0,0.9488101005554199,0.13925661673533085,0.9059985762796714) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="9" id="svg_6" y="24.34771" x="3.007563" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#000000">SPACE</text>
+ </g>
+</svg>

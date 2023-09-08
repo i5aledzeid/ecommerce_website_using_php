@@ -184,27 +184,18 @@ include 'components/wishlist_cart.php';
       </div>
         <?php if ($user_id != $fetch_product['sid']) { ?>
         <?php
-            /*$check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND pid = ?");
-            $check_cart_numbers->execute([$user_id, $fetch_product['id']]);
-            
-            $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE user_id = ? AND pid = ? AND status = ?");
-            $check_cart_status->execute([$user_id, $fetch_product['id'], 1]);*/
-            
-            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND user_id = ?");
-            $check_cart_numbers->execute([$fetch_product['id'], $user_id]);
-            
-            $check_cart_status = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
-            $check_cart_status->execute([$fetch_product['id'], 1]);
-
+            $check_cart_numbers = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ?");
+            $check_cart_numbers->execute([$fetch_product['id'], 1]);
             if($check_cart_numbers->rowCount() > 0) {
-                if($check_cart_status->rowCount() > 0) {
-                    echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
-                }
-                else {
-                    echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
-                }
+                echo '<a class="btn" id="reservation-btn" style="background: #ff5050;">تم سكن العقار <i class="bi bi-building-check"></i></a>';
             }else{
-                echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
+                $check_cart_number = $conn->prepare("SELECT * FROM `reservation` WHERE pid = ? AND status = ? AND user_id = ?");
+                $check_cart_number->execute([$fetch_product['id'], 0, $user_id]);
+                if($check_cart_number->rowCount() > 0) {
+                    echo '<a class="btn" id="reservation-btn" style="background: #198754;">تم إضافته <i class="bi bi-check-lg"></i></a>';
+                }else{
+                    echo '<input type="submit" value="حجز العقار" class="btn" name="add_to_reservation">';
+                }
             }
         ?>
         <?php } else { ?>

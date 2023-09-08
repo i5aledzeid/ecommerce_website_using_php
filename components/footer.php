@@ -27,7 +27,7 @@
          <h3>contact us</h3>
          <a href="tel:1234567890"><i class="fas fa-phone"></i> +123 456 7899</a>
          <a href="tel:0582350407"><i class="fas fa-phone"></i> +966 058 2350 407</a>
-         <a href="mailto:i5aledzeid@gmail.com"><i class="fas fa-envelope"></i> i5aledzeid@gmail.com</a>
+         <a href="mailto:i5aledzeid@gmail.com"><i class="fas fa-envelope"></i> info@shopy.space</a>
          <a href="https://www.google.com/myplace"><i class="fas fa-map-marker-alt"></i>Tokyo, Japan - 100-0000 </a>
       </div>
 
@@ -40,6 +40,13 @@
       </div>
 
    </section>
+   
+    <!--<section class="grid">
+        <div class="box" style="margin: auto; width: 70%; direction: rtl;">
+            <input type="email" name="email" placeholder="إدخل بريدك الإلكتروني" required="" maxlength="50" class="box" style="background: #E7E9EB; width: 100%; padding: 16px;">
+            <input type="submit" value="إشترك الآن" name="send" class="btn">
+        </div>
+    </section>-->
 
    <!--<div style="font-size: 12px;" class="credit">&copy; copyright @ 1996-<?= date('Y'); ?> by <span>i5aledzeid</span> | all rights reserved!</div>-->
     <div style="font-size: 12px; direction: rtl;" class="credit">&copy; حقوق النشر @ 1996-<?= date('Y'); ?> بواسطة <span>i5aledzeid</span> | كل الحقوق محفوظة!</div>

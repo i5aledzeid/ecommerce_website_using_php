@@ -27,6 +27,9 @@ if(isset($_SESSION['user_id'])){
 
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/home-style.css">
+   
+    <!-- https://icons.getbootstrap.com -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 </head>
 <body>
@@ -35,16 +38,19 @@ if(isset($_SESSION['user_id'])){
 
 <section class="about">
 
-   <div class="row">
+   <div class="row" style="direction: rtl;">
 
       <div class="image">
          <img src="images/about-img.svg" alt="">
       </div>
 
       <div class="content">
-         <h3>why choose us?</h3>
-         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam veritatis minus et similique doloribus? Harum molestias tenetur eaque illum quas? Obcaecati nulla in itaque modi magnam ipsa molestiae ullam consequuntur.</p>
-         <a href="contact.php" class="btn">contact us</a>
+         <h3>لماذا أخترتنا؟</h3>
+         <p>
+             معنا تستطيع ان تكون مستخدم حيث يتيح لك الاستطلاع عن المنتجات والاسواق والعقارات. كما يمكنك فتح سوق عام أو سوق عقاري حيث يمكنك عرض منتجاتك/عقارك باشتراك سنوي ب١٠٠ دولار فقط. أو يمكنك نشر إعلان بدولار واحد لشهر كامل ومتابعة حركة السوق فيما في ذلك الأرباح والإعلانات وغير من المميزات. كما يمكنك أيضاً الانضمام كموصل طلبات ومتابعة الطلبات وعرض سعر التوصيل. في الختام هناك مستخدم وسوق عام وعقاري وموصل طلبات كل تلك الخدمات بمقابل لا يتعدى ١٠٠ دولار في السنة وسنبقى محافظين على الجودة لذا نرجوا منكم إرسال الاقتراحات لرفع مستوى خدمتنا لكل العملاء.
+         </p>
+         <a href="contact.php" class="btn">اتصل بنا</a>
+         <a href="http://localhost/phpmyadmin/index.php?route=/database/structure&db=id21113871_shopy" class="btn">قاعدة البيانات</a>
       </div>
 
    </div>
@@ -53,26 +59,38 @@ if(isset($_SESSION['user_id'])){
 
 <section class="reviews">
    
-   <h1 class="heading">client's reviews</h1>
+   <h1 class="heading">آراء العملاء</h1>
 
    <div class="swiper reviews-slider">
 
    <div class="swiper-wrapper">
+       
+        <?php
+        $i = 1;
+        $select_products = $conn->prepare("SELECT * FROM `store` WHERE status=6 OR status=3 OR status=5");
+        $select_products->execute();
+        $number_of_brand = $select_products->rowCount();
+        if($select_products->rowCount() > 0) {
+            while($fetch_accounts = $select_products->fetch(PDO::FETCH_ASSOC)) { ?>
 
       <div class="swiper-slide slide">
-         <img src="images/pic-1.png" alt="">
-         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia tempore distinctio hic, iusto adipisci a rerum nemo perspiciatis fugiat sapiente.</p>
+         <img src="images/<?= $fetch_accounts['image']; ?>" alt="">
+         <p>
+             نشركم على حسن خدمتكم ، وشكراً.
+         </p>
          <div class="stars">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
-            <i class="fas fa-star-half-alt"></i>
+            <i class="fas fa-star"></i>
          </div>
-         <h3>john deo</h3>
+         <h3><?= $fetch_accounts['title']; ?></h3>
       </div>
+      
+      <?php } } ?>
 
-      <div class="swiper-slide slide">
+      <!--<div class="swiper-slide slide">
          <img src="images/pic-2.png" alt="">
          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia tempore distinctio hic, iusto adipisci a rerum nemo perspiciatis fugiat sapiente.</p>
          <div class="stars">
@@ -135,7 +153,7 @@ if(isset($_SESSION['user_id'])){
             <i class="fas fa-star-half-alt"></i>
          </div>
          <h3>john deo</h3>
-      </div>
+      </div>-->
 
    </div>
 
